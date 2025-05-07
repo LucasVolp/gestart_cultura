@@ -1,4 +1,4 @@
-from person import Person
+from models.person import Person
 from enum import Enum
 
 class TypeEvent(Enum):

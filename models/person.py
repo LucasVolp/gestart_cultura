@@ -1,37 +1,37 @@
-from uuid import uuid4
-from datetime import date 
+from uuid import UUID, uuid4
+from datetime import date
 from enum import Enum
 from abc import ABC, abstractmethod
 
-class Authenticable(ABC):
-    @abstractmethod
-    def auth(self, email:str, senha:str) -> bool:
-        pass
+# class Authenticable(ABC):
+#     @abstractmethod
+#     def auth(self, email: str, senha: str) -> bool:
+#         pass
 
-    @abstractmethod
-    def updateProfile(self, name:str, birth:date, email:str, password: str) -> None:
-        pass
+#     @abstractmethod
+#     def updateProfile(self, name: str, birth: date, email: str, password: str) -> None:
+#         pass
 
-    @abstractmethod
-    def recoverPassword(self, email:str, cpf:str) -> bool:
-        pass
+#     @abstractmethod
+#     def recoverPassword(self, email: str, cpf: str) -> bool:
+#         pass
 
-class Notifications(ABC):
-    @abstractmethod
-    def sendNotification(self, recipient:str, massage:str) -> None:
-        pass
+# class Notifications(ABC):
+#     @abstractmethod
+#     def sendNotification(self, recipient: str, message: str) -> None:
+#         pass
 
-    @abstractmethod
-    def scheduleNotificatio(self, recipient:str, message:str, datetime: date) -> None:
-        pass
+#     @abstractmethod
+#     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
+#         pass
 
 class Status(Enum):
     ACTIVE = "Ativo"
     INACTIVE = "Inativo"
     DELETED = "Deletado"
 
-class Person(ABC, Authenticable, Notifications):
-    def __init__(self, id:uuid4, name:str, cpf:str, birth:date, email:str, password:str, phone:str, status:Status):
+class Person(ABC):
+    def __init__(self, id: UUID, name: str, cpf: str, birth: date, email: str, password: str, phone: str, status: Status):
         self.__id = id
         self.__name = name
         self.__cpf = cpf
@@ -39,23 +39,7 @@ class Person(ABC, Authenticable, Notifications):
         self.__email = email
         self.__password = password
         self._phone = phone
-        self.__status = Status
-
-    @property
-    def _id(self):
-        return self.__id
-
-    @_id.setter
-    def _id(self, value):
-        self.__id = value
-
-    @property
-    def _name(self):
-        return self.__name
-
-    @_name.setter
-    def _name(self, value):
-        self.__name = value
+        self.__status = status
 
     @property
     def _cpf(self):
@@ -104,3 +88,19 @@ class Person(ABC, Authenticable, Notifications):
     @_status.setter
     def _status(self, value):
         self.__status = value
+
+
+    def auth(self, email: str, senha: str) -> bool:
+        raise NotImplementedError("auth method not implemented")
+
+    def updateProfile(self, name: str, birth: date, email: str, password: str) -> None:
+        raise NotImplementedError("updateProfile method not implemented")
+
+    def recoverPassword(self, email: str, cpf: str) -> bool:
+        raise NotImplementedError("recoverPassword method not implemented")
+
+    def sendNotification(self, recipient: str, message: str) -> None:
+        raise NotImplementedError("sendNotification method not implemented")
+
+    def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
+        raise NotImplementedError("scheduleNotification method not implemented")

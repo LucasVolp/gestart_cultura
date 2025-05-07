@@ -1,5 +1,4 @@
-from person import Person
-from user import User
+from models.person import Person
 
 class Seller(Person):
 
