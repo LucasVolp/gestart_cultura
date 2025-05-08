@@ -36,6 +36,10 @@ class Producer(Person):
     def _enterprise(self, value):
         self.__enterprise = value
 
+    def __str__(self):
+        tipo = self.__class__.__name__
+        return f"[{tipo}] Nome: {self.__name} | Email: {self.__email} | CNPJ: {self.__cnpj} | Empresa: {self.__enterprise}"
+
 #def createEvent(self, name:str, description:str, date:date, local:str, size:int, typeEvent: Enum) -> Event:
     pass
 
