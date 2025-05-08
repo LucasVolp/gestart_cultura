@@ -3,27 +3,27 @@ from datetime import date
 from enum import Enum
 from abc import ABC, abstractmethod
 
-# class Authenticable(ABC):
-#     @abstractmethod
-#     def auth(self, email: str, senha: str) -> bool:
-#         pass
+class Authenticable(ABC):
+    @abstractmethod
+    def auth(self, email: str, senha: str) -> bool:
+        pass
 
-#     @abstractmethod
-#     def updateProfile(self, name: str, birth: date, email: str, password: str) -> None:
-#         pass
+    @abstractmethod
+    def updateProfile(self, name: str, birth: date, email: str, password: str) -> None:
+        pass
 
-#     @abstractmethod
-#     def recoverPassword(self, email: str, cpf: str) -> bool:
-#         pass
+    @abstractmethod
+    def recoverPassword(self, email: str, cpf: str) -> bool:
+        pass
 
-# class Notifications(ABC):
-#     @abstractmethod
-#     def sendNotification(self, recipient: str, message: str) -> None:
-#         pass
+class Notifications(ABC):
+    @abstractmethod
+    def sendNotification(self, recipient: str, message: str) -> None:
+        pass
 
-#     @abstractmethod
-#     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
-#         pass
+    @abstractmethod
+    def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
+        pass
 
 class Status(Enum):
     ACTIVE = "Ativo"
@@ -40,6 +40,10 @@ class Person(ABC):
         self.__password = password
         self._phone = phone
         self.__status = status
+
+    def __str__(self):
+        tipo = self.__class__.__name__
+        return f"[{tipo}] Nome: {self.__name} | Email: {self.__email}"
 
     @property
     def _cpf(self):
@@ -89,18 +93,3 @@ class Person(ABC):
     def _status(self, value):
         self.__status = value
 
-
-    def auth(self, email: str, senha: str) -> bool:
-        raise NotImplementedError("auth method not implemented")
-
-    def updateProfile(self, name: str, birth: date, email: str, password: str) -> None:
-        raise NotImplementedError("updateProfile method not implemented")
-
-    def recoverPassword(self, email: str, cpf: str) -> bool:
-        raise NotImplementedError("recoverPassword method not implemented")
-
-    def sendNotification(self, recipient: str, message: str) -> None:
-        raise NotImplementedError("sendNotification method not implemented")
-
-    def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
-        raise NotImplementedError("scheduleNotification method not implemented")
