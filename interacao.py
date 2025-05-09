@@ -2,12 +2,15 @@ from models.user import User
 from models.seller import Seller
 from models.producer import Producer
 from uuid import UUID, uuid4
+from datetime import datetime
+
 
 def create_user():
     print("\n-- Criar Usuário --")
     name = input("Nome: ")
     cpf = input("CPF: ") 
     birth = input("Data de nascimento (DD/MM/AAAA): ")
+    birth = datetime.strptime(birth, "%d/%m/%Y").date()
     email = input("Email: ")
     password = input("Senha: ")
     phone = input("Telefone: ")
@@ -22,6 +25,7 @@ def create_seller():
     name = input("Nome: ")
     cpf = input("CPF: ") 
     birth = input("Data de nascimento (DD/MM/AAAA): ")
+    birth = datetime.strptime(birth, "%d/%m/%Y").date()
     email = input("Email: ")
     password = input("Senha: ")
     phone = input("Telefone: ")
@@ -36,6 +40,7 @@ def create_productor():
     name = input("Nome: ")
     cpf = input("CPF: ") 
     birth = input("Data de nascimento (DD/MM/AAAA): ")
+    birth = datetime.strptime(birth, "%d/%m/%Y").date()
     email = input("Email: ")
     password = input("Senha: ")
     phone = input("Telefone: ")

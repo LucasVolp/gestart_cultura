@@ -1,7 +1,7 @@
-from uuid import UUID, uuid4
+from uuid import UUID
 from datetime import date
-from enum import Enum
 from abc import ABC, abstractmethod
+from enums import Status
 
 class Authenticable(ABC):
     @abstractmethod
@@ -24,11 +24,6 @@ class Notifications(ABC):
     @abstractmethod
     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
         pass
-
-class Status(Enum):
-    ACTIVE = "Ativo"
-    INACTIVE = "Inativo"
-    DELETED = "Deletado"
 
 class Person(ABC):
     def __init__(self, id: UUID, name: str, cpf: str, birth: date, email: str, password: str, phone: str, status: Status):
