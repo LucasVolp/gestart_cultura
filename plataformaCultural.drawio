@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="XfVH0HAjjys5zsh1K343" name="Page-1">
-        <mxGraphModel dx="1139" dy="2860" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#FFFFFF" math="0" shadow="1">
+        <mxGraphModel dx="1057" dy="2756" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#FFFFFF" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -53,16 +53,16 @@
                     <mxGeometry y="158" width="240" height="32" as="geometry"/>
                 </mxCell>
                 <mxCell id="231" value="Event" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="290" y="-690" width="290" height="240" as="geometry"/>
+                    <mxGeometry x="290" y="-690" width="290" height="260" as="geometry"/>
                 </mxCell>
-                <mxCell id="232" value="&lt;div&gt;- id: uuid&lt;/div&gt;&lt;div&gt;- name: str&lt;/div&gt;&lt;div&gt;- description: str&lt;/div&gt;&lt;div&gt;- date: date&lt;/div&gt;&lt;div&gt;- local: str&lt;/div&gt;- size: int&lt;div&gt;- typeEvent: enum&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="231" vertex="1">
-                    <mxGeometry y="26" width="290" height="114" as="geometry"/>
+                <mxCell id="232" value="&lt;div&gt;- id: uuid&lt;/div&gt;&lt;div&gt;- name: str&lt;/div&gt;&lt;div&gt;- description: str&lt;/div&gt;&lt;div&gt;- date: date&lt;/div&gt;&lt;div&gt;- local: str&lt;/div&gt;- size: int&lt;div&gt;- typeEvent: enum&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;- tiers: array&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="231" vertex="1">
+                    <mxGeometry y="26" width="290" height="134" as="geometry"/>
                 </mxCell>
                 <mxCell id="233" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;rounded=0;" parent="231" vertex="1">
-                    <mxGeometry y="140" width="290" height="8" as="geometry"/>
+                    <mxGeometry y="160" width="290" height="8" as="geometry"/>
                 </mxCell>
                 <mxCell id="234" value="&lt;b&gt;+ getTickets&lt;/b&gt;(): List&amp;lt;Ticket&amp;gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;+ getTiers&lt;/b&gt;(): List&amp;lt;Tiers&amp;gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;+ availability&lt;/b&gt;()&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="231" vertex="1">
-                    <mxGeometry y="148" width="290" height="92" as="geometry"/>
+                    <mxGeometry y="168" width="290" height="92" as="geometry"/>
                 </mxCell>
                 <mxCell id="235" value="Rating" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="300" y="-1080" width="290" height="230" as="geometry"/>
@@ -140,16 +140,16 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="249" value="Tier" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="-165" y="-690" width="245" height="420" as="geometry"/>
+                    <mxGeometry x="-165" y="-690" width="245" height="450" as="geometry"/>
                 </mxCell>
-                <mxCell id="250" value="&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;- id: uuid&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- amount: int&lt;/div&gt;&lt;div&gt;- nome: str&lt;/div&gt;&lt;div&gt;- type: enum&lt;/div&gt;&lt;div&gt;- event: Event&lt;/div&gt;&lt;div&gt;- price: float&lt;/div&gt;&lt;div&gt;- startDate: date&lt;/div&gt;&lt;div&gt;- endDate: date&lt;/div&gt;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="249" vertex="1">
-                    <mxGeometry y="26" width="245" height="124" as="geometry"/>
+                <mxCell id="250" value="&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;- id: uuid&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- amount: int&lt;/div&gt;&lt;div&gt;- nome: str&lt;/div&gt;&lt;div&gt;- type: enum&lt;/div&gt;&lt;div&gt;- event: Event&lt;/div&gt;&lt;div&gt;- price: float&lt;/div&gt;&lt;div&gt;- startDate: date&lt;/div&gt;&lt;div&gt;- endDate: date&lt;/div&gt;&lt;div&gt;- tickets: array&lt;/div&gt;&lt;div&gt;-status: enum&lt;/div&gt;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="249" vertex="1">
+                    <mxGeometry y="26" width="245" height="154" as="geometry"/>
                 </mxCell>
                 <mxCell id="251" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;rounded=0;" parent="249" vertex="1">
-                    <mxGeometry y="150" width="245" height="8" as="geometry"/>
+                    <mxGeometry y="180" width="245" height="8" as="geometry"/>
                 </mxCell>
                 <mxCell id="252" value="&lt;div&gt;+ &lt;b&gt;createTier&lt;/b&gt;(amount: int, nome: str, type: TierType, event: Event, price: float, startDate: date, endDate: date): Tier&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ &lt;b&gt;editTier&lt;/b&gt;(amount: int, nome: str, type: TierType, event: Event, price: float, startDate: date, endDate: date)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ &lt;b&gt;deleteTier&lt;/b&gt;(tier: Tier)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;b&gt;+ openTier&lt;/b&gt;()&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;div&gt;&lt;b&gt;+ closeTier&lt;/b&gt;()&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;+ updatePrice&lt;/b&gt;(newPrice: float)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;+ getDisponibility&lt;/b&gt;(): bool&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="249" vertex="1">
-                    <mxGeometry y="158" width="245" height="262" as="geometry"/>
+                    <mxGeometry y="188" width="245" height="262" as="geometry"/>
                 </mxCell>
                 <mxCell id="269" value="Purchase" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="-220" y="168.1199999999999" width="340" height="240" as="geometry"/>
@@ -422,16 +422,16 @@
                     <mxGeometry y="212" width="240" height="32" as="geometry"/>
                 </mxCell>
                 <mxCell id="361" value="&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;div&gt;Status&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneLine=1;swimlaneFillColor=default;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="1380" y="-1840" width="240" height="150" as="geometry"/>
+                    <mxGeometry x="1380" y="-1840" width="240" height="180" as="geometry"/>
                 </mxCell>
-                <mxCell id="362" value="&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;ACTIVE&lt;/div&gt;&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;INACTIVE&lt;/div&gt;&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;DELETED&lt;/div&gt;&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;CANCELLED&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="361" vertex="1">
-                    <mxGeometry y="40" width="240" height="70" as="geometry"/>
+                <mxCell id="362" value="&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;ACTIVE&lt;/div&gt;&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;INACTIVE&lt;/div&gt;&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;DELETED&lt;/div&gt;&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;CANCELLED&lt;/div&gt;&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;OPEN&lt;/div&gt;&lt;div style=&quot;scrollbar-color: light-dark(#e2e2e2, #4b4b4b)&lt;br/&gt;&#x9;&#x9;&#x9;&#x9;&#x9;light-dark(#fbfbfb, var(--dark-panel-color));&quot;&gt;CLOSED&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="361" vertex="1">
+                    <mxGeometry y="40" width="240" height="100" as="geometry"/>
                 </mxCell>
                 <mxCell id="363" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;rounded=0;" parent="361" vertex="1">
-                    <mxGeometry y="110" width="240" height="8" as="geometry"/>
+                    <mxGeometry y="140" width="240" height="8" as="geometry"/>
                 </mxCell>
                 <mxCell id="364" value="&lt;br&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;rounded=0;" parent="361" vertex="1">
-                    <mxGeometry y="118" width="240" height="32" as="geometry"/>
+                    <mxGeometry y="148" width="240" height="32" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

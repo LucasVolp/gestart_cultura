@@ -6,3 +6,5 @@ class Status(Enum):
     INACTIVE = "INACTIVE"
     DELETED = "DELETED"
     CANCELLED = "CANCELLED"
+    OPEN = "OPEN"
+    CLOSED = "CLOSED"
