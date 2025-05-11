@@ -64,7 +64,8 @@ class User(Person):
         return ticket
     
     def createRating(self, event, rate: int, comment: str) -> None:
-        if event not in self.__ratings:
+        # Check if the user has a ticket for the given event
+        if not any(ticket.event == event for ticket in self.__tickets):
             raise ValueError("O usuário não pode avaliar o evento.")
         if event.status == Status.CLOSED:
             rating = Rating(id=uuid4(), user=self, event=event, rate=rate, comment=comment)
