@@ -1,6 +1,8 @@
 from uuid import uuid4
-from models import Person, Event
-from enums import TypeEvent
+from models.person import Person
+from models.event import Event
+from enums.typeEvent import TypeEvent
+from enums.status import Status
 from datetime import date
 
 class Producer(Person):
@@ -30,23 +32,23 @@ class Producer(Person):
         tipo = self.__class__.__name__
         return f"[{tipo}] Nome: {self.__name} | Email: {self.__email} | CNPJ: {self.__cnpj} | Empresa: {self.__enterprise}"
 
-def createEvent(self, name:str, description:str, date:date, local:str, size:int, typeEvent: TypeEvent) -> Event:
-    event_id = uuid4()
-    event = Event(event_id, name, description, date, local, size, typeEvent)
-    self.events.append(event)
-    return event
+    def createEvent(self, name:str, description:str, date:date, local:str, size:int, typeEvent: TypeEvent, status: Status) -> Event:
+        event_id = uuid4()
+        event = Event(event_id, name, description, date, local, size, typeEvent, status)
+        self.events.append(event)
+        return event
 
-def updateEvent(event:Event, name:str, description:str, date:date, local:str, size:int, typeEvent: TypeEvent) -> None:
-    event._name = name
-    event._description = description
-    event._date = date
-    event._local = local
-    event._size = size
-    event._typeEvent = typeEvent
+    def updateEvent(self, event:Event, name:str, description:str, date:date, local:str, size:int, typeEvent: TypeEvent) -> None:
+        event._name = name
+        event._description = description
+        event._date = date
+        event._local = local
+        event._size = size
+        event._typeEvent = typeEvent
 
-def deleteEvent(self, event:Event) -> None:
-    if event in self.events:
-        self.events.remove(event)
+    def deleteEvent(self, event:Event) -> None:
+        if event in self.events:
+            self.events.remove(event)
 
-def getEvent(self) -> list[Event]:
-    return self.events
+    def getEvent(self) -> list[Event]:
+        return list(self.events)
