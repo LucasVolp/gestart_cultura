@@ -95,8 +95,8 @@ class Purchase:
                     receipt = self.generateReceipt()
                     self.__buyer.addTicket(ticket)
                     self.__buyer.addReceipt(receipt)
-                    self.__buyer.addPurchase(self)
                     item._tier.addTicket(ticket)
+            self.__buyer.addPurchase(self)
         
     def generateReceipt(self):
         if self.__status == PaymentStatus.PAID:
