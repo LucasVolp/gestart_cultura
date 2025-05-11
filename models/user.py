@@ -102,7 +102,7 @@ class User(Person):
         if purchase not in self.__purchases:
             raise ValueError("Compra não pertence a este usuário.")
 
-        if (datetime.now() - purchase.date).days > 7:
+        if (datetime.now() - purchase._purchaseDate).days > 7:
             raise ValueError("O prazo para reembolso expirou.")
 
         for item in purchase._items:
