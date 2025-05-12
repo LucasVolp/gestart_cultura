@@ -1,24 +1,16 @@
+from uuid import uuid4
 from models.person import Person
-from enum import Enum
-
-class TypeEvent(Enum):
-    FESTIVAL_MUSICA = "Festival de Música"
-    EXPO_ARTE = "Exposicao de Arte"
-    TEATRO = "Teatro"
-    FESTIVAL_CINEMA = "Festival de Cinema"
-    ARTESANATO = "Artesanato"
-    RODA_CONVERSA = "Roda de Conversa"
-    MUSEU = "Museu"
-    FOLCLORE = "Folclore"
-    ONLINE = "Evento Online"
-    PRESENCIAL = "Evento Presencial"
-
+from models.event import Event
+from enums.typeEvent import TypeEvent
+from enums.status import Status
+from datetime import date
 
 class Producer(Person):
     def __init__(self, id, name, cpf, birth, email, password, phone, status, cnpj:str, enterprise):
       super().__init__(id, name, cpf, birth, email, password, phone, status)
       self.__cnpj = cnpj
       self.__enterprise = enterprise
+      self.events = []
 
     @property
     def _cnpj(self):
@@ -40,14 +32,23 @@ class Producer(Person):
         tipo = self.__class__.__name__
         return f"[{tipo}] Nome: {self.__name} | Email: {self.__email} | CNPJ: {self.__cnpj} | Empresa: {self.__enterprise}"
 
-#def createEvent(self, name:str, description:str, date:date, local:str, size:int, typeEvent: Enum) -> Event:
-    pass
+    def createEvent(self, name:str, description:str, date:date, local:str, size:int, typeEvent: TypeEvent, status: Status) -> Event:
+        event_id = uuid4()
+        event = Event(event_id, name, description, date, local, size, typeEvent, status)
+        self.events.append(event)
+        return event
 
-#def updateEvent(event:Event, name:str, description:str, date:date, local:str, size:int, typeEvent: Enum) -> None:
-    pass
+    def updateEvent(self, event:Event, name:str, description:str, date:date, local:str, size:int, typeEvent: TypeEvent) -> None:
+        event._name = name
+        event._description = description
+        event._date = date
+        event._local = local
+        event._size = size
+        event._typeEvent = typeEvent
 
-#def deleteEvent(event:Event) -> None:
-    pass
+    def deleteEvent(self, event:Event) -> None:
+        if event in self.events:
+            self.events.remove(event)
 
-#def getEvent() -> list[Event]:
-    pass
+    def getEvent(self) -> list[Event]:
+        return list(self.events)

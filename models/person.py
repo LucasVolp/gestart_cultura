@@ -1,7 +1,7 @@
 from uuid import UUID
 from datetime import date
 from abc import ABC, abstractmethod
-from enums import Status
+from enums.status import Status
 
 class Authenticable(ABC):
     @abstractmethod

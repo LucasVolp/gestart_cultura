@@ -1,4 +1,3 @@
-# types/status.py
 from enum import Enum
 
 class Status(Enum):
@@ -6,3 +5,7 @@ class Status(Enum):
     INACTIVE = "INACTIVE"
     DELETED = "DELETED"
     CANCELLED = "CANCELLED"
+    OPEN = "OPEN"
+    CLOSED = "CLOSED"
+    VALID = "VALID"
+    INVALID = "INVALID"
