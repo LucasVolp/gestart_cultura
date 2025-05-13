@@ -1,9 +1,13 @@
 from uuid import UUID
-from models.purchase import Purchase
+from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.purchase import Purchase
 
 
 class Receipt:
-    def __init__(self, id: UUID, date: str, quantity: int, description: str, purchase: Purchase) -> None:
+    def __init__(self, id: UUID, date: datetime, quantity: float, description: str, purchase: 'Purchase') -> None:
         self.__id = id
         self.__date = date
         self.__quantity = quantity

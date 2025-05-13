@@ -1,9 +1,10 @@
+from datetime import datetime
+from uuid import UUID, uuid4
+
 from models.user import User
 from models.seller import Seller
 from models.producer import Producer
-from uuid import UUID, uuid4
-from datetime import datetime
-
+from enums.status import Status
 
 def create_user():
     print("\n-- Criar Usuário --")
@@ -14,7 +15,7 @@ def create_user():
     email = input("Email: ")
     password = input("Senha: ")
     phone = input("Telefone: ")
-    status = "ativo"
+    status = Status.ACTIVE
 
     usuario = User(uuid4(), name, cpf, birth, email, password, phone, status)
     print("Usuário criado com sucesso!")
@@ -29,7 +30,7 @@ def create_seller():
     email = input("Email: ")
     password = input("Senha: ")
     phone = input("Telefone: ")
-    status = "ativo"
+    status = Status.ACTIVE
 
     vendedor = Seller(uuid4(), name, cpf, birth, email, password, phone, status)
     print("Vendedor criado com sucesso!")
@@ -44,7 +45,7 @@ def create_productor():
     email = input("Email: ")
     password = input("Senha: ")
     phone = input("Telefone: ")
-    status = "ativo"
+    status = Status.ACTIVE
     cnpj = input("CNPJ: ")
     enterprise = input("Nome da Empresa: ")
 

@@ -1,9 +1,11 @@
 from uuid import UUID
-from models.user import User
-from models.tier import Tier
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.tier import Tier
 
 class PurchaseItems:
-    def __init__(self, id: UUID, tier: Tier, quantity: int, unitPrice: float, totalPrice: float) -> None:
+    def __init__(self, id: UUID, tier: 'Tier', quantity: int, unitPrice: float, totalPrice: float) -> None:
         self.__id = id
         self.__tier = tier
         self.__quantity = quantity

@@ -1,15 +1,27 @@
 from uuid import UUID, uuid4
-from models.receipt import Receipt
-from models.user import User
+from datetime import datetime
+from typing import List, Optional, TYPE_CHECKING
+
 from enums.paymentStatus import PaymentStatus
-from models.ticket import Ticket
 from enums.status import Status
-from models.event import Event
-from models.tier import Tier
-from models.purchaseItems import PurchaseItems
+
+if TYPE_CHECKING:
+    from models.receipt import Receipt
+    from models.user import User
+    from models.ticket import Ticket
+    from models.event import Event
+    from models.tier import Tier
+    from models.purchaseItems import PurchaseItems
 
 class Purchase:
-    def __init__(self, id: UUID, buyer: User, purchaseDate: str, status: PaymentStatus, totalPrice: float, paymentMethod: str, items: list = None) -> None:
+    def __init__(self, 
+                 id: UUID, 
+                 buyer: 'User', 
+                 purchaseDate: datetime, 
+                 status: PaymentStatus, 
+                 totalPrice: float, 
+                 paymentMethod: str, 
+                 items: Optional[List['PurchaseItems']] = None) -> None:
         self.__id = id
         self.__buyer = buyer
         self.__purchaseDate = purchaseDate
@@ -17,6 +29,7 @@ class Purchase:
         self.__totalPrice = totalPrice
         self.__paymentMethod = paymentMethod
         self.__items = items if items is not None else []
+        self.__receipt: Optional['Receipt'] = None
 
     def __str__(self):
         tipo = self.__class__.__name__

@@ -1,47 +1,64 @@
 from datetime import datetime
+from uuid import UUID, uuid4
+from typing import List, Optional, TYPE_CHECKING, Any
+
 from models.person import Person
-from models.purchase import Purchase
-from models.purchaseItems import PurchaseItems
-from models.rating import Rating
-from models.ticket import Ticket
 from enums.typeEvent import TypeEvent
 from enums.status import Status
-from uuid import uuid4
+
+if TYPE_CHECKING:
+    from models.purchase import Purchase
+    from models.purchaseItems import PurchaseItems
+    from models.rating import Rating
+    from models.ticket import Ticket
+    from models.receipt import Receipt
 
 class User(Person):
-    users = []
+    users: List['User'] = []
 
-    def __init__(self, id: str, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: str, tickets: list = None, ratings: list = None, purchases: list = None, receipts: list = None):
+    def __init__(self, 
+                 id: UUID, 
+                 name: str, 
+                 cpf: str, 
+                 birth: datetime, 
+                 email: str, 
+                 password: str, 
+                 phone: str, 
+                 status: Status,
+                 tickets: Optional[List['Ticket']] = None,
+                 ratings: Optional[List['Rating']] = None,
+                 purchases: Optional[List['Purchase']] = None,
+                 receipts: Optional[List['Receipt']] = None):
         super().__init__(id, name, cpf, birth, email, password, phone, status)
-        self.__tickets = []
-        self.__ratings = []
-        self.__purchases = []
-        self.__receipts = []
+        self.__tickets = tickets or []
+        self.__ratings = ratings or []
+        self.__purchases = purchases or []
+        self.__receipts = receipts or []
 
     @classmethod
-    def getUsers(cls):
+    def getUsers(cls) -> List['User']:
         return list(cls.users)
     
-    def getTickets(self):
+    def getTickets(self) -> List['Ticket']:
         return list(self.__tickets)
     
-    def getRatings(self):
+    def getRatings(self) -> List['Rating']:
         return list(self.__ratings)
     
-    def getPurchases(self):
+    def getPurchases(self) -> List['Purchase']:
         return list(self.__purchases)
 
-    def addTicket(self, ticket):
+    def addTicket(self, ticket: 'Ticket') -> None:
         self.__tickets.append(ticket)
 
-    def buyTicket(self, tier, quantity, seller, paymentMethod):
+    def buyTicket(self, tier: Any, quantity: int, seller: 'Seller', paymentMethod: str) -> 'Purchase':
         if tier._event._typeEvent == TypeEvent.FREE_EVENT:
             return self.registerInFreeEvent(tier)
         # O seller registra a venda
         purchase = seller.createPurchase(tier, quantity, self, paymentMethod)
         return purchase
     
-    def transferTicket(self, ticket: Ticket, newCPF: str) -> None:
+    def transferTicket(self, ticket: 'Ticket', newCPF: str) -> None:
         if ticket not in self.__tickets:
             raise ValueError("O ticket não pertence a este usuário.")
         
@@ -57,13 +74,13 @@ class User(Person):
         new_owner.addTicket(ticket)
         ticket.owner = new_owner
 
-    def registerInFreeEvent(self, tier):
+    def registerInFreeEvent(self, tier: Any) -> 'Ticket':
         # Cria um ticket gratuito e adiciona ao usuário
         ticket = Ticket(id=uuid4(), owner=self, tier=tier, event=tier._event, status=Status.VALID, code=str(uuid4()))
         self.addTicket(ticket)
         return ticket
     
-    def createRating(self, event, rate: int, comment: str) -> None:
+    def createRating(self, event: Any, rate: int, comment: str) -> None:
         # Check if the user has a ticket for the given event
         if not any(ticket.event == event for ticket in self.__tickets):
             raise ValueError("O usuário não pode avaliar o evento.")
@@ -72,7 +89,7 @@ class User(Person):
             self.__ratings.append(rating)
             event.addRating(rating)
 
-    def updateRating(self, rating: Rating, rate: int, comment: str) -> None:
+    def updateRating(self, rating: 'Rating', rate: int, comment: str) -> None:
         if rating not in self.__ratings:
             raise ValueError("O rating não pertence a este usuário.")
         
@@ -81,7 +98,7 @@ class User(Person):
         if comment is not None:
             rating.comment = comment
     
-    def payPurchase(self, purchase: Purchase) -> None:
+    def payPurchase(self, purchase: 'Purchase') -> None:
         if purchase not in self.__purchases:
             raise ValueError("Compra não pertence a este usuário.")
         
@@ -92,13 +109,13 @@ class User(Person):
             purchase.status = Status.PAID
             purchase.confirmPayment()
     
-    def addPurchase(self, purchase: Purchase) -> None:
+    def addPurchase(self, purchase: 'Purchase') -> None:
         if purchase not in self.__purchases:
             self.__purchases.append(purchase)
         else:
             raise ValueError("Compra já registrada.")
 
-    def refundPurchase(self, purchase):
+    def refundPurchase(self, purchase: 'Purchase') -> bool:
         if purchase not in self.__purchases:
             raise ValueError("Compra não pertence a este usuário.")
 
@@ -122,6 +139,6 @@ class User(Person):
         purchase.status = Status.REFUND
         return True
     
-    def addReceipt(self, receipt):
+    def addReceipt(self, receipt: 'Receipt') -> None:
         self.__receipts.append(receipt)
 
