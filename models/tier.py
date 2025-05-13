@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from enums.status import Status
 
@@ -74,13 +75,78 @@ class Tier:
 
     
     def openTier(self) -> None:
-        self.__status = Status.OPEN
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+        """
+        try:
+            if self.__status == Status.CLOSED or self.getDisponibility() <= 0:
+                raise ValueError("Não é possível abrir um tier que já está fechado ou sem ingressos disponiveis.")
+            self.__status = Status.OPEN
+        except ValueError as e:
+            logging.error(f"Erro ao abrir o tier {self.__nome}: {str(e)}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao abrir o tier {self.__nome}: {str(e)}")
+            raise
 
     def closeTier(self) -> None:
-        self.__status = Status.CLOSED
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+        """
+        try: 
+            if self.__status == Status.CLOSED:
+                raise ValueError("Não é possível fechar um tier que já está fechado.")
+            self.__status = Status.CLOSED
+        except ValueError as e:
+            logging.error(f"Erro ao fechar o tier {self.__nome}: {str(e)}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao fechar o tier {self.__nome}: {str(e)}")
+            raise
 
     def getDisponibility(self) -> int:
-        return self.__amount - len(self.__tickets)
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            int: _description_
+        """
+        try:
+            if self.__status == Status.CLOSED:
+                raise ValueError("Não é possível obter a disponibilidade de um tier fechado.")
+            return self.__amount - len(self.__tickets)
+        except ValueError as e:
+            logging.error(f"Erro ao obter a disponibilidade do tier {self.__nome}: {str(e)}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao obter a disponibilidade do tier {self.__nome}: {str(e)}")
+            raise
     
     def addTicket(self, ticket) -> None:
-        self.__tickets.append(ticket)
+        """_summary_
+
+        Args:
+            ticket (_type_): _description_
+
+        Raises:
+            ValueError: _description_
+            ValueError: _description_
+        """
+        try:
+            if self.__status != Status.OPEN:
+                raise ValueError("Não é possível adicionar ingressos a um tier fechado.")
+            if self.getDisponibility() <= 0:
+                raise ValueError("Não há ingressos disponíveis neste tier.")
+            self.__tickets.append(ticket)
+        except ValueError as e:
+            logging.error(f"Erro ao adicionar ticket ao tier {self.__nome}: {str(e)}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao adicionar ticket ao tier {self.__nome}: {str(e)}")
+            raise

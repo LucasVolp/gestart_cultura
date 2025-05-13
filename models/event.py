@@ -1,4 +1,6 @@
-from uuid import UUID
+from datetime import date
+import logging
+from uuid import UUID, uuid4
 from enums.status import Status
 from enums.typeEvent import TypeEvent
 from models.tier import Tier
@@ -17,6 +19,7 @@ class Event():
         self.__status = status
         self.__tiers = []
         self.__ratings = []
+
 
     def __str__(self):
         tipo = self.__class__.__name__
@@ -82,57 +85,200 @@ class Event():
 
 
     def getTiers(self):
-        return list(self.__tiers)
-    
-    def createTier(self, amount: int, nome: str, price: float, startDate: str, endDate: str, status: Status) -> Tier:
-        tier_id = UUID
-        tier = Tier(tier_id, amount, nome, price, startDate, endDate, status)
-        self.__tiers.append(tier)
-        return tier
+        """_summary_
 
-    def updateTier(
-        self,
-        tier: Tier,
-        amount: int = None,
-        nome: str = None,
-        price: float = None,
-        startDate: str = None,
-        endDate: str = None,
-        status: Status = None
-    ) -> None:
-            if amount is not None:
-                tier._amount = amount
-            if nome is not None:
-                tier._nome = nome
-            if price is not None:
-                tier._price = price
-            if startDate is not None:
-                tier._startDate = startDate
-            if endDate is not None:
-                tier._endDate = endDate
-            if status is not None:
-                tier._status = status
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            _type_: _description_
+        """
+        try:
+            if not self.__tiers:
+                raise ValueError("Nenhum tier encontrado.")
+            return list(self.__tiers)
+        except ValueError as e:
+            logging.error(f"Erro ao obter tiers: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao obter tiers: {e}")
+            raise
+
+    def createTier(self, amount: int, nome: str, price: float, startDate: str, endDate: str, status: Status) -> Tier:
+        """_summary_
+
+        Args:
+            amount (int): _description_
+            nome (str): _description_
+            price (float): _description_
+            startDate (str): _description_
+            endDate (str): _description_
+            status (Status): _description_
+
+        Raises:
+            ValueError: _description_
+            ValueError: _description_
+            ValueError: _description_
+            ValueError: _description_
+
+        Returns:
+            Tier: _description_
+        """
+        try:
+            if self.__status != Status.OPEN:
+                raise ValueError("Não é possível criar tiers para um evento que não está aberto.")
+            if amount > self.__size:
+                raise ValueError("A quantidade de ingressos no tier excede o tamanho do evento.")
+            if price < 0:
+                raise ValueError("O preço não pode ser negativo.")
+            if startDate >= endDate:
+                raise ValueError("A data de início deve ser anterior à data de término.")
+            tier = Tier(id=uuid4(), amount=amount, nome=nome, price=price, startDate=startDate, endDate=endDate, status=status)
+            self.__tiers.append(tier)
             return tier
+        except ValueError as e:
+            logging.error(f"Erro ao criar o tier: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao criar o tier: {e}")
+            raise
+
+    def updateTier(self, tier: Tier, amount: int = None, nome: str = None, price: float = None, startDate: str = None, endDate: str = None, status: Status = None) -> None:
+        """_summary_
+
+        Args:
+            tier (Tier): _description_
+            amount (int, optional): _description_. Defaults to None.
+            nome (str, optional): _description_. Defaults to None.
+            price (float, optional): _description_. Defaults to None.
+            startDate (str, optional): _description_. Defaults to None.
+            endDate (str, optional): _description_. Defaults to None.
+            status (Status, optional): _description_. Defaults to None.
+
+        Raises:
+            ValueError: _description_
+            ValueError: _description_
+            ValueError: _description_
+            ValueError: _description_
+            ValueError: _description_
+
+        Returns:
+            _type_: _description_
+        """
+        try:
+            if tier not in self.__tiers:
+                raise ValueError("O tier não pertence a este evento.")
+            tier._amount = amount if amount else tier._amount
+            tier._nome = nome if nome else tier._nome
+            tier._price = price if price else tier._price
+            tier._startDate = startDate if startDate else tier._startDate
+            tier._endDate = endDate if endDate else tier._endDate
+            tier._status = status if status else tier._status
+            if amount and amount > self.__size:
+                raise ValueError("A quantidade de ingressos no tier excede o tamanho do evento.")
+            if price and price < 0:
+                raise ValueError("O preço não pode ser negativo.")
+            if startDate and endDate and startDate >= endDate:
+                raise ValueError("A data de início deve ser anterior à data de término.")
+            if status and status not in [Status.OPEN, Status.CLOSED]:
+                raise ValueError("Status inválido. Deve ser OPEN ou CLOSED.")
+            return tier
+        except ValueError as e:
+            logging.error(f"Erro ao atualizar o tier: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao atualizar o tier: {e}")
+            raise
     
     def deleteTier(self, tier: Tier) -> bool:
-        if tier in self.__tiers:
+        try:
+            if tier not in self.__tiers:
+                raise ValueError("O tier não pertence a este evento.")
+            if tier.getDisponibility() < tier._amount:
+                raise ValueError("Não é possível excluir um tier com ingressos já emitidos.")
             self.__tiers.remove(tier)
             return True
-        return False
+        except ValueError as e:
+            logging.error(f"Erro ao excluir o tier: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao excluir o tier: {e}")
+            raise
 
     def getRatings(self):
-        return list(self.__ratings)
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            _type_: _description_
+        """
+        try:
+            if not self.__ratings:
+                raise ValueError("Nenhuma avaliação encontrada.")
+            return list(self.__ratings)
+        except ValueError as e:
+            logging.error(f"Erro ao obter avaliações: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao obter avaliações: {e}")
+            raise
     
     def addRating(self, rating: Rating) -> None:
-        self.__ratings.append(rating)
+        """_summary_
+
+        Args:
+            rating (Rating): _description_
+
+        Raises:
+            ValueError: _description_
+        """
+        try:
+            if rating in self.__ratings:
+                raise ValueError("A avaliação já existe.")
+            self.__ratings.append(rating)
+        except ValueError as e:
+            logging.error(f"Erro ao adicionar avaliação: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao adicionar avaliação: {e}")
+            raise
 
     def deleteRating(self, rating: Rating) -> bool:
-        if rating in self.__ratings:
+        """_summary_
+
+        Args:
+            rating (Rating): _description_
+
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            bool: _description_
+        """
+        try:
+            if rating not in self.__ratings:
+                raise ValueError("A avaliação não pertence a este evento.")
             self.__ratings.remove(rating)
             return True
-        return False
+        except ValueError as e:
+            logging.error(f"Erro ao excluir avaliação: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao excluir avaliação: {e}")
+            raise
 
     def availability(self) -> Status:
-        return self.__status
+        """_summary_
+
+        Returns:
+            Status: _description_
+        """
+        try:
+            return self.__status
+        except Exception as e:
+            logging.error(f"Erro ao verificar a disponibilidade do evento: {e}")
+            raise
 
         
