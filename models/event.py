@@ -1,4 +1,4 @@
-from uuid import uuid4, UUID
+from uuid import UUID
 from enums.status import Status
 from enums.typeEvent import TypeEvent
 from models.tier import Tier
@@ -85,7 +85,7 @@ class Event():
         return list(self.__tiers)
     
     def createTier(self, amount: int, nome: str, price: float, startDate: str, endDate: str, status: Status) -> Tier:
-        tier_id = uuid4()
+        tier_id = UUID
         tier = Tier(tier_id, amount, nome, price, startDate, endDate, status)
         self.__tiers.append(tier)
         return tier
