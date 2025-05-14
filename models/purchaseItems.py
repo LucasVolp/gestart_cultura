@@ -1,5 +1,4 @@
 from uuid import UUID
-from models.user import User
 from models.tier import Tier
 
 class PurchaseItems:

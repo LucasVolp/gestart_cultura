@@ -1,12 +1,15 @@
+import logging
 from uuid import UUID
-from models.user import User
 from models.event import Event
 from enums.status import Status
 from models.tier import Tier
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from models.user import User
 
 class Ticket:
-    def __init__(self, id: UUID, owner: User, tier: Tier, event: Event, status: Status, code: str) -> None:
+    def __init__(self, id: UUID, owner: "User", tier: Tier, event: Event, status: Status, code: str) -> None:
         self.__id = id
         self.__owner = owner
         self.__tier = tier
@@ -59,10 +62,45 @@ class Ticket:
         self.__code = value
 
     def validateTicket(self) -> bool:
-        if self.__status == Status.VALID:
-            return True
-        else:
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+            ValueError: _description_
+
+        Returns:
+            bool: _description_
+        """
+        try:
+            if self.__status == Status.VALID:
+                return True
+            elif self.__event.__status == Status.CANCELLED:
+                raise ValueError("O evento foi cancelado.")
+            elif self.__event.__status == Status.CLOSED:
+                raise ValueError("O evento está fechado.")
+        except ValueError as e:
+            logging.error(f"Erro: {str(e)}")
+            return False
+        except Exception as e:
+            logging.error(f"Erro inesperado: {str(e)}")
             return False
         
     def getQRCode(self) -> str:
-        return f"QR Code: {self.__code}"
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            str: _description_
+        """
+        try:
+            if not self.__code:
+                raise ValueError("Código QR não gerado.")
+            return f"QR Code: {self.__code}"
+        except ValueError as e:
+            logging.error(f"Erro: {str(e)}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado: {str(e)}")
+            raise

@@ -1,15 +1,16 @@
+import logging
 from uuid import UUID, uuid4
 from models.receipt import Receipt
-from models.user import User
-from enums.paymentStatus import PaymentStatus
 from models.ticket import Ticket
+from enums.paymentStatus import PaymentStatus
 from enums.status import Status
-from models.event import Event
-from models.tier import Tier
-from models.purchaseItems import PurchaseItems
+from typing import TYPE_CHECKING, Tuple, List
+
+if TYPE_CHECKING:
+    from models.user import User
 
 class Purchase:
-    def __init__(self, id: UUID, buyer: User, purchaseDate: str, status: PaymentStatus, totalPrice: float, paymentMethod: str, items: list = None) -> None:
+    def __init__(self, id: UUID, buyer: "User", purchaseDate: str, status: PaymentStatus, totalPrice: float, paymentMethod: str, items: list = None) -> None:
         self.__id = id
         self.__buyer = buyer
         self.__purchaseDate = purchaseDate
@@ -78,29 +79,60 @@ class Purchase:
     def _items(self, value):
         self.__items = value
 
-    def confirmPayment(self):
-        if self.__status == PaymentStatus.PAID:
+    def confirmPayment(self) -> Tuple[List[Ticket], Receipt]:
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+            ValueError: _description_
+
+        Returns:
+            Tuple[List[Ticket], Receipt]: _description_
+        """
+        try:
+            if self.__status != PaymentStatus.PAID:
+                raise ValueError("Pagamento não está no status PAID")
+            tickets = []
             for item in self.__items:
                 tier = item._tier
-                event = tier._event if hasattr(tier, '_event') else None
+                if tier.getDisponibility() < item._quantity:
+                    raise ValueError(f"Não há ingressos suficientes no tier {tier._nome}")
                 for _ in range(item._quantity):
                     ticket = Ticket(
                         id=uuid4(),
                         owner=self.__buyer,
                         tier=tier,
-                        event=event,
+                        event=tier._event if hasattr(tier, '_event') else None,
                         status=Status.VALID,
                         code=str(uuid4())
                     )
-                    receipt = self.generateReceipt()
-                    self.__buyer.addTicket(ticket)
-                    self.__buyer.addReceipt(receipt)
+                    tickets.append(ticket)
                     item._tier.addTicket(ticket)
-            self.__buyer.addPurchase(self)
-        
-    def generateReceipt(self):
-        if self.__status == PaymentStatus.PAID:
-            receipt = Receipt(id=uuid4(), purchase=self, date=self.__purchaseDate, quantity=self.__totalPrice, description="Receipt for purchase")
-            return receipt
-        else:
-            raise ValueError("Cannot generate a receipt for a purchase that is not paid.")
+            receipt = self.generateReceipt()
+            return tickets, receipt
+        except ValueError as e:
+            logging.error(f"Erro ao confirmar pagamento {self.__id}: {str(e)}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao confirmar pagamento {self.__id}: {str(e)}")
+            raise
+    
+    def generateReceipt(self) -> Receipt:
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            Receipt: _description_
+        """
+        try:
+            if self.__status != PaymentStatus.PAID:
+                raise ValueError("Pagamento não está no status PAID")
+            return Receipt(id=uuid4(), purchase=self, date=self.__purchaseDate, quantity=self.__totalPrice, description="Receipt for purchase")
+        except ValueError as e:
+            logging.error(f"Erro ao gerar recibo para a compra {self.__id}: {str(e)}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro inesperado ao gerar recibo para a compra {self.__id}: {str(e)}")
+            raise
