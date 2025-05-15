@@ -2,12 +2,14 @@ from datetime import datetime
 import os
 import re
 
+from enums.status import Status
 from enums.typeEvent import TypeEvent
 
 class Utils:
 
     @staticmethod
     def menu(msg):
+        Utils.clearScreen()
         print("="*30)
         print(f"{msg}")
         print("="*30)
@@ -46,6 +48,25 @@ class Utils:
                     print("Opção inválida.")
             except ValueError:
                 print("Digite um número válido.")
+
+    @staticmethod
+    def statusEnum():
+        status = {
+            Status.OPEN: "Aberto",
+            Status.CLOSED: "Fechado"
+        }
+        print("Selecione o status do Lote:")
+        for idx, (key, value) in enumerate(status.items(), start=1):
+            print(f"{idx} - {value}")
+        while True:
+            try:
+                opcao = int(Utils.inputBack("Escolha o status do Lote: "))
+                if 1 <= opcao <= len(status):
+                    return list(status.keys())[opcao - 1]
+                else:
+                    print("Opção inválida.")
+            except ValueError:
+                print("Digite um número válido.")
     
     @staticmethod
     def typeEvents():
@@ -68,7 +89,7 @@ class Utils:
             print(f"{idx} - {nomes_pt[tipo]}")
         while True:
             try:
-                opcao = int(input("Escolha o tipo de evento: "))
+                opcao = int(Utils.inputBack("Escolha o tipo de evento: "))
                 if 1 <= opcao <= len(eventos):
                     return eventos[opcao - 1]
                 else:
@@ -77,7 +98,7 @@ class Utils:
                 print("Digite um número válido.")
 
     @staticmethod
-    def input_email(msg="Digite seu email: "):
+    def inputEmail(msg="Digite seu email: "):
         while True:
             email = Utils.inputBack(msg)
             pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
@@ -86,7 +107,7 @@ class Utils:
             print("Email inválido. Tente novamente.")
 
     @staticmethod
-    def input_cpf(msg="Digite seu CPF (xxx.xxx.xxx-xx): "):
+    def inputCPF(msg="Digite seu CPF (xxx.xxx.xxx-xx): "):
         while True:
             cpf = Utils.inputBack(msg)
             pattern = r"^\d{3}\.\d{3}\.\d{3}-\d{2}$"
@@ -95,7 +116,7 @@ class Utils:
             print("CPF inválido. Use o formato xxx.xxx.xxx-xx.")
 
     @staticmethod
-    def input_phone(msg="Digite seu telefone ((xx) 9xxxx-xxxx): "):
+    def inputPhone(msg="Digite seu telefone ((xx) 9xxxx-xxxx): "):
         while True:
             phone = Utils.inputBack(msg)
             pattern = r"^\(\d{2}\)\s9\d{4}-\d{4}$"
@@ -104,7 +125,7 @@ class Utils:
             print("Telefone inválido. Use o formato (xx) 9xxxx-xxxx.")
 
     @staticmethod
-    def input_date(msg="Digite a data (DD/MM/AAAA): "):
+    def inputDate(msg="Digite a data (DD/MM/AAAA): "):
         while True:
             date_str = Utils.inputBack(msg)
             try:
@@ -114,7 +135,7 @@ class Utils:
                 print("Data inválida. Use o formato DD/MM/AAAA.")
 
     @staticmethod
-    def input_password(msg="Digite sua senha: "):
+    def inputPassword(msg="Digite sua senha: "):
         while True:
             password = Utils.inputBack(msg)
             if len(password) >= 8 and any(c.isalpha() for c in password) and any(c.isdigit() for c in password):
@@ -122,7 +143,7 @@ class Utils:
             print("Senha inválida. A senha deve ter pelo menos 8 caracteres, incluindo letras e números.")
     
     @staticmethod
-    def input_cnpj(msg="Digite seu CNPJ (xx.xxx.xxx/xxxx-xx): "):
+    def inputCNPJ(msg="Digite seu CNPJ (xx.xxx.xxx/xxxx-xx): "):
         while True:
             cnpj = Utils.inputBack(msg)
             pattern = r"^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$"

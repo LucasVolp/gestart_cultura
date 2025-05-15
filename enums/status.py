@@ -9,3 +9,4 @@ class Status(Enum):
     CLOSED = "CLOSED"
     VALID = "VALID"
     INVALID = "INVALID"
+    SOLD_OUT = "SOLD_OUT"
