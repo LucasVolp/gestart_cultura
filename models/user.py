@@ -22,6 +22,25 @@ class User(Person):
         self.__purchases = []
         self.__receipts = []
 
+    def getUserbyEmail(cls, email):
+        """_summary_
+
+        Args:
+            cls (_type_): _description_
+            email (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        try:
+            for user in cls.users:
+                if user.email == email:
+                    return user
+            return None
+        except Exception as e:
+            logging.error(f"Erro ao buscar usuário por email: {str(e)}")
+            raise
+
     def sendNotification(self, recipient: str, message: str) -> None:
         try:
             if not self._validate_email(recipient):

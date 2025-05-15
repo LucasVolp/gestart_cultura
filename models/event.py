@@ -8,7 +8,7 @@ from models.rating import Rating
 
 
 class Event():
-    def __init__(self, id: UUID, name: str, description: str, date: str, local: str, size: int, typeEvent: TypeEvent, status: Status, tiers: list = None, ratings: list = None) -> None:
+    def __init__(self, id: UUID, name: str, description: str, date: str, local: str, size: int, typeEvent: TypeEvent, status: Status, tiers: list = None, ratings: list = None, producers: list = None) -> None:
         self.__id = id
         self.__name = name
         self.__description = description
@@ -19,6 +19,7 @@ class Event():
         self.__status = status
         self.__tiers = []
         self.__ratings = []
+        self.__producers = producers if producers else []
 
 
     def __str__(self):
@@ -82,6 +83,28 @@ class Event():
     @_typeEvent.setter
     def _typeEvent(self, value):
         self.__typeEvent = value
+
+    
+    def addProducer(self, producer):
+        try:
+            if producer not in self.__producers:
+                self.__producers.append(producer)
+            else:
+                raise ValueError("O produtor já está associado a este evento.")
+        except ValueError as e:
+            raise
+
+    def removeProducer(self, producer):
+        try:
+            if producer in self.__producers:
+                self.__producers.remove(producer)
+            else:
+                raise ValueError("O produtor não está associado a este evento.")
+        except ValueError as e:
+            raise
+
+    def getProducers(self):
+        return list(self.__producers)
 
 
     def getTiers(self):
@@ -154,13 +177,6 @@ class Event():
             startDate (str, optional): _description_. Defaults to None.
             endDate (str, optional): _description_. Defaults to None.
             status (Status, optional): _description_. Defaults to None.
-
-        Raises:
-            ValueError: _description_
-            ValueError: _description_
-            ValueError: _description_
-            ValueError: _description_
-            ValueError: _description_
 
         Returns:
             _type_: _description_

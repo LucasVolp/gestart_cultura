@@ -12,7 +12,7 @@ class Producer(Person):
 
     def __init__(self, id, name, cpf, birth, email, password, phone, status, cnpj:str, enterprise):
       super().__init__(id, name, cpf, birth, email, password, phone, status)
-      self.__cnpj = cnpj
+      self.__cnpj = cnpj if self._validate_cnpj(cnpj) else None
       self.__enterprise = enterprise
       self.events = []
 
@@ -210,23 +210,17 @@ class Producer(Person):
         except Exception as e:
             logging.error(f"Erro inesperado ao excluir evento: {str(e)}")
             raise
-
-    def getEvent(self) -> list[Event]:
+    
+    def listEvents(self):
         """_summary_
 
         Raises:
             ValueError: _description_
-
-        Returns:
-            list[Event]: _description_
         """
         try:
             if not self.events:
                 raise ValueError("Nenhum evento encontrado.")
-            return list(self.events)
-        except ValueError as e:
-            logging.error(f"Erro ao obter eventos: {str(e)}")
-            raise
-        except Exception as e:
-            logging.error(f"Erro inesperado ao obter eventos: {str(e)}")
+            for idx, event in enumerate(self.events, start=1):
+                print(f"{idx} - {event}")
+        except ValueError:
             raise
