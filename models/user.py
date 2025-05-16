@@ -352,7 +352,8 @@ class User(Person):
             if purchase._status == PaymentStatus.PAID:
                 print("A compra já foi paga.")
                 return
-            if purchase._status == PaymentStatus.PENDING:
+            if purchase._status == PaymentStatus.PENDING and self.__balance >= purchase._total:
+                self.__balance -= purchase._total
                 purchase._status = PaymentStatus.PAID
                 tickets, receipt = purchase.confirmPayment()
                 for ticket in tickets:

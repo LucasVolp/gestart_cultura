@@ -1,6 +1,6 @@
 from flows.utils import Utils
-from manageAccounts import manageAccounts
-from menus.notifications import notifications
+from flows.manageAccounts import manageAccounts
+from flows.notifications import notifications
 
 
 def sellerMenu(seller):

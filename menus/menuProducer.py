@@ -1,11 +1,11 @@
 from uuid import uuid4
 from enums.status import Status
 from flows.utils import Utils
-from menus.notifications import producerNotifications
+from flows.notifications import notifications
 from models.producer import Producer
 from eventMenu import producerEventMenu
 from tierMenu import producerTierMenu
-from manageAccounts import manageAccounts
+from flows.manageAccounts import manageAccounts
 
 def menuProducer(producer):
     while True:
@@ -35,7 +35,7 @@ def menuProducer(producer):
                     continue
             case "4":
                 try:
-                    producerNotifications(producer)
+                    notifications(producer)
                 except KeyboardInterrupt:
                     continue
             case "0":

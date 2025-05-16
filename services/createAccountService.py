@@ -3,7 +3,7 @@ from enums.status import Status
 from models.producer import Producer
 from models.seller import Seller
 from models.user import User
-from .auth_service import AuthService
+from .authService import AuthService
 
 
 class CreateAccountService:

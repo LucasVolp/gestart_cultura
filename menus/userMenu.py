@@ -1,4 +1,5 @@
 from flows.utils import Utils
+from models.event import Event
 
 
 def userMenu(user):
@@ -13,4 +14,23 @@ def userMenu(user):
         print("6. Gerênciar Notificações")
         print("0. Sair")
         option = input()
-        
+        match option:
+            case "1":
+                for idx, event in enumerate(Event.events, start=1):
+                    print(f"{idx} - {event.name} - {event.description} - {event.date} - {event.local} - {event.size} - {event.typeEvent.name} - {event.status.name}")
+                Utils.pause()
+            case "2":
+                pass
+            case "3":
+                pass
+            case "4":
+                pass
+            case "5":
+                pass
+            case "6":
+                pass
+            case "0":
+                print("Saindo do menu do usuário...")
+                break
+            case _:
+                print("Opção inválida. Tente novamente.")

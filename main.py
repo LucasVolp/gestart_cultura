@@ -2,8 +2,8 @@ from menus.menuProducer import menuProducer
 from models.producer import Producer
 from models.seller import Seller
 from models.user import User
-from services.auth_service import AuthService
-from services.create_account_service import CreateAccountService
+from services.authService import AuthService
+from services.createAccountService import CreateAccountService
 from flows.utils import Utils
 
 def main():

@@ -42,10 +42,10 @@ class Seller(Person):
             if amount <= 0:
                 print("A quantidade deve ser maior que zero.")
                 return None
-            if tier._quantity < amount:
+            if tier.amount < amount:
                 print("Quantidade solicitada maior que a disponível.")
                 return None
-            if tier._status != Status.OPEN:
+            if tier.status != Status.OPEN:
                 print("O tier não está disponível para compra.")
                 return None
             

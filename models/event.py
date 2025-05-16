@@ -8,6 +8,8 @@ from models.rating import Rating
 
 
 class Event():
+    events = []
+
     def __init__(self, id: UUID, name: str, description: str, date: str, local: str, size: int, typeEvent: TypeEvent, status: Status, tiers: list = None, ratings: list = None, producers: list = None) -> None:
         self.__id = id
         self.__name = name
@@ -20,6 +22,7 @@ class Event():
         self.__tiers = []
         self.__ratings = []
         self.__producers = producers if producers else []
+        Event.events.append(self)
 
 
     def __str__(self):
