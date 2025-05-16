@@ -15,7 +15,8 @@ class Tier:
 
     def __str__(self):
         tipo = self.__class__.__name__
-        return f"[{tipo}] Nome: {self.__name} | Preço: {self.__price} | Início: {self.__startDate} | Fim: {self.__endDate} | Status: {self.__status.name}"
+        status = self.__status.name
+        return f"[{tipo}] Nome: {self.__name} | Preço: {self.__price} | Início: {self.__startDate} | Fim: {self.__endDate} | Status: {status} | Ingressos: {self.__tickets} | Disponibilidade: {self.getDisponibility()}"
 
     @property
     def id(self):

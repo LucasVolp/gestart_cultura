@@ -26,7 +26,9 @@ class Event():
         tipo = self.__class__.__name__
         typeEvent = self.__typeEvent.name
         status = self.__status.name
-        return f"[{tipo}] Nome: {self.__name} | Descrição: {self.__description} | Data: {self.__date} | Local: {self.__local} | Tamanho: {self.__size} | Lotes: {self.__tiers} | Avaliações: {self.__ratings} | Tipo de Evento: {typeEvent} | Status: {status}"
+        tiers = [tier.name for tier in self.__tiers]
+        ratings = [rating.name for rating in self.__ratings]
+        return f"[{tipo}] Nome: {self.__name} | Descrição: {self.__description} | Data: {self.__date} | Local: {self.__local} | Tamanho: {self.__size} | Lotes: {tiers} | Avaliações: {ratings} | Tipo de Evento: {typeEvent} | Status: {status}"
 
     @property
     def id(self):
@@ -129,15 +131,21 @@ class Event():
         if self.__status != Status.OPEN:
             print("Não é possível criar tiers para um evento que não está aberto.")
             return None
-        if amount > self.__size:
+        if self.__tickets:
+            totalTickets = sum(tier.amount for tier in self.__tiers)
+
+        if totalTickets + amount > self.__size:
             print("A quantidade de ingressos no tier excede o tamanho do evento.")
             return None
+        
         if price < 0:
             print("O preço não pode ser negativo.")
             return None
+        
         if startDate >= endDate:
             print("A data de início deve ser anterior à data de término.")
             return None
+        
         tier = Tier(id=uuid4(), amount=amount, name=name, price=price, startDate=startDate, endDate=endDate, status=status)
         self.__tiers.append(tier)
         return tier

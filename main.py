@@ -1,3 +1,7 @@
+from menus.menuProducer import menuProducer
+from models.producer import Producer
+from models.seller import Seller
+from models.user import User
 from services.auth_service import AuthService
 from services.create_account_service import CreateAccountService
 from flows.utils import Utils
@@ -16,11 +20,17 @@ def main():
             case "1":
                 try:
                     Utils.menu("Fazer Login - ou digite 0 para voltar")
-                    email = Utils.input_email()
-                    password = Utils.inputBack("Digite sua senha")
+                    email = Utils.inputEmail()
+                    password = Utils.inputBack("Digite sua senha: ")
                     account = auth_service.authenticar(email, password)
                     if account:
                         print(f"Bem-vindo, {account.name}!")
+                        if isinstance(account, Producer):
+                            menuProducer(account)
+                        elif isinstance(account, User):
+                            pass
+                        elif isinstance(account, Seller):
+                            pass
                     else:
                         print("Email ou senha incorretos.")
                     Utils.pause()
@@ -30,16 +40,16 @@ def main():
                 try:
                     Utils.menu("Criar Conta - ou digite 0 para voltar")
                     account_type = Utils.accountTypes()
-                    name = Utils.inputBack("Digite seu nome")
-                    email = Utils.input_email()
-                    cpf = Utils.input_cpf()
-                    phone = Utils.input_phone()
-                    birth = Utils.input_date("Digite sua data de nascimento (DD/MM/AAAA): ")
-                    password = Utils.input_password()
+                    name = Utils.inputBack("Digite seu nome: ")
+                    email = Utils.inputEmail()
+                    cpf = Utils.inputCPF()
+                    phone = Utils.inputPhone()
+                    birth = Utils.inputDate("Digite sua data de nascimento (DD/MM/AAAA): ")
+                    password = Utils.inputPassword()
 
                     if account_type == "producer":
-                        cnpj = Utils.input_cnpj()
-                        enterprise = Utils.inputBack("Digite o nome da sua empresa")
+                        cnpj = Utils.inputCNPJ()
+                        enterprise = Utils.inputBack("Digite o nome da sua empresa: ")
                         account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone, cnpj, enterprise)
                     
                     account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone)

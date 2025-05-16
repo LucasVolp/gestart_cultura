@@ -94,8 +94,19 @@ class Person(Authenticable, ABC):
         Returns:
             bool: _description_
         """
-        pattern = re.compile(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$')
-        return bool(re.match(pattern, cpf))
+        cpf = re.sub(r'\D', '', cpf)
+        if len(cpf) != 11 or cpf == cpf[0] * 11:
+            return False
+
+        soma = sum(int(cpf[i]) * (10 - i) for i in range(9))
+        resto = soma % 11
+        d10 = 0 if resto < 2 else 11 - resto
+
+        soma = sum(int(cpf[i]) * (11 - i) for i in range(10))
+        resto = soma % 11
+        d11 = 0 if resto < 2 else 11 - resto
+
+        return int(cpf[9]) == d10 and int(cpf[10]) == d11
 
     @staticmethod
     def _validate_email(email: str) -> bool:
@@ -238,23 +249,39 @@ class Person(Authenticable, ABC):
         """
         try:
             if name and not name.strip():
-                raise ValueError("O nome não pode ser vazio.")
+                print("O nome não pode ser vazio.")
+                return
             if birth and birth >= date.today():
-                raise ValueError("A data de nascimento deve ser no passado.")
+                print("A data de nascimento deve ser no passado.")
+                return
             if email and not self._validate_email(email):
-                raise ValueError("Email inválido.")
+                print("Email inválido.")
+                return
             if password and not self._validate_password(password):
-                raise ValueError("A password deve ter pelo menos 8 caracteres, incluindo letras e números.")
+                print("A senha deve ter pelo menos 8 caracteres, incluindo letras e números.")
+                return
             self.__name = name if name else self.__name
             self.__birth = birth if birth else self.__birth
             self.__email = email if email else self.__email
             self.__password = self._hash_password(password) if password else self.__password
-        except ValueError as e:
-            logging.error(f"Erro ao atualizar perfil para {self.__email}: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao atualizar perfil para {self.__email}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao atualizar perfil para {self.__email}: {str(e)}")
+
+    def deleteAccount(self) -> bool:
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+        """
+        try:
+            if self.__status == Status.DELETED:
+                print("Conta já excluída.")
+                return False
+            self.__status = Status.DELETED
+            print(f"Conta {self.__email} excluída com sucesso.")
+            return True
+        except Exception as e:
+            print(f"Erro inesperado ao excluir conta {self.__email}: {str(e)}")
     
     def recoverPassword(self, email: str, cpf: str) -> bool:
         """_summary_

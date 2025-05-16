@@ -1,9 +1,11 @@
 from uuid import uuid4
 from enums.status import Status
 from flows.utils import Utils
+from menus.notifications import producerNotifications
 from models.producer import Producer
 from eventMenu import producerEventMenu
 from tierMenu import producerTierMenu
+from manageAccounts import manageAccounts
 
 def menuProducer(producer):
     while True:
@@ -12,6 +14,7 @@ def menuProducer(producer):
         print("1. Gerênciar Eventos")
         print("2. Gerênciar Lotes")
         print("3. Gerênciar Conta")
+        print("4. Gerênciar Notificações")
         print("0. Sair")
         option = input()
         match option:
@@ -26,7 +29,15 @@ def menuProducer(producer):
                 except KeyboardInterrupt:
                     continue
             case "3":
-                pass
+                try:
+                    manageAccounts(producer)
+                except KeyboardInterrupt:
+                    continue
+            case "4":
+                try:
+                    producerNotifications(producer)
+                except KeyboardInterrupt:
+                    continue
             case "0":
                 print("Saindo do menu do Produtor. Até logo!")
                 break

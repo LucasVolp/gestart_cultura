@@ -4,6 +4,7 @@ import re
 
 from enums.status import Status
 from enums.typeEvent import TypeEvent
+from models.person import Person
 
 class Utils:
 
@@ -111,9 +112,9 @@ class Utils:
         while True:
             cpf = Utils.inputBack(msg)
             pattern = r"^\d{3}\.\d{3}\.\d{3}-\d{2}$"
-            if re.match(pattern, cpf):
+            if re.match(pattern, cpf) and Person._validate_cpf(cpf):
                 return cpf
-            print("CPF inválido. Use o formato xxx.xxx.xxx-xx.")
+            print("CPF inválido. Use o formato xxx.xxx.xxx-xx e um número válido.")
 
     @staticmethod
     def inputPhone(msg="Digite seu telefone ((xx) 9xxxx-xxxx): "):

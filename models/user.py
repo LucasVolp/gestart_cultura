@@ -15,12 +15,17 @@ if TYPE_CHECKING:
 class User(Person):
     users = []
 
-    def __init__(self, id: str, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: str, tickets: list = None, ratings: list = None, purchases: list = None, receipts: list = None):
+    def __init__(self, id: str, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: str, balance: float, tickets: list = None, ratings: list = None, purchases: list = None, receipts: list = None):
         super().__init__(id, name, cpf, birth, email, password, phone, status)
+        self.__balance = balance
         self.__tickets = []
         self.__ratings = []
         self.__purchases = []
         self.__receipts = []
+
+    @property
+    def balance(self):
+        return self.__balance
 
     def getUserbyEmail(cls, email):
         """_summary_
@@ -44,30 +49,25 @@ class User(Person):
     def sendNotification(self, recipient: str, message: str) -> None:
         try:
             if not self._validate_email(recipient):
-                raise ValueError("Destinatário inválido.")
-            # Simula envio de email (implementação real usaria algum serviço de email)
-            logging.info(f"Notificação enviada para {recipient}: {message}")
-        except ValueError as e:
-            logging.error(f"Erro ao enviar notificação para {recipient}: {str(e)}")
-            raise
+                print("Email inválido.")
+                return
+            # Simula envio de email
+            print(f"Notificação enviada para {recipient}: {message}")
         except Exception as e:
-            logging.error(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
 
     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
         try:
             if not self._validate_email(recipient):
-                raise ValueError("Destinatário inválido.")
+                print("Email inválido.")
+                return
             if datetime < date.today():
-                raise ValueError("A data de agendamento deve ser futura.")
-            # Simula agendamento (implementação real usaria algum serviço de agendamento)
-            logging.info(f"Notificação agendada para {recipient} em {datetime}: {message}")
-        except ValueError as e:
-            logging.error(f"Erro ao agendar notificação para {recipient}: {str(e)}")
-            raise
+                print("A data de agendamento deve ser futura.")
+                return
+            # Simula agendamento de email
+            print(f"Notificação agendada para {recipient} em {datetime}: {message}")
         except Exception as e:
-            logging.error(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
 
     @classmethod
     def getUsers(cls):
@@ -163,13 +163,9 @@ class User(Person):
             if ticket not in self.__tickets:
                 self.__tickets.append(ticket)
             else:
-                raise ValueError("Ticket já registrado.")
-        except ValueError as e:
-            logging.error(f"Erro ao adicionar ticket para o usuário {self._id}: {str(e)}")
-            raise
+                print("Ticket já registrado.")
         except Exception as e:
-            logging.error(f"Erro inesperado ao adicionar ticket para o usuário {self._id}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao adicionar ticket para o usuário {self._id}: {str(e)}")
 
     def buyTicket(self, tier, quantity, seller, paymentMethod):
         """_summary_
@@ -211,29 +207,30 @@ class User(Person):
         """
         try:
             if ticket._event._typeEvent == TypeEvent.FREE_EVENT:
-                raise ValueError("Não é possível transferir ingressos de eventos gratuitos.")
+                print("Não é possível transferir ingressos de eventos gratuitos.")
+                return
             if ticket not in self.__tickets:
-                raise ValueError("O ticket não pertence a este usuário.")
+                print("O ticket não pertence a este usuário.")
+                return
             if ticket._status != Status.VALID:
-                raise ValueError("O ticket não está válido para transferência.")
+                print("O ticket não está válido para transferência.")
+                return
             if ticket._event.status == Status.CLOSED:
-                raise ValueError("O evento já foi encerrado, não é possível transferir o ingresso.")
+                print("O evento já foi encerrado, não é possível transferir o ingresso.")
+                return
             new_owner = None
             for user in User.users:
                 if user._cpf == newCPF:
                     new_owner = user
                     break
             if not new_owner:
-                raise ValueError("Novo usuário com o CPF informado não encontrado.")
+                print("Novo usuário com o CPF informado não encontrado.")
+                return
             self.__tickets.remove(ticket)
             new_owner.addTicket(ticket)
             ticket.owner = new_owner
-        except ValueError as e:
-            logging.error(f"Erro ao transferir ticket para o usuário {self._id}: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao transferir ticket para o usuário {self._id}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao transferir ticket para o usuário {self._id}: {str(e)}")
 
     def registerInFreeEvent(self, tier):
         """_summary_
@@ -251,20 +248,20 @@ class User(Person):
         """
         try:
             if tier._event._typeEvent != TypeEvent.FREE_EVENT:
-                raise ValueError("O evento não é gratuito.")
+                print("O evento não é gratuito.")
+                return None
             if tier.getDisponibility() <= 0:
-                raise ValueError("Não há ingressos disponíveis para o evento.")
+                print("Não há ingressos disponíveis para o evento.")
+                return None
             if tier._event.status == Status.CLOSED:
-                raise ValueError("O evento já foi encerrado, não é possível registrar-se.")
+                print("O evento já foi encerrado, não é possível registrar-se.")
+                return None
             ticket = Ticket(id=uuid4(), owner=self, tier=tier, event=tier._event, status=Status.VALID, code=str(uuid4()))
             self.addTicket(ticket)
             return ticket
-        except ValueError as e:
-            logging.error(f"Erro ao registrar no evento gratuito para o usuário {self._id}: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao registrar no evento gratuito para o usuário {self._id}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao registrar no evento gratuito para o usuário {self._id}: {str(e)}")
+            return None
     
     def createRating(self, event, rate: int, comment: str) -> Rating:
         """_summary_
@@ -283,20 +280,19 @@ class User(Person):
         """
         try:
             if not any(ticket.event == event for ticket in self.__tickets):
-                raise ValueError("O usuário não pode avaliar o evento.")
+                print("O usuário não pode avaliar o evento.")
+                return None
             if event.status == Status.CLOSED:
                 rating = Rating(id=uuid4(), user=self, event=event, rate=rate, comment=comment)
                 self.__ratings.append(rating)
                 event.addRating(rating)
                 return rating
             else:
-                raise ValueError("O evento não está encerrado, não é possível avaliar.")
-        except ValueError as e:
-            logging.error(f"Erro ao criar rating para o usuário {self._id}: {str(e)}")
-            raise
+                print("O evento não está encerrado, não é possível avaliar.")
+                return None
         except Exception as e:
-            logging.error(f"Erro inesperado ao criar rating para o usuário {self._id}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao criar rating para o usuário {self._id}: {str(e)}")
+            return None
 
     def updateRating(self, rating: Rating, rate: int, comment: str) -> None:
         """_summary_
@@ -312,17 +308,15 @@ class User(Person):
         """
         try:
             if rating not in self.__ratings:
-                raise ValueError("O rating não pertence a este usuário.")
+                print("O rating não pertence a este usuário.")
+                return
             if rating._event.status != Status.CLOSED:
-                raise ValueError("O evento não está encerrado, não é possível atualizar a avaliação.")
+                print("O evento não está encerrado, não é possível atualizar a avaliação.")
+                return
             rating._rate = rate if 0 <= rate <= 5 else rating._rate
             rating._comment = comment if comment else rating._comment
-        except ValueError as e:
-            logging.error(f"Erro ao atualizar rating para o usuário {self.__name}: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao atualizar rating para o usuário {self.__name}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao atualizar rating para o usuário {self.__name}: {str(e)}")
 
     def deleteRating(self, rating: Rating) -> None:
         """_summary_
@@ -335,14 +329,11 @@ class User(Person):
         """
         try:
             if rating not in self.__ratings:
-                raise ValueError("O rating não pertence a este usuário.")
+                print("O rating não pertence a este usuário.")
+                return
             self.__ratings.remove(rating)
-        except ValueError as e:
-            logging.error(f"Erro ao deletar rating para o usuário {self.__name}: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao deletar rating para o usuário {self.__name}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao deletar rating para o usuário {self.__name}: {str(e)}")
 
     def payPurchase(self, purchase: "Purchase") -> None:
         """_summary_
@@ -356,9 +347,11 @@ class User(Person):
         """
         try:
             if purchase not in self.__purchases:
-                raise ValueError("Compra não pertence a este usuário.")
+                print("Compra não pertence a este usuário.")
+                return
             if purchase._status == PaymentStatus.PAID:
-                raise ValueError("A compra já foi paga.")
+                print("A compra já foi paga.")
+                return
             if purchase._status == PaymentStatus.PENDING:
                 purchase._status = PaymentStatus.PAID
                 tickets, receipt = purchase.confirmPayment()
@@ -366,9 +359,8 @@ class User(Person):
                     self.addTicket(ticket)
                 self.addReceipt(receipt)
                 self.addPurchase(purchase)
-        except ValueError as e:
-            logging.error(f"Erro ao pagar compra para o usuário {self._id}: {str(e)}")
-            raise
+        except Exception as e:
+            print(f"Erro inesperado ao pagar compra para o usuário {self._id}: {str(e)}")
     
     def addPurchase(self, purchase: "Purchase") -> None:
         """_summary_
@@ -382,17 +374,12 @@ class User(Person):
         """
         try:
             if purchase in self.__purchases:
-                raise ValueError("Compra já registrada.")
+                print("Compra já registrada.")
+                return
             if purchase not in self.__purchases:
                 self.__purchases.append(purchase)
-            else:
-                raise ValueError("Compra já registrada.")
-        except ValueError as e:
-            logging.error(f"Erro ao adicionar compra para o usuário {self._id}: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao adicionar compra para o usuário {self._id}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao adicionar compra para o usuário {self._id}: {str(e)}")
 
     def refundPurchase(self, purchase):
         """_summary_
@@ -449,15 +436,10 @@ class User(Person):
         """
         try:
             if receipt in self.__receipts:
-                raise ValueError("Recibo já registrado.")
+                print("Recibo já registrado.")
+                return
             if receipt not in self.__receipts:
                 self.__receipts.append(receipt)
-            else:
-                raise ValueError("Recibo já registrado.")
-        except ValueError as e:
-            logging.error(f"Erro ao adicionar recibo para o usuário {self._id}: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao adicionar recibo para o usuário {self._id}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao adicionar recibo para o usuário {self._id}: {str(e)}")
 

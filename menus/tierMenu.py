@@ -64,7 +64,6 @@ def editTierMenu(producer, event=None):
         Utils.pause()
         return
     tier = selected_event.tiers[tierIndex]
-    # Opções de ação no lote
     print("O que deseja fazer?")
     print("1. Abrir Lote")
     print("2. Fechar Lote")

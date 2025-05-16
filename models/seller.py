@@ -16,75 +16,68 @@ class Seller(Person):
 
     def sendNotification(self, recipient: str, message: str) -> None:
         try:
-            if not self._validate_phone(recipient):
-                raise ValueError("Número de telefone inválido.")
-            # Simula envio de SMS
-            logging.info(f"SMS enviado para {recipient}: {message}")
-        except ValueError as e:
-            logging.error(f"Erro ao enviar notificação para {recipient}: {str(e)}")
-            raise
+            if not self._validate_email(recipient):
+                print("Email inválido.")
+                return
+            # Simula envio de email
+            logging.info(f"Notificação enviada para {recipient}: {message}")
         except Exception as e:
-            logging.error(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
 
     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
         try:
-            if not self._validate_phone(recipient):
-                raise ValueError("Número de telefone inválido.")
+            if not self._validate_email(recipient):
+                print("Email inválido.")
+                return
             if datetime < date.today():
-                raise ValueError("A data de agendamento deve ser futura.")
-            # Simula agendamento de SMS
-            logging.info(f"SMS agendado para {recipient} em {datetime}: {message}")
-        except ValueError as e:
-            logging.error(f"Erro ao agendar notificação para {recipient}: {str(e)}")
-            raise
+                print("A data de agendamento deve ser futura.")
+                return
+            # Simula agendamento de email
+            logging.info(f"Notificação agendada para {recipient} em {datetime}: {message}")
         except Exception as e:
-            logging.error(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
 
     def createPurchase(self, tier, amount, user, paymentMethod):
         try:
             if amount <= 0:
-                raise ValueError("A quantidade deve ser maior que zero.")
+                print("A quantidade deve ser maior que zero.")
+                return None
             if tier._quantity < amount:
-                raise ValueError("Quantidade solicitada maior que a disponível.")
+                print("Quantidade solicitada maior que a disponível.")
+                return None
             if tier._status != Status.OPEN:
-                raise ValueError("O tier não está disponível para compra.")
-            item = PurchaseItems(id=uuid4(), tier=tier, quantity=amount, unitPrice=tier._price, totalPrice=tier._price*amount)
+                print("O tier não está disponível para compra.")
+                return None
+            
+            item = PurchaseItems(id=uuid4(), tier=tier, quantity=amount, unitPrice=tier.price, totalPrice=tier.price*amount)
             purchase = Purchase(id=uuid4(), buyer=user, purchaseDate=datetime.now(), status=PaymentStatus.PENDING, totalPrice=item._totalPrice, paymentMethod=paymentMethod, items=[item])
+            
             self.purchases.append(purchase)
             user.addPurchase(purchase)
             return purchase
-        except ValueError as e:
-            logging.error(f"Erro ao criar compra: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao criar compra: {str(e)}")
-            raise
+            print(f"Erro inesperado ao criar compra: {str(e)}")
+            return None
     
     @classmethod
     def getSellers(cls):
         try:
             if not cls.sellers:
-                raise ValueError("Nenhum vendedor encontrado.")
+                print("Nenhum vendedor encontrado.")
+                return []
             return list(cls.sellers)
-        except ValueError as e:
-            logging.error(f"Erro: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado: {str(e)}")
-            raise
+            print(f"Erro inesperado: {str(e)}")
+            return []
     
     def getPurchases(self):
         try:
             if not self.purchases:
-                raise ValueError("Nenhuma compra encontrada.")
+                print("Nenhuma compra encontrada.")
+                return []
             return list(self.purchases)
-        except ValueError as e:
-            logging.error(f"Erro: {str(e)}")
-            return []
         except Exception as e:
-            logging.error(f"Erro inesperado: {str(e)}")
+            print(f"Erro inesperado: {str(e)}")
             return []
 
 

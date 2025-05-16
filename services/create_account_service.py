@@ -32,7 +32,7 @@ class CreateAccountService:
                 raise ValueError("CPF já cadastrado.")
 
             if account_type == "user":
-                user = User(id=uuid4(),name=name, cpf=cpf, birth=birth, email=email, password=password, phone=phone, status=Status.ACTIVE)
+                user = User(id=uuid4(),name=name, cpf=cpf, birth=birth, email=email, password=password, phone=phone, balance=1000, status=Status.ACTIVE)
                 if user:
                     User.users.append(user)
                     return True

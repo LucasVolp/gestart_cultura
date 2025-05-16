@@ -20,6 +20,7 @@ def createEventMenu(producer):
         opcao = Utils.inputBack("Escolha uma opção: ")
         if opcao == "1":
             createTierMenu(producer, event)
+            return
         elif opcao == "2":
             print("Voltando ao menu de eventos.")
     else:
@@ -109,25 +110,29 @@ def listEventsMenu(producer):
     Utils.pause()
 
 def producerEventMenu(producer):
-    while True:
-        Utils.menu("Gerenciar Eventos - ou digite 0 para voltar")
-        print("Escolha uma opção:")
-        print("1. Criar Evento")
-        print("2. Editar Evento")
-        print("3. Excluir Evento")
-        print("4. Listar Eventos")
-        print("0. Voltar")
-        eventOption = Utils.inputBack("Escolha uma opção: ")
-        if eventOption == "1":
-            createEventMenu(producer)
-        elif eventOption == "2":
-            editEventMenu(producer)
-        elif eventOption == "3":
-            deleteEventMenu(producer)
-        elif eventOption == "4":
-            listEventsMenu(producer)
-        elif eventOption == "0":
-            break
-        else:
-            print("Opção inválida. Tente novamente.")
-            Utils.pause()
+    try:
+        while True:
+            Utils.menu("Gerenciar Eventos - ou digite 0 para voltar")
+            print("Escolha uma opção:")
+            print("1. Criar Evento")
+            print("2. Editar Evento")
+            print("3. Excluir Evento")
+            print("4. Listar Eventos")
+            print("0. Voltar")
+            eventOption = Utils.inputBack("Escolha uma opção: ")
+            if eventOption == "1":
+                createEventMenu(producer)
+            elif eventOption == "2":
+                editEventMenu(producer)
+            elif eventOption == "3":
+                deleteEventMenu(producer)
+            elif eventOption == "4":
+                listEventsMenu(producer)
+            elif eventOption == "0":
+                break
+            else:
+                print("Opção inválida. Tente novamente.")
+                Utils.pause()
+    except KeyboardInterrupt:
+        print("\nSaindo...")
+        Utils.pause()

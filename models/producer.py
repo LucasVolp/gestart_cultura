@@ -94,33 +94,27 @@ class Producer(Person):
             raise
     
     def sendNotification(self, recipient: str, message: str) -> None:
-
         try:
             if not self._validate_email(recipient):
-                raise ValueError("Email inválido.")
-            # Simula envio de email em massa
-            logging.info(f"Email em massa enviado para {recipient}: {message}")
-        except ValueError as e:
-            logging.error(f"Erro ao enviar notificação para {recipient}: {str(e)}")
-            raise
+                print("Email inválido.")
+                return
+            # Simula envio de email
+            logging.info(f"Notificação enviada para {recipient}: {message}")
         except Exception as e:
-            logging.error(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
 
     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
         try:
             if not self._validate_email(recipient):
-                raise ValueError("Email inválido.")
+                print("Email inválido.")
+                return
             if datetime < date.today():
-                raise ValueError("A data de agendamento deve ser futura.")
-            # Simula agendamento de email em massa
-            logging.info(f"Email agendado para {recipient} em {datetime}: {message}")
-        except ValueError as e:
-            logging.error(f"Erro ao agendar notificação para {recipient}: {str(e)}")
-            raise
+                print("A data de agendamento deve ser futura.")
+                return
+            # Simula agendamento de email
+            logging.info(f"Notificação agendada para {recipient} em {datetime}: {message}")
         except Exception as e:
-            logging.error(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
 
     def createEvent(self, name: str, description: str, date: date, local: str, size: int, typeEvent: TypeEvent, status: Status, tiers: list = None) -> Event:
         """Cria um novo evento e adiciona à lista do produtor. Retorna o evento criado ou None em caso de erro."""
