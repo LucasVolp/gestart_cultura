@@ -1,4 +1,4 @@
-from flows.utils import Utils
+from flows.utils import Utils, MenuBackException
 from models.event import Event
 from menus.ticketMenu import ticketMenu
 from menus.purchaseMenu import purchaseMenu
@@ -26,36 +26,48 @@ def userMenu(user):
                         for idx, event in enumerate(Event.events, start=1):
                             print(f"{idx} - {event.name} - {event.description} - {event.date} - {event.local} - {event.size} - {event.typeEvent.name} - {event.status.name}")
                         Utils.pause()
+                    except MenuBackException:
+                        break
                     except Exception as e:
                         print(f"Erro ao listar eventos: {e}")
                         Utils.pause()
                 case "2":
                     try:
                         ticketMenu(user)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar ingressos: {e}")
                         Utils.pause()
                 case "3":
                     try:
                         purchaseMenu(user)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar compras: {e}")
                         Utils.pause()
                 case "4":
                     try:
                         ratingMenu(user)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar avaliações: {e}")
                         Utils.pause()
                 case "5":
                     try:
                         manageAccounts(user)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar conta: {e}")
                         Utils.pause()
                 case "6":
                     try:
                         notifications(user)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar notificações: {e}")
                         Utils.pause()
@@ -65,6 +77,8 @@ def userMenu(user):
                 case _:
                     print("Opção inválida. Tente novamente.")
                     Utils.pause()
+        except MenuBackException:
+            break
         except Exception as e:
             print(f"Erro inesperado: {e}")
             Utils.pause()

@@ -130,27 +130,28 @@ class Event():
             return []
         return list(self.__tiers)
 
+    def getRatings(self):
+        if not self.__ratings:
+            print("Nenhuma avaliação encontrada.")
+            return []
+        return list(self.__ratings)
+
     def createTier(self, amount: int, name: str, price: float, startDate: str, endDate: str, status: Status) -> Tier:
         if self.__status != Status.OPEN:
             print("Não é possível criar tiers para um evento que não está aberto.")
             return None
-        if self.__tickets:
-            totalTickets = sum(tier.amount for tier in self.__tiers)
-
+        totalTickets = sum(tier.amount for tier in self.__tiers)
         if totalTickets + amount > self.__size:
             print("A quantidade de ingressos no tier excede o tamanho do evento.")
             return None
-        
         if price < 0:
             print("O preço não pode ser negativo.")
             return None
-        
         if startDate >= endDate:
             print("A data de início deve ser anterior à data de término.")
             return None
-        
         tier = Tier(id=uuid4(), amount=amount, name=name, price=price, startDate=startDate, endDate=endDate, status=status)
-        self.__tiers.append(tier)
+        self.addTier(tier)
         return tier
 
     def updateTier(self, tier: Tier, amount: int = None, name: str = None, price: float = None, startDate: str = None, endDate: str = None, status: Status = None) -> Tier:
@@ -169,9 +170,9 @@ class Event():
         if status and status not in [Status.OPEN, Status.CLOSED]:
             print("Status inválido. Deve ser OPEN ou CLOSED.")
             return None
-        tier.amount = amount if amount else tier.amount
+        tier.amount = amount if amount is not None else tier.amount
         tier.name = name if name else tier.name
-        tier.price = price if price else tier.price
+        tier.price = price if price is not None else tier.price
         tier.startDate = startDate if startDate else tier.startDate
         tier.endDate = endDate if endDate else tier.endDate
         tier.status = status if status else tier.status
@@ -184,7 +185,7 @@ class Event():
         if tier.getDisponibility() < tier.amount:
             print("Não é possível excluir um tier com ingressos já emitidos.")
             return False
-        self.__tiers.remove(tier)
+        self.removeTier(tier)
         return True
 
     def getRatings(self):
@@ -208,4 +209,20 @@ class Event():
 
     def availability(self) -> Status:
         return self.__status
+
+    def addTier(self, tier: Tier):
+        if tier not in self.__tiers:
+            self.__tiers.append(tier)
+
+    def removeTier(self, tier: Tier):
+        if tier in self.__tiers:
+            self.__tiers.remove(tier)
+
+    def addRating(self, rating: Rating):
+        if rating not in self.__ratings:
+            self.__ratings.append(rating)
+
+    def removeRating(self, rating: Rating):
+        if rating in self.__ratings:
+            self.__ratings.remove(rating)
 

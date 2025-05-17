@@ -1,4 +1,4 @@
-from flows.utils import Utils
+from flows.utils import Utils, MenuBackException
 from flows.manageAccounts import manageAccounts
 from flows.notifications import notifications
 
@@ -16,24 +16,31 @@ def sellerMenu(seller):
             match option:
                 case "1":
                     try:
-                        if seller.purchases:
+                        purchases = getattr(seller, "purchases", [])
+                        if purchases:
                             print("Suas vendas:")
-                            for purchase in seller.purchases:
+                            for purchase in purchases:
                                 print(f"ID: {purchase.id}, Evento: {purchase.event.name}, Data: {purchase.date}")
                         else:
                             print("Você não tem vendas.")
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao listar vendas: {e}")
                         Utils.pause()
                 case "2":
                     try:
                         manageAccounts(seller)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar conta: {e}")
                         Utils.pause()
                 case "3":
                     try:
                         notifications(seller)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar notificações: {e}")
                         Utils.pause()
@@ -43,6 +50,8 @@ def sellerMenu(seller):
                 case _:
                     print("Opção inválida. Tente novamente.")
                     Utils.pause()
+        except MenuBackException:
+            break
         except Exception as e:
             print(f"Erro inesperado: {e}")
             Utils.pause()

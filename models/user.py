@@ -1,12 +1,11 @@
 from datetime import date, datetime
-import logging
 from enums.paymentStatus import PaymentStatus
 from models.person import Person
 from models.rating import Rating
 from models.ticket import Ticket
 from enums.typeEvent import TypeEvent
 from enums.status import Status
-from uuid import uuid4
+from uuid import UUID, uuid4
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -15,7 +14,7 @@ if TYPE_CHECKING:
 class User(Person):
     users = []
 
-    def __init__(self, id: str, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: str, balance: float, tickets: list = None, ratings: list = None, purchases: list = None, receipts: list = None):
+    def __init__(self, id: UUID, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: Status, balance: float, tickets: list = None, ratings: list = None, purchases: list = None, receipts: list = None):
         super().__init__(id, name, cpf, birth, email, password, phone, status)
         self.__balance = balance
         self.__tickets = []
@@ -26,6 +25,14 @@ class User(Person):
     @property
     def balance(self):
         return self.__balance
+
+    @property
+    def id(self):
+        return self._Person__id
+    
+    @property
+    def _id(self):
+        return self._Person__id
 
     def getUserbyEmail(cls, email):
         """_summary_
@@ -43,7 +50,7 @@ class User(Person):
                     return user
             return None
         except Exception as e:
-            logging.error(f"Erro ao buscar usuário por email: {str(e)}")
+            print(f"Erro inesperado ao buscar usuário por email: {str(e)}")
             raise
 
     def sendNotification(self, recipient: str, message: str) -> None:
@@ -84,10 +91,10 @@ class User(Person):
                 raise ValueError("Nenhum usuário encontrado.")
             return list(cls.users)
         except ValueError as e:
-            logging.error(f"Erro ao obter usuários: {str(e)}")
+            print(f"Erro ao obter usuários: {str(e)}")
             raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao obter usuários: {str(e)}")
+            print(f"Erro inesperado ao obter usuários: {str(e)}")
             raise
     
     def getTickets(self):
@@ -104,10 +111,10 @@ class User(Person):
                 raise ValueError("Nenhum ticket encontrado.")
             return list(self.__tickets)
         except ValueError as e:
-            logging.error(f"Erro ao obter tickets: {str(e)}")
+            print(f"Erro ao obter tickets: {str(e)}")
             raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao obter tickets: {str(e)}")
+            print(f"Erro inesperado ao obter tickets: {str(e)}")
             raise
     
     def getRatings(self):
@@ -124,10 +131,10 @@ class User(Person):
                 raise ValueError("Nenhum rating encontrado.")
             return list(self.__ratings)
         except ValueError as e:
-            logging.error(f"Erro ao obter ratings: {str(e)}")
+            print(f"Erro ao obter ratings: {str(e)}")
             raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao obter ratings: {str(e)}")
+            print(f"Erro inesperado ao obter ratings: {str(e)}")
             raise
     
     def getPurchases(self):
@@ -144,10 +151,10 @@ class User(Person):
                 raise ValueError("Nenhuma compra encontrada.")
             return list(self.__purchases)
         except ValueError as e:
-            logging.error(f"Erro ao obter compras: {str(e)}")
+            print(f"Erro ao obter compras: {str(e)}")
             raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao obter compras: {str(e)}")
+            print(f"Erro inesperado ao obter compras: {str(e)}")
             raise
 
     def addTicket(self, ticket):
@@ -168,45 +175,21 @@ class User(Person):
             print(f"Erro inesperado ao adicionar ticket para o usuário {self._id}: {str(e)}")
 
     def buyTicket(self, tier, quantity, seller, paymentMethod):
-        """_summary_
-
-        Args:
-            tier (_type_): _description_
-            quantity (_type_): _description_
-            seller (_type_): _description_
-            paymentMethod (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """
         try:
-            if tier._event._typeEvent == TypeEvent.FREE_EVENT:
+            if hasattr(tier, 'event') and getattr(tier, 'event') and getattr(tier, 'event').typeEvent == TypeEvent.FREE_EVENT:
                 return self.registerInFreeEvent(tier)
             purchase = seller.createPurchase(tier, quantity, self, paymentMethod)
             return purchase
         except ValueError as e:
-            logging.error(f"Erro ao comprar ticket para o usuário {self._id}: {str(e)}")
-            raise
+            print(f"Erro ao comprar ingresso: {str(e)}")
+            return None
         except Exception as e:
-            logging.error(f"Erro inesperado ao comprar ticket para o usuário {self._id}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao comprar ingresso: {str(e)}")
+            return None
     
     def transferTicket(self, ticket: Ticket, newCPF: str) -> None:
-        """_summary_
-
-        Args:
-            ticket (Ticket): _description_
-            newCPF (str): _description_
-
-        Raises:
-            ValueError: _description_
-            ValueError: _description_
-            ValueError: _description_
-            ValueError: _description_
-            ValueError: _description_
-        """
         try:
-            if ticket._event._typeEvent == TypeEvent.FREE_EVENT:
+            if hasattr(ticket, 'tier') and hasattr(ticket.tier, 'event') and ticket.tier.event.typeEvent == TypeEvent.FREE_EVENT:
                 print("Não é possível transferir ingressos de eventos gratuitos.")
                 return
             if ticket not in self.__tickets:
@@ -215,7 +198,7 @@ class User(Person):
             if ticket._status != Status.VALID:
                 print("O ticket não está válido para transferência.")
                 return
-            if ticket._event.status == Status.CLOSED:
+            if hasattr(ticket, 'tier') and hasattr(ticket.tier, 'event') and ticket.tier.event.status == Status.CLOSED:
                 print("O evento já foi encerrado, não é possível transferir o ingresso.")
                 return
             new_owner = None
@@ -230,7 +213,7 @@ class User(Person):
             new_owner.addTicket(ticket)
             ticket.owner = new_owner
         except Exception as e:
-            print(f"Erro inesperado ao transferir ticket para o usuário {self._id}: {str(e)}")
+            print(f"Erro inesperado ao transferir ticket: {str(e)}")
 
     def registerInFreeEvent(self, event):
         """_summary_
@@ -352,8 +335,8 @@ class User(Person):
             if purchase._status == PaymentStatus.PAID:
                 print("A compra já foi paga.")
                 return
-            if purchase._status == PaymentStatus.PENDING and self.__balance >= purchase._total:
-                self.__balance -= purchase._total
+            if purchase._status == PaymentStatus.PENDING and self.__balance >= purchase._totalPrice:
+                self.__balance -= purchase._totalPrice
                 purchase._status = PaymentStatus.PAID
                 tickets, receipt = purchase.confirmPayment()
                 for ticket in tickets:
@@ -361,7 +344,7 @@ class User(Person):
                 self.addReceipt(receipt)
                 self.addPurchase(purchase)
         except Exception as e:
-            print(f"Erro inesperado ao pagar compra para o usuário {self._id}: {str(e)}")
+            print(f"Erro inesperado ao pagar compra: {str(e)}")
     
     def addPurchase(self, purchase: "Purchase") -> None:
         """_summary_
@@ -419,10 +402,10 @@ class User(Person):
             purchase.status = Status.REFUND
             return True
         except ValueError as e:
-            logging.error(f"Erro ao solicitar reembolso para o usuário {self._id}: {str(e)}")
+            print(f"Erro ao solicitar reembolso para o usuário {self._id}: {str(e)}")
             return False
         except Exception as e:
-            logging.error(f"Erro inesperado ao solicitar reembolso para o usuário {self._id}: {str(e)}")
+            print(f"Erro inesperado ao solicitar reembolso para o usuário {self._id}: {str(e)}")
             return False
     
     def addReceipt(self, receipt):

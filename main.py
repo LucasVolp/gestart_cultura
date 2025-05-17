@@ -29,16 +29,25 @@ def main():
                     if account:
                         print(f"Bem-vindo, {account.name}!")
                         if isinstance(account, Producer):
-                            menuProducer(account)
+                            try:
+                                menuProducer(account)
+                            except KeyboardInterrupt:
+                                pass
                         elif isinstance(account, User):
-                            userMenu(account)
+                            try:
+                                userMenu(account)
+                            except KeyboardInterrupt:
+                                pass
                         elif isinstance(account, Seller):
-                            sellerMenu(account)
+                            try:
+                                sellerMenu(account)
+                            except KeyboardInterrupt:
+                                pass
                     else:
                         print("Email ou senha incorretos.")
                     Utils.pause()
                 except KeyboardInterrupt:
-                    continue
+                    pass
             case "2":
                 try:
                     Utils.menu("Criar Conta - ou digite 0 para voltar")
@@ -54,8 +63,8 @@ def main():
                         cnpj = Utils.inputCNPJ()
                         enterprise = Utils.inputBack("Digite o nome da sua empresa: ")
                         account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone, cnpj, enterprise)
-                    
-                    account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone)
+                    else:
+                        account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone)
                     
                     if account:
                         print("Conta criada com sucesso!")
@@ -63,7 +72,7 @@ def main():
                         print("Erro ao criar conta.")
                     Utils.pause()
                 except KeyboardInterrupt:
-                    continue
+                    pass
             case "0":
                 print("Saindo do sistema. Até logo!")
                 break

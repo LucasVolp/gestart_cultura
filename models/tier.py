@@ -3,7 +3,7 @@ from uuid import UUID
 from enums.status import Status
 
 class Tier:
-    def __init__(self, id: UUID, amount: int, name: str, price: float, startDate: str, endDate: str, status: str, tickets: list = None) -> None:
+    def __init__(self, id: UUID, amount: int, name: str, price: float, startDate: str, endDate: str, status: Status, tickets: list = None) -> None:
         self.__id = id
         self.__amount = amount
         self.__name = name

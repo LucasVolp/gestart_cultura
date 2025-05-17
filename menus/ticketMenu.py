@@ -1,6 +1,6 @@
+from flows.utils import Utils, MenuBackException
 from enums.paymentMethods import PaymentMethods
 from enums.typeEvent import TypeEvent
-from flows.utils import Utils
 from models.event import Event
 from models.seller import Seller
 
@@ -15,6 +15,8 @@ def listTickets(user):
             for idx, ticket in enumerate(tickets, start=1):
                 print(f"{idx} - {ticket}")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro inesperado ao listar ingressos: {e}")
         Utils.pause()
@@ -130,7 +132,7 @@ def buyTicket(user):
             print("Método de pagamento inválido.")
             Utils.pause()
             return
-        selectedPaymentMethod = PaymentMethods(paymentMethodIndex)
+        selectedPaymentMethod = list(PaymentMethods)[paymentMethodIndex]
         purchase = user.buyTicket(selectedTier, amount, selectedSeller, selectedPaymentMethod)
         if purchase:
             print(f"Compra realizada com sucesso! Você comprou {amount} ingressos do lote {selectedTier.name} para o evento {selectedEvent.name}.")
@@ -138,6 +140,8 @@ def buyTicket(user):
         else:
             print("Erro ao realizar a compra.")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro inesperado ao comprar ingresso: {e}")
         Utils.pause()
@@ -167,6 +171,8 @@ def transferTicketMenu(user):
         newCPF = Utils.inputBack("Digite o CPF do novo proprietário: ")
         user.transferTicket(ticket, newCPF)
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro inesperado ao transferir ingresso: {e}")
         Utils.pause()
@@ -194,6 +200,8 @@ def ticketMenu(user):
                 case _:
                     print("Opção inválida. Tente novamente.")
                     Utils.pause()
+        except MenuBackException:
+            break
         except Exception as e:
             print(f"Erro inesperado: {e}")
             Utils.pause()

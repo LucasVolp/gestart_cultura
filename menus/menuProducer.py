@@ -1,6 +1,6 @@
 from uuid import uuid4
 from enums.status import Status
-from flows.utils import Utils
+from flows.utils import Utils, MenuBackException
 from flows.notifications import notifications
 from models.producer import Producer
 from .eventMenu import producerEventMenu
@@ -22,24 +22,32 @@ def menuProducer(producer):
                 case "1":
                     try:
                         producerEventMenu(producer)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar eventos: {e}")
                         Utils.pause()
                 case "2":
                     try:
                         producerTierMenu(producer)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar lotes: {e}")
                         Utils.pause()
                 case "3":
                     try:
                         manageAccounts(producer)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar conta: {e}")
                         Utils.pause()
                 case "4":
                     try:
                         notifications(producer)
+                    except MenuBackException:
+                        continue
                     except Exception as e:
                         print(f"Erro ao gerenciar notificações: {e}")
                         Utils.pause()
@@ -49,6 +57,8 @@ def menuProducer(producer):
                 case _:
                     print("Opção inválida. Tente novamente.")
                     Utils.pause()
+        except MenuBackException:
+            break
         except Exception as e:
             print(f"Erro inesperado: {e}")
             Utils.pause()

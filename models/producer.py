@@ -1,6 +1,6 @@
 import logging
 import re
-from uuid import uuid4
+from uuid import uuid4, UUID
 from models.person import Person
 from models.event import Event
 from enums.typeEvent import TypeEvent
@@ -10,11 +10,11 @@ from datetime import date
 class Producer(Person):
     producers = []
 
-    def __init__(self, id, name, cpf, birth, email, password, phone, status, cnpj:str, enterprise):
-      super().__init__(id, name, cpf, birth, email, password, phone, status)
-      self.__cnpj = cnpj if self._validate_cnpj(cnpj) else None
-      self.__enterprise = enterprise
-      self.events = []
+    def __init__(self, id: UUID, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: Status, cnpj: str, enterprise: str):
+        super().__init__(id, name, cpf, birth, email, password, phone, status)
+        self.__cnpj = cnpj if self._validate_cnpj(cnpj) else None
+        self.__enterprise = enterprise
+        self.events = []
 
     @staticmethod
     def _validate_cnpj(cnpj: str) -> bool:

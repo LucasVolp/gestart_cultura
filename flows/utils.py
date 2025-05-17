@@ -6,6 +6,9 @@ from enums.status import Status
 from enums.typeEvent import TypeEvent
 from models.person import Person
 
+class MenuBackException(Exception):
+    pass
+
 class Utils:
 
     @staticmethod
@@ -23,7 +26,7 @@ class Utils:
     def inputBack(msg):
         valor = input(f"{msg}")
         if valor == "0":
-            raise KeyboardInterrupt
+            raise MenuBackException
         return valor
 
     @staticmethod

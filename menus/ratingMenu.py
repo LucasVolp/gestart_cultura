@@ -1,4 +1,4 @@
-from flows.utils import Utils
+from flows.utils import Utils, MenuBackException
 from models.event import Event
 
 def showRatings(user):
@@ -11,6 +11,8 @@ def showRatings(user):
             for idx, rating in enumerate(ratings, start=1):
                 print(f"{idx} - Evento: {rating.event.name} | Nota: {rating.rate} | Comentário: {rating.comment}")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro ao listar avaliações: {e}")
         Utils.pause()
@@ -50,6 +52,8 @@ def createRatingMenu(user):
         else:
             print("Não foi possível criar a avaliação.")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro ao criar avaliação: {e}")
         Utils.pause()
@@ -78,6 +82,8 @@ def deleteRatingMenu(user):
         user.deleteRating(rating)
         print("Avaliação deletada com sucesso!")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro ao deletar avaliação: {e}")
         Utils.pause()
@@ -113,6 +119,8 @@ def editRatingMenu(user):
         user.updateRating(rating, newRate, newComment)
         print("Avaliação atualizada com sucesso!")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro ao editar avaliação: {e}")
         Utils.pause()
@@ -142,6 +150,8 @@ def ratingMenu(user):
                 case _:
                     print("Opção inválida. Tente novamente.")
                     Utils.pause()
+        except MenuBackException:
+            break
         except Exception as e:
             print(f"Erro inesperado: {e}")
             Utils.pause()

@@ -1,4 +1,4 @@
-from flows.utils import Utils
+from flows.utils import Utils, MenuBackException
 
 
 def createTierMenu(producer, event=None):
@@ -42,6 +42,8 @@ def createTierMenu(producer, event=None):
         else:
             print("Erro ao criar lote.")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro inesperado: {e}")
         Utils.pause()
@@ -142,6 +144,8 @@ def editTierMenu(producer, event=None):
         else:
             print("Opção inválida.")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro inesperado: {e}")
         Utils.pause()
@@ -194,6 +198,8 @@ def deleteTierMenu(producer, event=None):
         else:
             print("Erro ao excluir lote.")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro inesperado: {e}")
         Utils.pause()
@@ -231,6 +237,8 @@ def listTiersMenu(producer, event=None):
         for idx, tier in enumerate(selected_event.tiers, start=1):
             print(f"{idx} - {tier.name} - Preço: {tier.price} - Ingressos restantes: {tier.amount} - Status: {tier.status}")
         Utils.pause()
+    except MenuBackException:
+        return
     except Exception as e:
         print(f"Erro inesperado: {e}")
         Utils.pause()
@@ -260,6 +268,8 @@ def producerTierMenu(producer, event=None):
             else:
                 print("Opção inválida. Tente novamente.")
                 Utils.pause()
+        except MenuBackException:
+            break
         except Exception as e:
             print(f"Erro inesperado: {e}")
             Utils.pause()
