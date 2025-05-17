@@ -232,7 +232,7 @@ class User(Person):
         except Exception as e:
             print(f"Erro inesperado ao transferir ticket para o usuário {self._id}: {str(e)}")
 
-    def registerInFreeEvent(self, tier):
+    def registerInFreeEvent(self, event):
         """_summary_
 
         Args:
@@ -247,16 +247,16 @@ class User(Person):
             _type_: _description_
         """
         try:
-            if tier._event._typeEvent != TypeEvent.FREE_EVENT:
+            if event.typeEvent != TypeEvent.FREE_EVENT:
                 print("O evento não é gratuito.")
                 return None
-            if tier.getDisponibility() <= 0:
+            if event.size <= 0:
                 print("Não há ingressos disponíveis para o evento.")
                 return None
-            if tier._event.status == Status.CLOSED:
+            if event.status == Status.CLOSED:
                 print("O evento já foi encerrado, não é possível registrar-se.")
                 return None
-            ticket = Ticket(id=uuid4(), owner=self, tier=tier, event=tier._event, status=Status.VALID, code=str(uuid4()))
+            ticket = Ticket(id=uuid4(), owner=self, tier=None, event=event, status=Status.VALID, code=str(uuid4()))
             self.addTicket(ticket)
             return ticket
         except Exception as e:
@@ -310,11 +310,11 @@ class User(Person):
             if rating not in self.__ratings:
                 print("O rating não pertence a este usuário.")
                 return
-            if rating._event.status != Status.CLOSED:
+            if rating.event.status != Status.CLOSED:
                 print("O evento não está encerrado, não é possível atualizar a avaliação.")
                 return
-            rating._rate = rate if 0 <= rate <= 5 else rating._rate
-            rating._comment = comment if comment else rating._comment
+            rating.rate = rate if 0 <= rate <= 5 else rating.rate
+            rating.comment = comment if comment else rating.comment
         except Exception as e:
             print(f"Erro inesperado ao atualizar rating para o usuário {self.__name}: {str(e)}")
 

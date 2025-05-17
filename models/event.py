@@ -30,7 +30,7 @@ class Event():
         typeEvent = self.__typeEvent.name
         status = self.__status.name
         tiers = [tier.name for tier in self.__tiers]
-        ratings = [rating.name for rating in self.__ratings]
+        ratings = [f"{rating.user.name if hasattr(rating.user, 'name') else ''}: {rating.rate}" for rating in self.__ratings]
         return f"[{tipo}] Nome: {self.__name} | Descrição: {self.__description} | Data: {self.__date} | Local: {self.__local} | Tamanho: {self.__size} | Lotes: {tiers} | Avaliações: {ratings} | Tipo de Evento: {typeEvent} | Status: {status}"
 
     @property

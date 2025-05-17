@@ -1,10 +1,13 @@
 from menus.menuProducer import menuProducer
+from menus.menuSeller import sellerMenu
+from menus.userMenu import userMenu
 from models.producer import Producer
 from models.seller import Seller
 from models.user import User
 from services.authService import AuthService
 from services.createAccountService import CreateAccountService
 from flows.utils import Utils
+from seeders import seed_data
 
 def main():
     auth_service = AuthService()
@@ -28,9 +31,9 @@ def main():
                         if isinstance(account, Producer):
                             menuProducer(account)
                         elif isinstance(account, User):
-                            pass
+                            userMenu(account)
                         elif isinstance(account, Seller):
-                            pass
+                            sellerMenu(account)
                     else:
                         print("Email ou senha incorretos.")
                     Utils.pause()

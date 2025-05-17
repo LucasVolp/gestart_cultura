@@ -2,14 +2,24 @@ import logging
 from uuid import UUID
 
 class Rating:
-    def __init__(self, id: UUID, rate: int, comment: str):
+    def __init__(self, id: UUID, user, event, rate: int, comment: str):
         self.__id = id
+        self.__user = user
+        self.__event = event
         self.__rate = rate
         self.__comment = comment
 
     @property
     def id(self) -> UUID:
         return self.__id
+
+    @property
+    def user(self):
+        return self.__user
+
+    @property
+    def event(self):
+        return self.__event
 
     @property
     def rate(self) -> int:
@@ -38,4 +48,3 @@ class Rating:
         except ValueError as e:
             logging.error(f"Erro: {str(e)}")
             raise
-        
