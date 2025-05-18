@@ -8,12 +8,12 @@ from enums.status import Status
 
 class Authenticable(ABC):
     @abstractmethod
-    def auth(self, email: str, senha: str) -> bool:
+    def auth(self, email: str, password: str) -> bool:
         """_summary_
 
         Args:
             email (str): _description_
-            senha (str): _description_
+            password (str): _description_
 
         Returns:
             bool: _description_
@@ -67,15 +67,17 @@ class Notifications(ABC):
         """
         pass
 
-class Person(ABC):
+class Person(Authenticable, ABC):
     def __init__(self, id: UUID, name: str, cpf: str, birth: date, email: str, password: str, phone: str, status: Status):
+        if isinstance(birth, str):
+            birth = datetime.strptime(birth, "%d/%m/%Y").date()
         self.__id = id
         self.__name = name
-        self.__cpf = cpf
-        self.__birth = birth
-        self.__email = email
-        self.__password = password
-        self._phone = phone
+        self.__cpf = cpf if self._validate_cpf(cpf) else None
+        self.__birth = birth if birth < date.today() else None
+        self.__email = email if self._validate_email(email) else None
+        self.__password = self._hash_password(password) if self._validate_password(password) else None
+        self._phone = phone if self._validate_phone(phone) else None
         self.__status = status
 
     def __str__(self):
@@ -92,8 +94,19 @@ class Person(ABC):
         Returns:
             bool: _description_
         """
-        pattern = re.compile(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$')
-        return bool(re.match(pattern, cpf))
+        cpf = re.sub(r'\D', '', cpf)
+        if len(cpf) != 11 or cpf == cpf[0] * 11:
+            return False
+
+        soma = sum(int(cpf[i]) * (10 - i) for i in range(9))
+        resto = soma % 11
+        d10 = 0 if resto < 2 else 11 - resto
+
+        soma = sum(int(cpf[i]) * (11 - i) for i in range(10))
+        resto = soma % 11
+        d11 = 0 if resto < 2 else 11 - resto
+
+        return int(cpf[9]) == d10 and int(cpf[10]) == d11
 
     @staticmethod
     def _validate_email(email: str) -> bool:
@@ -186,12 +199,12 @@ class Person(ABC):
     def status(self) -> Status:
         return self.__status
 
-    def auth(self, email: str, senha: str) -> bool:
+    def auth(self, email: str, password: str) -> bool:
         """_summary_
 
         Args:
             email (str): _description_
-            senha (str): _description_
+            password (str): _description_
 
         Raises:
             ValueError: _description_
@@ -207,8 +220,8 @@ class Person(ABC):
                 raise ValueError("Email inválido.")
             if email != self.__email:
                 raise ValueError("Email não encontrado.")
-            if not self._check_password(senha, self.__password):
-                raise ValueError("Senha incorreta.")
+            if not self._check_password(password, self.__password):
+                raise ValueError("password incorreta.")
             if self.__status != Status.ACTIVE:
                 raise ValueError("Conta inativa.")
             return True
@@ -236,23 +249,39 @@ class Person(ABC):
         """
         try:
             if name and not name.strip():
-                raise ValueError("O nome não pode ser vazio.")
+                print("O nome não pode ser vazio.")
+                return
             if birth and birth >= date.today():
-                raise ValueError("A data de nascimento deve ser no passado.")
+                print("A data de nascimento deve ser no passado.")
+                return
             if email and not self._validate_email(email):
-                raise ValueError("Email inválido.")
+                print("Email inválido.")
+                return
             if password and not self._validate_password(password):
-                raise ValueError("A senha deve ter pelo menos 8 caracteres, incluindo letras e números.")
+                print("A senha deve ter pelo menos 8 caracteres, incluindo letras e números.")
+                return
             self.__name = name if name else self.__name
             self.__birth = birth if birth else self.__birth
             self.__email = email if email else self.__email
             self.__password = self._hash_password(password) if password else self.__password
-        except ValueError as e:
-            logging.error(f"Erro ao atualizar perfil para {self.__email}: {str(e)}")
-            raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao atualizar perfil para {self.__email}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao atualizar perfil para {self.__email}: {str(e)}")
+
+    def deleteAccount(self) -> bool:
+        """_summary_
+
+        Raises:
+            ValueError: _description_
+        """
+        try:
+            if self.__status == Status.DELETED:
+                print("Conta já excluída.")
+                return False
+            self.__status = Status.DELETED
+            print(f"Conta {self.__email} excluída com sucesso.")
+            return True
+        except Exception as e:
+            print(f"Erro inesperado ao excluir conta {self.__email}: {str(e)}")
     
     def recoverPassword(self, email: str, cpf: str) -> bool:
         """_summary_
@@ -277,13 +306,13 @@ class Person(ABC):
             if email != self.__email or cpf != self.__cpf:
                 raise ValueError("Email ou CPF não correspondem.")
             # Simula envio de link de recuperação (implementação real teria que enviar um email)
-            logging.info(f"Link de recuperação de senha enviado para {email}")
+            logging.info(f"Link de recuperação de password enviado para {email}")
             return True
         except ValueError as e:
-            logging.error(f"Erro na recuperação de senha para {email}: {str(e)}")
+            logging.error(f"Erro na recuperação de password para {email}: {str(e)}")
             return False
         except Exception as e:
-            logging.error(f"Erro inesperado na recuperação de senha para {email}: {str(e)}")
+            logging.error(f"Erro inesperado na recuperação de password para {email}: {str(e)}")
             return False
 
     @abstractmethod

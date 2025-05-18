@@ -1,6 +1,6 @@
 import logging
 import re
-from uuid import uuid4
+from uuid import uuid4, UUID
 from models.person import Person
 from models.event import Event
 from enums.typeEvent import TypeEvent
@@ -10,11 +10,11 @@ from datetime import date
 class Producer(Person):
     producers = []
 
-    def __init__(self, id, name, cpf, birth, email, password, phone, status, cnpj:str, enterprise):
-      super().__init__(id, name, cpf, birth, email, password, phone, status)
-      self.__cnpj = cnpj
-      self.__enterprise = enterprise
-      self.events = []
+    def __init__(self, id: UUID, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: Status, cnpj: str, enterprise: str):
+        super().__init__(id, name, cpf, birth, email, password, phone, status)
+        self.__cnpj = cnpj if self._validate_cnpj(cnpj) else None
+        self.__enterprise = enterprise
+        self.events = []
 
     @staticmethod
     def _validate_cnpj(cnpj: str) -> bool:
@@ -94,139 +94,80 @@ class Producer(Person):
             raise
     
     def sendNotification(self, recipient: str, message: str) -> None:
-
         try:
             if not self._validate_email(recipient):
-                raise ValueError("Email inválido.")
-            # Simula envio de email em massa
-            logging.info(f"Email em massa enviado para {recipient}: {message}")
-        except ValueError as e:
-            logging.error(f"Erro ao enviar notificação para {recipient}: {str(e)}")
-            raise
+                print("Email inválido.")
+                return
+            # Simula envio de email
+            logging.info(f"Notificação enviada para {recipient}: {message}")
         except Exception as e:
-            logging.error(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
 
     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
         try:
             if not self._validate_email(recipient):
-                raise ValueError("Email inválido.")
+                print("Email inválido.")
+                return
             if datetime < date.today():
-                raise ValueError("A data de agendamento deve ser futura.")
-            # Simula agendamento de email em massa
-            logging.info(f"Email agendado para {recipient} em {datetime}: {message}")
-        except ValueError as e:
-            logging.error(f"Erro ao agendar notificação para {recipient}: {str(e)}")
-            raise
+                print("A data de agendamento deve ser futura.")
+                return
+            # Simula agendamento de email
+            logging.info(f"Notificação agendada para {recipient} em {datetime}: {message}")
         except Exception as e:
-            logging.error(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
-            raise
+            print(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
 
     def createEvent(self, name: str, description: str, date: date, local: str, size: int, typeEvent: TypeEvent, status: Status, tiers: list = None) -> Event:
-        """_summary_
+        """Cria um novo evento e adiciona à lista do produtor. Retorna o evento criado ou None em caso de erro."""
+        if not name or not description or not local or size <= 0 or not typeEvent or date < date.today():
+            print("Todos os campos são obrigatórios, tamanho deve ser maior que zero e a data deve estar no futuro.")
+            return None
+        event = Event(id=uuid4(), name=name, description=description, date=date, local=local, size=size, typeEvent=typeEvent, status=Status.OPEN)
+        if tiers:
+            for tier_data in tiers:
+                event.createTier(**tier_data)
+        self.events.append(event)
+        return event
 
-        Args:
-            name (str): _description_
-            description (str): _description_
-            date (date): _description_
-            local (str): _description_
-            size (int): _description_
-            typeEvent (TypeEvent): _description_
-            status (Status): _description_
-            tiers (list, optional): _description_. Defaults to None.
+    def updateEvent(self, event: Event, name: str, description: str, date: date, local: str, size: int, typeEvent: TypeEvent) -> bool:
+        """Atualiza os dados de um evento do produtor. Retorna True se sucesso, False se falha."""
+        if event not in self.events:
+            print("O evento não pertence a este produtor.")
+            return False
+        if name:
+            event.name = name
+        if description:
+            event.description = description
+        if date:
+            event.date = date
+        if local:
+            event.local = local
+        if size:
+            event.size = size
+        if typeEvent:
+            event.typeEvent = typeEvent
+        return True
 
-        Raises:
-            ValueError: _description_
-
-        Returns:
-            Event: _description_
-        """
-        try:
-            if not name or not description or not local or size <= 0 or not typeEvent and date < date.today():
-                raise ValueError("Todos os campos são obrigatórios, tamanho deve ser maior que zero e a data deve estar no futuro.")
-            event = Event(id=uuid4(), name=name, description=description, date=date, local=local, size=size, typeEvent=typeEvent, status=Status.OPEN)
-            if tiers:
-                for tier_data in tiers:
-                    event.createTier(**tier_data)
-            self.events.append(event)
-            return event
-        except ValueError as e:
-            logging.error(f"Erro ao criar evento: {str(e)}")
-            raise
-        except Exception as e:
-            logging.error(f"Erro inesperado ao criar evento: {str(e)}")
-            raise
-
-    def updateEvent(self, event:Event, name:str, description:str, date:date, local:str, size:int, typeEvent: TypeEvent) -> None:
-        """_summary_
-
-        Args:
-            event (Event): _description_
-            name (str): _description_
-            description (str): _description_
-            date (date): _description_
-            local (str): _description_
-            size (int): _description_
-            typeEvent (TypeEvent): _description_
-
-        Raises:
-            ValueError: _description_
-        """
+    def deleteEvent(self, event: Event) -> bool:
+        """Tenta remover um evento do produtor. Retorna True se sucesso, False se falha."""
         try:
             if event not in self.events:
-                raise ValueError("O evento não pertence a este produtor.")
-            event._name = name if name else event._name
-            event._description = description if description else event._description
-            event._date = date if date else event._date
-            event._local = local if local else event._local
-            event._size = size if size else event._size
-            event._typeEvent = typeEvent if typeEvent else event._typeEvent
-        except ValueError as e:
-            logging.error(f"Erro ao atualizar evento: {str(e)}")
-            raise
-        except Exception as e:
-            logging.error(f"Erro inesperado ao atualizar evento: {str(e)}")
-            raise
-
-    def deleteEvent(self, event: Event) -> None:
-        """_summary_
-
-        Args:
-            event (Event): _description_
-
-        Raises:
-            ValueError: _description_
-            ValueError: _description_
-        """
-        try:
-            if event not in self.events:
-                raise ValueError("O evento não pertence a este produtor.")
+                print("O evento não pertence a este produtor.")
+                return False
             if any(tier.getDisponibility() < tier._amount for tier in event.getTiers()):
-                raise ValueError("Não é possível excluir um evento com ingressos já emitidos.")
+                print("Não é possível excluir um evento com ingressos já emitidos.")
+                return False
             self.events.remove(event)
-        except ValueError as e:
-            logging.error(f"Erro ao excluir evento: {str(e)}")
-            raise
+            return True
         except Exception as e:
             logging.error(f"Erro inesperado ao excluir evento: {str(e)}")
-            raise
-
-    def getEvent(self) -> list[Event]:
-        """_summary_
-
-        Raises:
-            ValueError: _description_
-
-        Returns:
-            list[Event]: _description_
-        """
-        try:
-            if not self.events:
-                raise ValueError("Nenhum evento encontrado.")
-            return list(self.events)
-        except ValueError as e:
-            logging.error(f"Erro ao obter eventos: {str(e)}")
-            raise
-        except Exception as e:
-            logging.error(f"Erro inesperado ao obter eventos: {str(e)}")
-            raise
+            print("Erro inesperado ao excluir evento.")
+            return False
+    
+    def listEvents(self) -> bool:
+        """Lista os eventos do produtor. Retorna True se houver eventos, False se não houver."""
+        if not self.events:
+            print("Nenhum evento encontrado.")
+            return False
+        for idx, event in enumerate(self.events, start=1):
+            print(f"{idx} - {event}")
+        return True
