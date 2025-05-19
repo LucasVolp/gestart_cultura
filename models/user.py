@@ -126,16 +126,11 @@ class User(Person):
         Returns:
             _type_: _description_
         """
-        #try:
+        
         if not self.__ratings:
-          raise ValueError("Nenhum rating encontrado.")
+         raise ValueError("Nenhuma avaliação encontrada.")
         return list(self.__ratings)
-        # except ValueError as e:
-        #     print(f"Erro ao obter ratings: {str(e)}")
-        #     raise
-        # except Exception as e:
-        #     print(f"Erro inesperado ao obter ratings: {str(e)}")
-        #     raise
+       
     
     def getPurchases(self):
         """_summary_
