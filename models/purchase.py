@@ -3,6 +3,7 @@ from uuid import UUID, uuid4
 from models.receipt import Receipt
 from models.ticket import Ticket
 from enums.paymentStatus import PaymentStatus
+from enums.paymentMethods import PaymentMethods
 from enums.status import Status
 from typing import TYPE_CHECKING, Tuple, List
 
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
     from models.user import User
 
 class Purchase:
-    def __init__(self, id: UUID, buyer: "User", purchaseDate: str, status: PaymentStatus, totalPrice: float, paymentMethod: str, items: list = None) -> None:
+    def __init__(self, id: UUID, buyer: "User", purchaseDate: str, status: PaymentStatus, totalPrice: float, paymentMethod: PaymentMethods, items: list = None) -> None:
         self.__id = id
         self.__buyer = buyer
         self.__purchaseDate = purchaseDate
@@ -21,7 +22,7 @@ class Purchase:
 
     def __str__(self):
         tipo = self.__class__.__name__
-        return f"[{tipo}] ID: {self.__id} | Comprador: {self.__buyer} | Data da Compra: {self.__purchaseDate} | Status: {self.__status.name} | Preço Total: {self.__totalPrice} | Método de Pagamento: {self.__paymentMethod}"
+        return f"[{tipo}] ID: {self.__id} | Comprador: {self.__buyer} | Data da Compra: {self.__purchaseDate} | Status: {self.__status.name} | Preço Total: {self.__totalPrice} | Método de Pagamento: {self.__paymentMethod.name}"
     
     @property
     def _id(self):
