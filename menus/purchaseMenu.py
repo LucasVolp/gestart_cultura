@@ -2,16 +2,16 @@ from flows.utils import Utils, MenuBackException
 
 def showPurchases(user):
     try:
-        ratings = user.getRatings()
-        print("Suas avaliações:")
-        for idx, rating in enumerate(ratings, start=1):
-            print(f"{idx} - Evento: {rating.event.name} | Nota: {rating.rate} | Comentário: {rating.comment}")
+        purchases = user.getPurchases()
+        print("Suas compras:")
+        for idx, purchase in enumerate(purchases, start=1):
+            print(f"{idx} - {purchase}")
         Utils.pause()
-    except ValueError as e:
+    except Exception as e:
         print(str(e))
         Utils.pause()
     except MenuBackException:
-        return
+       return
     
 def refundPurchaseMenu(user):
     try:

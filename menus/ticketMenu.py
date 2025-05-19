@@ -18,9 +18,6 @@ def listTickets(user):
         Utils.pause()
     except MenuBackException:
         return
-    except Exception as e:
-        print(f"Erro inesperado ao listar ingressos: {e}")
-        Utils.pause()
 
 def buyTicket(user):
     try:
