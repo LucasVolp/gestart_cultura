@@ -4,17 +4,17 @@ from models.event import Event
 def showRatings(user):
     try:
         ratings = user.getRatings()
-        if not ratings:
-            print("Nenhuma avaliação encontrada.")
-        else:
-            print("Suas avaliações:")
-            for idx, rating in enumerate(ratings, start=1):
-                print(f"{idx} - Evento: {rating.event.name} | Nota: {rating.rate} | Comentário: {rating.comment}")
+        print("Suas avaliações:")
+        for idx, rating in enumerate(ratings, start=1):
+            print(f"{idx} - Evento: {rating.event.name} | Nota: {rating.rate} | Comentário: {rating.comment}")
+        Utils.pause()
+    except ValueError as e:
+        print(str(e))   
         Utils.pause()
     except MenuBackException:
         return
     except Exception as e:
-        print(f"Erro ao listar avaliações: {e}")
+        print(f"Erro inesperado ao listar avaliações: {e}")
         Utils.pause()
 
 def createRatingMenu(user):

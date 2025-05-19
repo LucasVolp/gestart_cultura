@@ -8,12 +8,13 @@ def listTickets(user):
     try:
         Utils.menu(f"Meus Ingressos - {user.name}")
         tickets = user.getTickets()
-        if not tickets:
-            print("Nenhum ingresso encontrado.")
-        else:
-            print("Ingressos disponíveis:")
-            for idx, ticket in enumerate(tickets, start=1):
-                print(f"{idx} - {ticket}")
+        print("Ingressos disponíveis:")
+        for idx, ticket in enumerate(tickets, start=1):
+            print(f"{idx} - {ticket}")
+        Utils.pause()
+
+    except ValueError as e:
+        print(str(e))  
         Utils.pause()
     except MenuBackException:
         return

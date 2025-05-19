@@ -106,16 +106,16 @@ class User(Person):
         Returns:
             _type_: _description_
         """
-        try:
-            if not self.__tickets:
-                raise ValueError("Nenhum ticket encontrado.")
-            return list(self.__tickets)
-        except ValueError as e:
-            print(f"Erro ao obter tickets: {str(e)}")
-            raise
-        except Exception as e:
-            print(f"Erro inesperado ao obter tickets: {str(e)}")
-            raise
+        #try:
+        if not self.__tickets:
+          raise ValueError("Nenhum ticket encontrado.")
+        return list(self.__tickets)
+        # except ValueError as e:
+        #     print(f"Erro ao obter tickets: {str(e)}")
+        #     raise
+        # except Exception as e:
+        #     print(f"Erro inesperado ao obter tickets: {str(e)}")
+        #     raise
     
     def getRatings(self):
         """_summary_
@@ -126,16 +126,16 @@ class User(Person):
         Returns:
             _type_: _description_
         """
-        try:
-            if not self.__ratings:
-                raise ValueError("Nenhum rating encontrado.")
-            return list(self.__ratings)
-        except ValueError as e:
-            print(f"Erro ao obter ratings: {str(e)}")
-            raise
-        except Exception as e:
-            print(f"Erro inesperado ao obter ratings: {str(e)}")
-            raise
+        #try:
+        if not self.__ratings:
+          raise ValueError("Nenhum rating encontrado.")
+        return list(self.__ratings)
+        # except ValueError as e:
+        #     print(f"Erro ao obter ratings: {str(e)}")
+        #     raise
+        # except Exception as e:
+        #     print(f"Erro inesperado ao obter ratings: {str(e)}")
+        #     raise
     
     def getPurchases(self):
         """_summary_
