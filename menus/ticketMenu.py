@@ -168,6 +168,7 @@ def transferTicketMenu(user):
         ticket = tickets[ticketIndex]
         newCPF = Utils.inputBack("Digite o CPF do novo proprietário: ")
         user.transferTicket(ticket, newCPF)
+        print("Ingresso transferido com sucesso!")
         Utils.pause()
     except MenuBackException:
         return
