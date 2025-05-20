@@ -235,7 +235,7 @@ def listTiersMenu(producer, event=None):
             return
         print("Lotes disponíveis:")
         for idx, tier in enumerate(selected_event.tiers, start=1):
-            print(f"{idx} - {tier.name} - Preço: {tier.price} - Ingressos restantes: {tier.amount} - Status: {tier.status}")
+            print(f"{idx} - Nome : {tier.name} - Preço: {tier.price:.2f} - Ingressos restantes: {tier.amount} - Status: {tier.status.name}")
         Utils.pause()
     except MenuBackException:
         return

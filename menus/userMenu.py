@@ -24,7 +24,7 @@ def userMenu(user):
                 case "1":
                     try:
                         for idx, event in enumerate(Event.events, start=1):
-                            print(f"{idx} - {event.name} - {event.description} - {event.date} - {event.local} - {event.size} - {event.typeEvent.name} - {event.status.name}")
+                            print(f"{idx} - Nome: {event.name} | Descrição: {event.description} | Data: {event.date} | Local:{event.local} | Capacidade: {event.size} | Tipo; {event.typeEvent.name} | Status: {event.status.name}")
                         Utils.pause()
                     except MenuBackException:
                         break

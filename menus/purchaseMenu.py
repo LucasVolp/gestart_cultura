@@ -5,7 +5,7 @@ def showPurchases(user):
         purchases = user.getPurchases()
         print("Suas compras:")
         for idx, purchase in enumerate(purchases, start=1):
-            print(f"{idx} - {purchase}")
+            print(f"{idx} - ID: {purchase._id} | Data: {purchase._purchaseDate} | Total: {purchase._totalPrice} | Status: {purchase._status.name} | Método: {purchase._paymentMethod.name}")
         Utils.pause()
     except Exception as e:
         print(str(e))
