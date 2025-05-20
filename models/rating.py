@@ -1,4 +1,3 @@
-import logging
 from uuid import UUID
 
 class Rating:
@@ -36,7 +35,7 @@ class Rating:
                 raise ValueError("A nota deve ser entre 1 e 5.")
             self.__rate = rate
         except ValueError as e:
-            logging.error(f"Erro: {str(e)}")
+            print(f"Erro: {str(e)}")
             raise
 
     @comment.setter
@@ -46,5 +45,5 @@ class Rating:
                 raise ValueError("Comentário não pode ser vazio.")
             self.__comment = comment
         except ValueError as e:
-            logging.error(f"Erro: {str(e)}")
+            print(f"Erro: {str(e)}")
             raise

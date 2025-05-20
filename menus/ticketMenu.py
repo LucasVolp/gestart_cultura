@@ -10,7 +10,7 @@ def listTickets(user):
         tickets = user.getTickets()
         print("Ingressos disponíveis:")
         for idx, ticket in enumerate(tickets, start=1):
-            print(f"{idx} - {ticket}")
+            print(f"{idx} - Dono: {ticket.owner.name} - Lote: {ticket.tier.name} - Vendedor: {ticket.seller.name} - Código do Ingresso: {ticket.code} - Status: {ticket.status.name}")
         Utils.pause()
 
     except ValueError as e:

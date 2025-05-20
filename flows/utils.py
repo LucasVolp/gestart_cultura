@@ -24,10 +24,10 @@ class Utils:
 
     @staticmethod
     def inputBack(msg):
-        valor = input(f"{msg}")
-        if valor == "0":
+        value = input(f"{msg}")
+        if value == "0":
             raise MenuBackException
-        return valor
+        return value
 
     @staticmethod
     def pause():
@@ -35,19 +35,19 @@ class Utils:
 
     @staticmethod
     def accountTypes():
-        tipos_conta = [
+        accountType = [
             ("Usuário", "user"),
             ("Vendedor", "seller"),
             ("Produtor", "producer")
         ]
         print("Selecione o tipo de conta:")
-        for idx, (nome, valor) in enumerate(tipos_conta, start=1):
-            print(f"{idx} - {nome}")
+        for idx, (name, value) in enumerate(accountType, start=1):
+            print(f"{idx} - {name}")
         while True:
             try:
-                opcao = int(Utils.inputBack("Escolha o tipo de conta: "))
-                if 1 <= opcao <= len(tipos_conta):
-                    return tipos_conta[opcao - 1][1]
+                option = int(Utils.inputBack("Escolha o tipo de conta: "))
+                if 1 <= option <= len(accountType):
+                    return accountType[option - 1][1]
                 else:
                     print("Opção inválida.")
             except ValueError:
@@ -64,9 +64,9 @@ class Utils:
             print(f"{idx} - {value}")
         while True:
             try:
-                opcao = int(Utils.inputBack("Escolha o status do Lote: "))
-                if 1 <= opcao <= len(status):
-                    return list(status.keys())[opcao - 1]
+                option = int(Utils.inputBack("Escolha o status do Lote: "))
+                if 1 <= option <= len(status):
+                    return list(status.keys())[option - 1]
                 else:
                     print("Opção inválida.")
             except ValueError:
@@ -74,7 +74,7 @@ class Utils:
     
     @staticmethod
     def typeEvents():
-        nomes_pt = {
+        namesPortuguese = {
             TypeEvent.MUSIC_FESTIVAL: "Festival de Música",
             TypeEvent.ART_EXHIBITION: "Exposição de Arte",
             TypeEvent.THEATER: "Teatro",
@@ -88,14 +88,14 @@ class Utils:
             TypeEvent.FREE_EVENT: "Evento Gratuito"
         }
         print("Selecione o tipo de evento:")
-        eventos = list(TypeEvent)
-        for idx, tipo in enumerate(eventos, start=1):
-            print(f"{idx} - {nomes_pt[tipo]}")
+        events = list(TypeEvent)
+        for idx, tipo in enumerate(events, start=1):
+            print(f"{idx} - {namesPortuguese[tipo]}")
         while True:
             try:
-                opcao = int(Utils.inputBack("Escolha o tipo de evento: "))
-                if 1 <= opcao <= len(eventos):
-                    return eventos[opcao - 1]
+                option = int(Utils.inputBack("Escolha o tipo de evento: "))
+                if 1 <= option <= len(events):
+                    return events[option - 1]
                 else:
                     print("Opção inválida.")
             except ValueError:
@@ -115,7 +115,7 @@ class Utils:
         while True:
             cpf = Utils.inputBack(msg)
             pattern = r"^\d{3}\.\d{3}\.\d{3}-\d{2}$"
-            if re.match(pattern, cpf) and Person._validate_cpf(cpf):
+            if re.match(pattern, cpf) and Person.validateCPF(cpf):
                 return cpf
             print("CPF inválido. Use o formato xxx.xxx.xxx-xx e um número válido.")
 
@@ -131,10 +131,10 @@ class Utils:
     @staticmethod
     def inputDate(msg="Digite a data (DD/MM/AAAA): "):
         while True:
-            date_str = Utils.inputBack(msg)
+            dateStr = Utils.inputBack(msg)
             try:
-                date_obj = datetime.strptime(date_str, "%d/%m/%Y").date()
-                return date_obj
+                dateObj = datetime.strptime(dateStr, "%d/%m/%Y").date()
+                return dateObj
             except ValueError:
                 print("Data inválida. Use o formato DD/MM/AAAA.")
 

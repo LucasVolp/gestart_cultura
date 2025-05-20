@@ -10,7 +10,7 @@ from flows.notifications import notifications
 def userMenu(user):
     while True:
         try:
-            Utils.menu(f"Bem vindo(a) ao menu do Usuário, {user.name}")
+            Utils.menu(f"Bem vindo(a) ao menu do Usuário, {user.name} - Saldo atual: {user.balance}")
             print("\nEscolha uma opção:")
             print("1. Ver eventos")
             print("2. Gerenciar Ingressos")

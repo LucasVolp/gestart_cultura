@@ -1,9 +1,12 @@
-import logging
 from uuid import UUID
 from enums.status import Status
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.event import Event
 
 class Tier:
-    def __init__(self, id: UUID, amount: int, name: str, price: float, startDate: str, endDate: str, status: Status, tickets: list = None) -> None:
+    def __init__(self, id: UUID, amount: int, name: str, price: float, startDate: str, endDate: str, status: Status, event: "Event", tickets: list = None) -> None:
         self.__id = id
         self.__amount = amount
         self.__name = name
@@ -11,12 +14,15 @@ class Tier:
         self.__startDate = startDate
         self.__endDate = endDate
         self.__status = status
+        self.__event = event
         self.__tickets = tickets if tickets is not None else []
 
     def __str__(self):
         tipo = self.__class__.__name__
         status = self.__status.name
-        return f"[{tipo}] Nome: {self.__name} | Preço: {self.__price} | Início: {self.__startDate} | Fim: {self.__endDate} | Status: {status} | Ingressos: {self.__tickets} | Disponibilidade: {self.getDisponibility()}"
+        event = self.__event.name
+        tickets = [ticket.code for ticket in self.__tickets]
+        return f"[{tipo}] Nome: {self.__name} | Preço: {self.__price} | Início: {self.__startDate} | Fim: {self.__endDate} | Status: {status} | Evento: {event} | Ingressos: {tickets} | Disponibilidade: {self.getDisponibility()}"
 
     @property
     def id(self):
@@ -73,6 +79,14 @@ class Tier:
     @status.setter
     def status(self, value):
         self.__status = value
+
+    @property
+    def event(self):
+        return self.__event
+    
+    @event.setter
+    def event(self, value):
+        self.__event = value
 
     
     def openTier(self) -> bool:

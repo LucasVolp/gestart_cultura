@@ -6,7 +6,7 @@ from flows.notifications import notifications
 def sellerMenu(seller):
     while True:
         try:
-            Utils.menu(f"Bem vindo(a) ao menu do Vendedor, {seller.name}")
+            Utils.menu(f"Bem vindo(a) ao menu do Vendedor, {seller.name} - Vendas até o momento: {len(seller.purchases) if hasattr(seller, 'purchases') else 0}")
             print("\nEscolha uma opção:")
             print("1. Ver vendas")
             print("2. Gerenciar Conta")

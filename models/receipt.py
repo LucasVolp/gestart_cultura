@@ -18,37 +18,37 @@ class Receipt:
         return f"[{tipo}] ID: {self.__id} | Data: {self.__date} | Quantidade: {self.__quantity} | Descrição: {self.__description} | Compra: {self.__purchase}"
     
     @property
-    def _id(self):
+    def id(self):
         return self.__id
     
     @property
-    def _date(self):
+    def date(self):
         return self.__date
     
-    @_date.setter
-    def _date(self, value):
+    @date.setter
+    def date(self, value):
         self.__date = value
 
     @property
-    def _quantity(self):
+    def quantity(self):
         return self.__quantity
 
-    @_quantity.setter
-    def _quantity(self, value):
+    @quantity.setter
+    def quantity(self, value):
         self.__quantity = value
 
     @property
-    def _description(self):
+    def description(self):
         return self.__description
     
-    @_description.setter
-    def _description(self, value):
+    @description.setter
+    def description(self, value):
         self.__description = value
 
     @property
-    def _purchase(self):
+    def purchase(self):
         return self.__purchase
     
-    @_purchase.setter
+    @purchase.setter
     def _purchase(self, value):
         self.__purchase = value

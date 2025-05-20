@@ -31,7 +31,7 @@ class User(Person):
         return self._Person__id
     
     @property
-    def _id(self):
+    def id(self):
         return self._Person__id
 
     def getUserbyEmail(cls, email):
@@ -55,7 +55,7 @@ class User(Person):
 
     def sendNotification(self, recipient: str, message: str) -> None:
         try:
-            if not self._validate_email(recipient):
+            if not self.validateEmail(recipient):
                 print("Email inválido.")
                 return
             # Simula envio de email
@@ -65,7 +65,7 @@ class User(Person):
 
     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
         try:
-            if not self._validate_email(recipient):
+            if not self.validateEmail(recipient):
                 print("Email inválido.")
                 return
             if datetime < date.today():
@@ -185,23 +185,23 @@ class User(Person):
             if ticket not in self.__tickets:
                 print("O ticket não pertence a este usuário.")
                 return
-            if ticket._status != Status.VALID:
+            if ticket.status != Status.VALID:
                 print("O ticket não está válido para transferência.")
                 return
             if hasattr(ticket, 'tier') and hasattr(ticket.tier, 'event') and ticket.tier.event.status == Status.CLOSED:
                 print("O evento já foi encerrado, não é possível transferir o ingresso.")
                 return
-            new_owner = None
+            newOwner = None
             for user in User.users:
-                if user._cpf == newCPF:
-                    new_owner = user
+                if user.cpf == newCPF:
+                    newOwner = user
                     break
-            if not new_owner:
+            if not newOwner:
                 print("Novo usuário com o CPF informado não encontrado.")
                 return
             self.__tickets.remove(ticket)
-            new_owner.addTicket(ticket)
-            ticket.owner = new_owner
+            newOwner.addTicket(ticket)
+            ticket.owner = newOwner
         except Exception as e:
             print(f"Erro inesperado ao transferir ticket: {str(e)}")
 
@@ -229,11 +229,11 @@ class User(Person):
             if event.status == Status.CLOSED:
                 print("O evento já foi encerrado, não é possível registrar-se.")
                 return None
-            ticket = Ticket(id=uuid4(), owner=self, tier=None, event=event, status=Status.VALID, code=str(uuid4()))
+            ticket = Ticket(id=uuid4(), owner=self, tier=None, event=event, seller=None, status=Status.VALID, code=str(uuid4()))
             self.addTicket(ticket)
             return ticket
         except Exception as e:
-            print(f"Erro inesperado ao registrar no evento gratuito para o usuário {self._id}: {str(e)}")
+            print(f"Erro inesperado ao registrar no evento gratuito para o usuário {self.name}: {str(e)}")
             return None
     
     def createRating(self, event, rate: int, comment: str) -> Rating:
@@ -322,17 +322,20 @@ class User(Person):
             if purchase not in self.__purchases:
                 print("Compra não pertence a este usuário.")
                 return
-            if purchase._status == PaymentStatus.PAID:
+            if purchase.status == PaymentStatus.PAID:
                 print("A compra já foi paga.")
                 return
-            if purchase._status == PaymentStatus.PENDING and self.__balance >= purchase._totalPrice:
-                self.__balance -= purchase._totalPrice
-                purchase._status = PaymentStatus.PAID
+            if purchase.status == PaymentStatus.PENDING and self.__balance >= purchase.totalPrice:
+                self.__balance -= purchase.totalPrice
+                purchase.status = PaymentStatus.PAID
                 tickets, receipt = purchase.confirmPayment()
                 for ticket in tickets:
                     self.addTicket(ticket)
                 self.addReceipt(receipt)
                 self.addPurchase(purchase)
+            else:
+                print("Saldo insuficiente ou compra não está pendente.")
+                return
         except Exception as e:
             print(f"Erro inesperado ao pagar compra: {str(e)}")
     
@@ -347,9 +350,6 @@ class User(Person):
             ValueError: _description_
         """
         try:
-            if purchase in self.__purchases:
-                print("Compra já registrada.")
-                return
             if purchase not in self.__purchases:
                 self.__purchases.append(purchase)
         except Exception as e:
@@ -373,29 +373,37 @@ class User(Person):
             if purchase not in self.__purchases:
                 raise ValueError("Compra não pertence a este usuário.")
             
-            if (datetime.now() - purchase._purchaseDate).days > 7:
+            if (datetime.now() - purchase.purchaseDate).days > 7:
                 raise ValueError("O prazo para reembolso expirou.")
+            
+            if purchase.status != PaymentStatus.PAID:
+                raise ValueError("A compra não está paga ou já foi reembolsada.")
 
-            for item in purchase._items:
-                event = item._tier._event
+            for item in purchase.items:
+                event = item.tier.event
                 if event.status == Status.CLOSED:
                     raise ValueError("O evento já foi encerrado, não é possível reembolsar.")
-                
-            for item in purchase._items:
-                ticket_to_remove = None
+            
+            for item in purchase.items:
+                ticketRemove = None
                 for ticket in self.__tickets:
-                    if ticket.tier == item._tier:
-                        ticket_to_remove = ticket
+                    if ticket.tier == item.tier:
+                        ticketRemove = ticket
                         break
-                if ticket_to_remove:
-                    self.__tickets.remove(ticket_to_remove)
-            purchase.status = Status.REFUND
+
+                if ticketRemove:
+                    self.__tickets.remove(ticketRemove)
+
+            purchase.status = PaymentStatus.REFUNDED
+            self.__balance += purchase.totalPrice
             return True
+        
         except ValueError as e:
-            print(f"Erro ao solicitar reembolso para o usuário {self._id}: {str(e)}")
+            print(f"Erro ao solicitar reembolso para o usuário {self.name}: {str(e)}")
             return False
+        
         except Exception as e:
-            print(f"Erro inesperado ao solicitar reembolso para o usuário {self._id}: {str(e)}")
+            print(f"Erro inesperado ao solicitar reembolso para o usuário {self.name}: {str(e)}")
             return False
     
     def addReceipt(self, receipt):

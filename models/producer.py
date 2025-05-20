@@ -1,4 +1,3 @@
-import logging
 import re
 from uuid import uuid4, UUID
 from models.person import Person
@@ -12,12 +11,12 @@ class Producer(Person):
 
     def __init__(self, id: UUID, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: Status, cnpj: str, enterprise: str):
         super().__init__(id, name, cpf, birth, email, password, phone, status)
-        self.__cnpj = cnpj if self._validate_cnpj(cnpj) else None
+        self.__cnpj = cnpj if self.validateCNPJ(cnpj) else None
         self.__enterprise = enterprise
         self.events = []
 
     @staticmethod
-    def _validate_cnpj(cnpj: str) -> bool:
+    def validateCNPJ(cnpj: str) -> bool:
         """_summary_
 
         Args:
@@ -56,10 +55,10 @@ class Producer(Person):
                 raise ValueError("Nenhum produtor encontrado.")
             return list(cls.producers)
         except ValueError as e:
-            logging.error(f"Erro ao obter produtores: {str(e)}")
+            print(f"Erro ao obter produtores: {str(e)}")
             raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao obter produtores: {str(e)}")
+            print(f"Erro inesperado ao obter produtores: {str(e)}")
             raise
 
     def updateProfile(self, name: str = None, birth: date = None, email: str = None, password: str = None, cnpj: str = None, enterprise: str = None) -> None:
@@ -87,10 +86,10 @@ class Producer(Person):
             self.__cnpj = cnpj if cnpj else self.__cnpj
             self.__enterprise = enterprise if enterprise else self.__enterprise
         except ValueError as e:
-            logging.error(f"Erro ao atualizar perfil do produtor {self.email}: {str(e)}")
+            print(f"Erro ao atualizar perfil do produtor {self.email}: {str(e)}")
             raise
         except Exception as e:
-            logging.error(f"Erro inesperado ao atualizar perfil do produtor {self.email}: {str(e)}")
+            print(f"Erro inesperado ao atualizar perfil do produtor {self.email}: {str(e)}")
             raise
     
     def sendNotification(self, recipient: str, message: str) -> None:
@@ -99,7 +98,7 @@ class Producer(Person):
                 print("Email inválido.")
                 return
             # Simula envio de email
-            logging.info(f"Notificação enviada para {recipient}: {message}")
+            print(f"Notificação enviada para {recipient}: {message}")
         except Exception as e:
             print(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
 
@@ -112,7 +111,7 @@ class Producer(Person):
                 print("A data de agendamento deve ser futura.")
                 return
             # Simula agendamento de email
-            logging.info(f"Notificação agendada para {recipient} em {datetime}: {message}")
+            print(f"Notificação agendada para {recipient} em {datetime}: {message}")
         except Exception as e:
             print(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
 
@@ -159,7 +158,7 @@ class Producer(Person):
             self.events.remove(event)
             return True
         except Exception as e:
-            logging.error(f"Erro inesperado ao excluir evento: {str(e)}")
+            print(f"Erro inesperado ao excluir evento: {str(e)}")
             print("Erro inesperado ao excluir evento.")
             return False
     
