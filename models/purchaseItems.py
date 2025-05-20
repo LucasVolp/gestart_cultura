@@ -14,29 +14,29 @@ class PurchaseItems:
         return f"[{tipo}] ID: {self.__id} | Tier: {self.__tier} | Quantidade: {self.__quantity} | Preço Unitário: {self.__unitPrice} | Preço Total: {self.__totalPrice}"
     
     @property
-    def _id(self):
+    def id(self):
         return self.__id
     
     @property
-    def _tier(self):
+    def tier(self):
         return self.__tier
     
-    @_tier.setter
-    def _tier(self, value):
+    @tier.setter
+    def tier(self, value):
         self.__tier = value
 
     @property
-    def _quantity(self):
+    def quantity(self):
         return self.__quantity
     
-    @_quantity.setter
-    def _quantity(self, value):
+    @quantity.setter
+    def quantity(self, value):
         self.__quantity = value
     
     @property
-    def _unitPrice(self):
+    def unitPrice(self):
         return self.__unitPrice
     
     @property
-    def _totalPrice(self):
+    def totalPrice(self):
         return self.__totalPrice

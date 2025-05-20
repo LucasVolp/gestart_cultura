@@ -1,4 +1,3 @@
-import logging
 from uuid import UUID
 from models.event import Event
 from enums.status import Status
@@ -7,58 +6,69 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.user import User
+    from models.seller import Seller
 
 class Ticket:
-    def __init__(self, id: UUID, owner: "User", tier: Tier, event: Event, status: Status, code: str) -> None:
+    def __init__(self, id: UUID, owner: "User", tier: Tier, event: Event, seller: "Seller", status: Status, code: str) -> None:
         self.__id = id
         self.__owner = owner
         self.__tier = tier
         self.__event = event
+        self.__seller = seller
         self.__status = status
         self.__code = code
 
     def __str__(self):
         tipo = self.__class__.__name__
-        return f"[{tipo}] ID: {self.__id} | Proprietário: {self.__owner} | Tier: {self.__tier} | Evento: {self.__event} | Status: {self.__status.name} | Código: {self.__code}"
+        seller = self.__seller.name
+        return f"[{tipo}] ID: {self.__id} | Proprietário: {self.__owner} | Tier: {self.__tier} | Evento: {self.__event} | Vendedor: {seller} | Status: {self.__status.name} | Código: {self.__code}"
     
     @property
-    def _owner(self):
+    def owner(self):
         return self.__owner
     
-    @_owner.setter
-    def _owner(self, value):
+    @owner.setter
+    def owner(self, value):
         self.__owner = value
 
     @property
-    def _tier(self):
+    def tier(self):
         return self.__tier
     
-    @_tier.setter
-    def _tier(self, value):
+    @tier.setter
+    def tier(self, value):
         self.__tier = value
 
     @property
-    def _event(self):
+    def event(self):
         return self.__event
     
-    @_event.setter
-    def _event(self, value):
+    @event.setter
+    def event(self, value):
         self.__event = value
 
     @property
-    def _status(self):
+    def seller(self):
+        return self.__seller
+    
+    @seller.setter
+    def seller(self, value):
+        self.__seller = value
+
+    @property
+    def status(self):
         return self.__status
     
-    @_status.setter
-    def _status(self, value):
+    @status.setter
+    def status(self, value):
         self.__status = value
 
     @property
-    def _code(self):
+    def code(self):
         return self.__code
     
-    @_code.setter
-    def _code(self, value):
+    @code.setter
+    def code(self, value):
         self.__code = value
 
     def validateTicket(self) -> bool:
@@ -79,10 +89,10 @@ class Ticket:
             elif self.__event.__status == Status.CLOSED:
                 raise ValueError("O evento está fechado.")
         except ValueError as e:
-            logging.error(f"Erro: {str(e)}")
+            print(f"Erro: {str(e)}")
             return False
         except Exception as e:
-            logging.error(f"Erro inesperado: {str(e)}")
+            print(f"Erro inesperado: {str(e)}")
             return False
         
     def getQRCode(self) -> str:
@@ -99,8 +109,8 @@ class Ticket:
                 raise ValueError("Código QR não gerado.")
             return f"QR Code: {self.__code}"
         except ValueError as e:
-            logging.error(f"Erro: {str(e)}")
+            print(f"Erro: {str(e)}")
             raise
         except Exception as e:
-            logging.error(f"Erro inesperado: {str(e)}")
+            print(f"Erro inesperado: {str(e)}")
             raise

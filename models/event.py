@@ -150,7 +150,7 @@ class Event():
         if startDate >= endDate:
             print("A data de início deve ser anterior à data de término.")
             return None
-        tier = Tier(id=uuid4(), amount=amount, name=name, price=price, startDate=startDate, endDate=endDate, status=status)
+        tier = Tier(id=uuid4(), amount=amount, name=name, price=price, startDate=startDate, endDate=endDate, status=status, event=self)
         self.addTier(tier)
         return tier
 

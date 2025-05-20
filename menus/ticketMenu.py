@@ -8,18 +8,16 @@ def listTickets(user):
     try:
         Utils.menu(f"Meus Ingressos - {user.name}")
         tickets = user.getTickets()
-        if not tickets:
-            print("Nenhum ingresso encontrado.")
-        else:
-            print("Ingressos disponíveis:")
-            for idx, ticket in enumerate(tickets, start=1):
-                print(f"{idx} - {ticket}")
+        print("Ingressos disponíveis:")
+        for idx, ticket in enumerate(tickets, start=1):
+            print(f"{idx} - Proprietário: {ticket.owner.name} - Evento: {ticket.tier.event.name} - Lote: {ticket.tier.name} - Vendedor: {ticket.seller.name} - Código do Ingresso: {ticket.code} - Status: {ticket.status.name}")
+        Utils.pause()
+
+    except ValueError as e:
+        print(str(e))  
         Utils.pause()
     except MenuBackException:
         return
-    except Exception as e:
-        print(f"Erro inesperado ao listar ingressos: {e}")
-        Utils.pause()
 
 def buyTicket(user):
     try:
@@ -74,7 +72,7 @@ def buyTicket(user):
             return
 
         for idx, tier in enumerate(tiers, start=1):
-            print(f"{idx} - {tier.name} - {tier.price} - {tier.startDate} - {tier.endDate} - {tier.status.name}")
+            print(f"{idx} - Nome: {tier.name} - Preço: {tier.price} - Status: {tier.status.name}")
         try:
             tierIndex = int(Utils.inputBack("Escolha o número do lote: ")) - 1
         except ValueError:
@@ -156,7 +154,7 @@ def transferTicketMenu(user):
             return
         print("Ingressos disponíveis para transferência:")
         for idx, ticket in enumerate(tickets, start=1):
-            print(f"{idx} - {ticket}")
+            print(f"{idx} - Proprietário: {ticket.owner.name} - Lote: {ticket.tier.name} - Evento: {ticket.event.name} - Vendedor: {ticket.seller.name} - Código do Ingresso: {ticket.code} - Status: {ticket.status.name}")
         try:
             ticketIndex = int(Utils.inputBack("Escolha o número do ingresso para transferir: ")) - 1
         except ValueError:
@@ -169,13 +167,13 @@ def transferTicketMenu(user):
             return
         ticket = tickets[ticketIndex]
         newCPF = Utils.inputBack("Digite o CPF do novo proprietário: ")
-        user.transferTicket(ticket, newCPF)
+        try:
+            user.transferTicket(ticket, newCPF)
+        except ValueError as e:
+            print(f"Erro inesperado ao transferir ingresso: {e}")
         Utils.pause()
     except MenuBackException:
-        return
-    except Exception as e:
-        print(f"Erro inesperado ao transferir ingresso: {e}")
-        Utils.pause()
+      return
 
 def ticketMenu(user):
     while True:

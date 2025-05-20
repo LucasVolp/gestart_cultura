@@ -10,7 +10,7 @@ from flows.notifications import notifications
 def userMenu(user):
     while True:
         try:
-            Utils.menu(f"Bem vindo(a) ao menu do Usuário, {user.name}")
+            Utils.menu(f"Bem vindo(a) ao menu do Usuário, {user.name} - Saldo atual: {user.balance}")
             print("\nEscolha uma opção:")
             print("1. Ver eventos")
             print("2. Gerenciar Ingressos")
@@ -24,7 +24,7 @@ def userMenu(user):
                 case "1":
                     try:
                         for idx, event in enumerate(Event.events, start=1):
-                            print(f"{idx} - {event.name} - {event.description} - {event.date} - {event.local} - {event.size} - {event.typeEvent.name} - {event.status.name}")
+                            print(f"{idx} - Nome: {event.name} | Descrição: {event.description} | Data: {event.date} | Local:{event.local} | Capacidade: {event.size} | Tipo; {event.typeEvent.name} | Status: {event.status.name}")
                         Utils.pause()
                     except MenuBackException:
                         break

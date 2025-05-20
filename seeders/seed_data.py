@@ -65,8 +65,8 @@ event1 = Event(
 )
 # Tiers para evento 1
 
-tier1_1 = Tier(id=uuid4(), amount=100, name="Pista", price=100.0, startDate="01/05/2025", endDate="19/06/2025", status=Status.OPEN)
-tier1_2 = Tier(id=uuid4(), amount=50, name="VIP", price=200.0, startDate="01/05/2025", endDate="19/06/2025", status=Status.OPEN)
+tier1_1 = Tier(id=uuid4(), amount=100, name="Pista", price=100.0, startDate="01/05/2025", endDate="19/06/2025", status=Status.OPEN, event=event1)
+tier1_2 = Tier(id=uuid4(), amount=50, name="VIP", price=200.0, startDate="01/05/2025", endDate="19/06/2025", status=Status.OPEN, event=event1)
 event1.addTier(tier1_1)
 event1.addTier(tier1_2)
 # Rating para evento 1
@@ -102,10 +102,12 @@ event3 = Event(
     typeEvent=TypeEvent.THEATER,
     status=Status.OPEN
 )
-tier3_1 = Tier(id=uuid4(), amount=80, name="Plateia", price=120.0, startDate="01/06/2025", endDate="14/08/2025", status=Status.OPEN)
-tier3_2 = Tier(id=uuid4(), amount=30, name="Camarote", price=250.0, startDate="01/06/2025", endDate="14/08/2025", status=Status.OPEN)
+tier3_1 = Tier(id=uuid4(), amount=80, name="Plateia", price=120.0, startDate="01/06/2025", endDate="14/08/2025", status=Status.OPEN, event=event3)
+tier3_2 = Tier(id=uuid4(), amount=30, name="Camarote", price=250.0, startDate="01/06/2025", endDate="14/08/2025", status=Status.OPEN, event=event3)
 event3.addTier(tier3_1)
 event3.addTier(tier3_2)
 rating3 = Rating(id=uuid4(), user=user1, event=event3, rate=5, comment="Jazz maravilhoso!")
 event3.addRating(rating3)
 Event.events.append(event3)
+
+# Nenhum ticket criado diretamente aqui. Se necessário, criar Ticket com seller=algum_seller

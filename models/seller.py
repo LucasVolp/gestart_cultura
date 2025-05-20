@@ -1,4 +1,3 @@
-import logging
 from enums.status import Status
 from models.person import Person
 from models.purchase import Purchase
@@ -20,7 +19,7 @@ class Seller(Person):
                 print("Email inválido.")
                 return
             # Simula envio de email
-            logging.info(f"Notificação enviada para {recipient}: {message}")
+            print(f"Notificação enviada para {recipient}: {message}")
         except Exception as e:
             print(f"Erro inesperado ao enviar notificação para {recipient}: {str(e)}")
 
@@ -33,7 +32,7 @@ class Seller(Person):
                 print("A data de agendamento deve ser futura.")
                 return
             # Simula agendamento de email
-            logging.info(f"Notificação agendada para {recipient} em {datetime}: {message}")
+            print(f"Notificação agendada para {recipient} em {datetime}: {message}")
         except Exception as e:
             print(f"Erro inesperado ao agendar notificação para {recipient}: {str(e)}")
 
@@ -48,9 +47,8 @@ class Seller(Person):
             if tier.status != Status.OPEN:
                 print("O tier não está disponível para compra.")
                 return None
-            
             item = PurchaseItems(id=uuid4(), tier=tier, quantity=amount, unitPrice=tier.price, totalPrice=tier.price*amount)
-            purchase = Purchase(id=uuid4(), buyer=user, purchaseDate=datetime.now(), status=PaymentStatus.PENDING, totalPrice=item._totalPrice, paymentMethod=paymentMethod, items=[item])
+            purchase = Purchase(id=uuid4(), buyer=user, seller=self, purchaseDate=datetime.now(), status=PaymentStatus.PENDING, totalPrice=item.totalPrice, paymentMethod=paymentMethod, items=[item])
             
             self.purchases.append(purchase)
             user.addPurchase(purchase)
