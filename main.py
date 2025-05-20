@@ -6,7 +6,7 @@ from models.seller import Seller
 from models.user import User
 from services.authService import AuthService
 from services.createAccountService import CreateAccountService
-from flows.utils import Utils
+from flows.utils import MenuBackException, Utils
 from seeders import seed_data
 
 def main():
@@ -23,7 +23,10 @@ def main():
             case "1":
                 try:
                     Utils.menu("Fazer Login - ou digite 0 para voltar")
-                    email = Utils.inputEmail()
+                    try:
+                        email = Utils.inputEmail()
+                    except MenuBackException:
+                        continue
                     password = Utils.inputBack("Digite sua senha: ")
                     account = auth_service.authenticar(email, password)
                     if account:

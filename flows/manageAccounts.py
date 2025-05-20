@@ -47,12 +47,16 @@ def manageAccounts(account):
         elif option == "2":
             confirm = Utils.inputBack("Tem certeza que deseja excluir a conta? (s/n): ")
             if confirm.lower() == 's':
-                if account.deleteAccount():
-                    print("Conta excluída com sucesso!")
-                    Utils.pause()
-                    break
-                else:
-                    print("Erro ao excluir conta.")
+                try:
+                    if account.deleteAccount():
+                        print("Conta excluída com sucesso!")
+                        Utils.pause()
+                        break
+                    else:
+                        print("Erro ao excluir conta.")
+                        Utils.pause()
+                except Exception as e:
+                    print(f"Erro ao excluir conta: {e}")
                     Utils.pause()
             else:
                 print("Exclusão cancelada.")

@@ -27,7 +27,7 @@ def createRatingMenu(user):
             return
         print("Eventos encerrados disponíveis para avaliação:")
         for idx, event in enumerate(events, start=1):
-            print(f"{idx} - {event.name}")
+            print(f"{idx} - Nome: {event.name} | Descrição: {event.description} | Data: {event.date} | Local: {event.local}")
         try:
             eventIndex = int(Utils.inputBack("Escolha o número do evento: ")) - 1
         except ValueError:

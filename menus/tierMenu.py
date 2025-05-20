@@ -11,7 +11,7 @@ def createTierMenu(producer, event=None):
                 return
             print("Escolha um evento para criar um lote:")
             for idx, ev in enumerate(producer.events, start=1):
-                print(f"{idx} - {ev.name}")
+                print(f"{idx} - Nome: {ev.name} | Descrição: {ev.description} | Data: {ev.date} | Local: {ev.local} | Capacidade: {ev.size} | Tipo: {ev.typeEvent.name} | Status: {ev.status.name}")
             try:
                 eventIndex = int(Utils.inputBack("Escolha o número do evento: ")) - 1
             except ValueError:
@@ -22,9 +22,9 @@ def createTierMenu(producer, event=None):
                 print("Evento inválido.")
                 Utils.pause()
                 return
-            selected_event = producer.events[eventIndex]
+            selectedEvent = producer.events[eventIndex]
         else:
-            selected_event = event
+            selectedEvent = event
         try:
             amount = int(Utils.inputBack("Digite a quantidade de ingressos do lote: "))
             price = float(Utils.inputBack("Digite o preço do lote: "))
@@ -36,7 +36,7 @@ def createTierMenu(producer, event=None):
         startDate = Utils.inputDate("Digite a data de início do lote (DD/MM/AAAA): ")
         endDate = Utils.inputDate("Digite a data de término do lote (DD/MM/AAAA): ")
         status = Utils.statusEnum()
-        tier = selected_event.createTier(amount=amount, name=name, price=price, startDate=startDate, endDate=endDate, status=status)
+        tier = selectedEvent.createTier(amount=amount, name=name, price=price, startDate=startDate, endDate=endDate, status=status)
         if tier:
             print(f"Lote criado com sucesso! - Lote: {tier}")
         else:
@@ -70,27 +70,27 @@ def editTierMenu(producer, event=None):
                 print("Evento inválido.")
                 Utils.pause()
                 return
-            selected_event = producer.events[eventIndex]
+            selectedEvent = producer.events[eventIndex]
         else:
-            selected_event = event
-        if not selected_event.tiers:
+            selectedEvent = event
+        if not selectedEvent.tiers:
             print("Nenhum lote encontrado.")
             Utils.pause()
             return
         print("Escolha um lote para editar:")
-        for idx, tier in enumerate(selected_event.tiers, start=1):
-            print(f"{idx} - {tier.name}")
+        for idx, tier in enumerate(selectedEvent.tiers, start=1):
+            print(f"{idx} - Nome: {tier.name} - Preço: {tier.price:.2f} - Ingressos restantes: {tier.amount} - Status: {tier.status.name}")
         try:
             tierIndex = int(Utils.inputBack("Escolha o número do lote: ")) - 1
         except ValueError:
             print("Entrada inválida. Digite um número.")
             Utils.pause()
             return
-        if tierIndex < 0 or tierIndex >= len(selected_event.tiers):
+        if tierIndex < 0 or tierIndex >= len(selectedEvent.tiers):
             print("Lote inválido.")
             Utils.pause()
             return
-        tier = selected_event.tiers[tierIndex]
+        tier = selectedEvent.tiers[tierIndex]
         print("O que deseja fazer?")
         print("1. Abrir Lote")
         print("2. Fechar Lote")
@@ -136,7 +136,7 @@ def editTierMenu(producer, event=None):
             newStatus = Utils.statusEnum()
             if not newStatus:
                 newStatus = tier.status
-            updatedTier = selected_event.updateTier(tier, amount=newAmount, name=newName, price=newPrice, startDate=newStartDate, endDate=newEndDate, status=newStatus)
+            updatedTier = selectedEvent.updateTier(tier, amount=newAmount, name=newName, price=newPrice, startDate=newStartDate, endDate=newEndDate, status=newStatus)
             if updatedTier:
                 print(f"Lote editado com sucesso! - Lote: {updatedTier}")
             else:
@@ -172,15 +172,15 @@ def deleteTierMenu(producer, event=None):
                 print("Evento inválido.")
                 Utils.pause()
                 return
-            selected_event = producer.events[eventIndex]
+            selectedEvent = producer.events[eventIndex]
         else:
-            selected_event = event
-        if not selected_event.tiers:
+            selectedEvent = event
+        if not selectedEvent.tiers:
             print("Nenhum lote encontrado.")
             Utils.pause()
             return
         print("Escolha um lote para excluir:")
-        for idx, tier in enumerate(selected_event.tiers, start=1):
+        for idx, tier in enumerate(selectedEvent.tiers, start=1):
             print(f"{idx} - {tier.name}")
         try:
             tierIndex = int(Utils.inputBack("Escolha o número do lote: ")) - 1
@@ -188,13 +188,13 @@ def deleteTierMenu(producer, event=None):
             print("Entrada inválida. Digite um número.")
             Utils.pause()
             return
-        if tierIndex < 0 or tierIndex >= len(selected_event.tiers):
+        if tierIndex < 0 or tierIndex >= len(selectedEvent.tiers):
             print("Lote inválido.")
             Utils.pause()
             return
-        tier = selected_event.tiers[tierIndex]
-        if selected_event.deleteTier(tier):
-            print(f"Lote excluído com sucesso! - Lote: {tier}")
+        tier = selectedEvent.tiers[tierIndex]
+        if selectedEvent.deleteTier(tier):
+            print(f"Lote excluído com sucesso! - Lote: {tier.name}")
         else:
             print("Erro ao excluir lote.")
         Utils.pause()
@@ -226,15 +226,15 @@ def listTiersMenu(producer, event=None):
                 print("Evento inválido.")
                 Utils.pause()
                 return
-            selected_event = producer.events[eventIndex]
+            selectedEvent = producer.events[eventIndex]
         else:
-            selected_event = event
-        if not selected_event.tiers:
+            selectedEvent = event
+        if not selectedEvent.tiers:
             print("Nenhum lote encontrado.")
             Utils.pause()
             return
         print("Lotes disponíveis:")
-        for idx, tier in enumerate(selected_event.tiers, start=1):
+        for idx, tier in enumerate(selectedEvent.tiers, start=1):
             print(f"{idx} - Nome : {tier.name} - Preço: {tier.price:.2f} - Ingressos restantes: {tier.amount} - Status: {tier.status.name}")
         Utils.pause()
     except MenuBackException:

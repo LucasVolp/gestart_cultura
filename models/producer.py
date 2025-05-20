@@ -61,7 +61,7 @@ class Producer(Person):
             print(f"Erro inesperado ao obter produtores: {str(e)}")
             raise
 
-    def updateProfile(self, name: str = None, birth: date = None, email: str = None, password: str = None, cnpj: str = None, enterprise: str = None) -> None:
+    def updateProfile(self, name: str = None, birth: date = None, email: str = None, password: str = None, cnpj: str = None, enterprise: str = None) -> bool:
         """_summary_
 
         Args:
@@ -77,7 +77,7 @@ class Producer(Person):
             ValueError: _description_
         """
         try:
-            if cnpj and not self._validate_cnpj(cnpj):
+            if cnpj and not self.validateCNPJ(cnpj):
                 raise ValueError("CNPJ inválido.")
             if enterprise and not enterprise.strip():
                 raise ValueError("O nome da empresa não pode ser vazio.")
@@ -85,16 +85,13 @@ class Producer(Person):
             # Atualizar campos específicos
             self.__cnpj = cnpj if cnpj else self.__cnpj
             self.__enterprise = enterprise if enterprise else self.__enterprise
-        except ValueError as e:
-            print(f"Erro ao atualizar perfil do produtor {self.email}: {str(e)}")
-            raise
-        except Exception as e:
-            print(f"Erro inesperado ao atualizar perfil do produtor {self.email}: {str(e)}")
+            return True
+        except Exception:
             raise
     
     def sendNotification(self, recipient: str, message: str) -> None:
         try:
-            if not self._validate_email(recipient):
+            if not self.validateEmail(recipient):
                 print("Email inválido.")
                 return
             # Simula envio de email

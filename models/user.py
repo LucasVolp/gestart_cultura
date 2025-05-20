@@ -181,16 +181,16 @@ class User(Person):
         try:
             if hasattr(ticket, 'tier') and hasattr(ticket.tier, 'event') and ticket.tier.event.typeEvent == TypeEvent.FREE_EVENT:
                 print("Não é possível transferir ingressos de eventos gratuitos.")
-                return
+                return False
             if ticket not in self.__tickets:
                 print("O ticket não pertence a este usuário.")
-                return
+                return False
             if ticket.status != Status.VALID:
                 print("O ticket não está válido para transferência.")
-                return
+                return False
             if hasattr(ticket, 'tier') and hasattr(ticket.tier, 'event') and ticket.tier.event.status == Status.CLOSED:
                 print("O evento já foi encerrado, não é possível transferir o ingresso.")
-                return
+                return False
             newOwner = None
             for user in User.users:
                 if user.cpf == newCPF:
@@ -198,13 +198,15 @@ class User(Person):
                     break
             if not newOwner:
                 print("Novo usuário com o CPF informado não encontrado.")
-                return
+                return False
             self.__tickets.remove(ticket)
             newOwner.addTicket(ticket)
             ticket.owner = newOwner
+            print("Ingresso transferido com sucesso!")
+            return True
         except Exception as e:
             print(f"Erro inesperado ao transferir ticket: {str(e)}")
-
+            return False
     def registerInFreeEvent(self, event):
         """_summary_
 

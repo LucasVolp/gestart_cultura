@@ -5,7 +5,7 @@ def showPurchases(user):
         purchases = user.getPurchases()
         print("Suas compras:")
         for idx, purchase in enumerate(purchases, start=1):
-            print(f"{idx} - ID: {purchase._id} | Data: {purchase._purchaseDate} | Total: {purchase._totalPrice} | Status: {purchase._status.name} | Método: {purchase._paymentMethod.name}")
+            print(f"{idx} - ID: {purchase.id} | Data: {purchase.purchaseDate} | Total: {purchase.totalPrice} | Status: {purchase.status.name} | Método: {purchase.paymentMethod.name}")
         Utils.pause()
     except Exception as e:
         print(str(e))
@@ -22,7 +22,7 @@ def refundPurchaseMenu(user):
             return
         print("Escolha uma compra para reembolsar:")
         for idx, purchase in enumerate(purchases, start=1):
-            print(f"{idx} - {purchase}")
+            print(f"{idx} - ID: {purchase.id} | Data: {purchase.purchaseDate} | Total: {purchase.totalPrice} | Status: {purchase.status.name} | Método: {purchase.paymentMethod.name}")
         try:
             purchaseIndex = int(Utils.inputBack("Escolha o número da compra: ")) - 1
         except ValueError:
@@ -57,7 +57,7 @@ def showReceipts(user):
         else:
             print("Seus recibos:")
             for idx, receipt in enumerate(receipts, start=1):
-                print(f"{idx} - {receipt}")
+                print(f"{idx} - ID: {receipt.id} | ID da compra: {receipt.purchase.id} | Proprietário: {receipt.purchase.buyer.name} | Vendedor: {receipt.purchase.seller.name} | Data: {receipt.date} | Total: {receipt.purchase.totalPrice} | Descrição: {receipt.description} | Status: {receipt.purchase.status.name} | Método: {receipt.purchase.paymentMethod.name}")
         Utils.pause()
     except MenuBackException:
         return
@@ -76,7 +76,8 @@ def payPurchaseMenu(user):
             return
         print(f"Escolha uma compra para pagar - Saldo atual: {user.balance}")
         for idx, purchase in enumerate(pendingPurchases, start=1):
-            print(f"{idx} - {purchase}")
+            itens = ", ".join([f"{item.tier.name} ({item.quantity})" for item in purchase.items])
+            print(f"{idx} - ID: {purchase.id} - Itens: {itens} | Data: {purchase.purchaseDate} | Total: {purchase.totalPrice} | Status: {purchase.status.name} | Método: {purchase.paymentMethod.name}")
         try:
             purchaseIndex = int(Utils.inputBack("Escolha o número da compra: ")) - 1
         except ValueError:
