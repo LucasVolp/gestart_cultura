@@ -101,7 +101,7 @@ class Producer(Person):
 
     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
         try:
-            if not self._validate_email(recipient):
+            if not self.validateEmail(recipient):
                 print("Email inválido.")
                 return
             if datetime < date.today():

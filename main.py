@@ -10,8 +10,8 @@ from flows.utils import MenuBackException, Utils
 from seeders import seed_data
 
 def main():
-    auth_service = AuthService()
-    create_account_service = CreateAccountService()
+    authService = AuthService()
+    createAccountService = CreateAccountService()
     while True:
         Utils.menu("Bem vindo ao Gestart Cultura")
         print("Escolha uma opção:")
@@ -28,7 +28,7 @@ def main():
                     except MenuBackException:
                         continue
                     password = Utils.inputBack("Digite sua senha: ")
-                    account = auth_service.authenticar(email, password)
+                    account = authService.authenticate(email, password)
                     if account:
                         print(f"Bem-vindo, {account.name}!")
                         if isinstance(account, Producer):
@@ -65,15 +65,13 @@ def main():
                     if account_type == "producer":
                         cnpj = Utils.inputCNPJ()
                         enterprise = Utils.inputBack("Digite o nome da sua empresa: ")
-                        account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone, cnpj, enterprise)
+                        account = createAccountService.createAccount(account_type, name, cpf, birth, email, password, phone, cnpj, enterprise)
                     else:
-                        account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone)
+                        account = createAccountService.createAccount(account_type, name, cpf, birth, email, password, phone)
                     
                     if account:
                         print("Conta criada com sucesso!")
-                    else:
-                        print("Erro ao criar conta.")
-                    Utils.pause()
+                        Utils.pause()
                 except KeyboardInterrupt:
                     pass
             case "0":

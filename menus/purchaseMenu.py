@@ -90,7 +90,6 @@ def payPurchaseMenu(user):
             return
         purchase = pendingPurchases[purchaseIndex]
         user.payPurchase(purchase)
-        print("Pagamento realizado (ou atualizado) com sucesso!")
         Utils.pause()
     except MenuBackException:
         return

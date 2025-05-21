@@ -207,6 +207,7 @@ class User(Person):
         except Exception as e:
             print(f"Erro inesperado ao transferir ticket: {str(e)}")
             return False
+    
     def registerInFreeEvent(self, event):
         """_summary_
 
@@ -323,10 +324,10 @@ class User(Person):
         try:
             if purchase not in self.__purchases:
                 print("Compra não pertence a este usuário.")
-                return
+                return False
             if purchase.status == PaymentStatus.PAID:
                 print("A compra já foi paga.")
-                return
+                return False
             if purchase.status == PaymentStatus.PENDING and self.__balance >= purchase.totalPrice:
                 self.__balance -= purchase.totalPrice
                 purchase.status = PaymentStatus.PAID
@@ -335,9 +336,11 @@ class User(Person):
                     self.addTicket(ticket)
                 self.addReceipt(receipt)
                 self.addPurchase(purchase)
+                print("Compra paga com sucesso!")
+                return True
             else:
                 print("Saldo insuficiente ou compra não está pendente.")
-                return
+                return False
         except Exception as e:
             print(f"Erro inesperado ao pagar compra: {str(e)}")
     

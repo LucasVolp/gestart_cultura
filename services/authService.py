@@ -20,7 +20,7 @@ class AuthService:
             return None
 
     @staticmethod
-    def authenticar(email, password):
+    def authenticate(email, password):
         try:
             if not email or not password:
                 raise ValueError("Email e senha são obrigatórios.")

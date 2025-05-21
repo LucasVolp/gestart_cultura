@@ -15,7 +15,7 @@ class Seller(Person):
 
     def sendNotification(self, recipient: str, message: str) -> None:
         try:
-            if not self._validate_email(recipient):
+            if not self.validateEmail(recipient):
                 print("Email inválido.")
                 return
             # Simula envio de email
@@ -25,7 +25,7 @@ class Seller(Person):
 
     def scheduleNotification(self, recipient: str, message: str, datetime: date) -> None:
         try:
-            if not self._validate_email(recipient):
+            if not self.validateEmail(recipient):
                 print("Email inválido.")
                 return
             if datetime < date.today():

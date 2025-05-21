@@ -16,13 +16,14 @@ def sellerMenu(seller):
             match option:
                 case "1":
                     try:
-                        purchases = getattr(seller, "purchases", [])
+                        purchases = getattr(seller, 'purchases', [])
                         if purchases:
                             print("Suas vendas:")
                             for purchase in purchases:
                                 print(f"ID: {purchase.id}, Evento: {purchase.event.name}, Data: {purchase.date}")
                         else:
                             print("Você não tem vendas.")
+                            Utils.pause()
                     except MenuBackException:
                         continue
                     except Exception as e:
