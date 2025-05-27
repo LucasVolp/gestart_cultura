@@ -11,22 +11,15 @@ class Producer(Person):
 
     def __init__(self, id: UUID, name: str, cpf: str, birth: str, email: str, password: str, phone: str, status: Status, cnpj: str, enterprise: str):
         super().__init__(id, name, cpf, birth, email, password, phone, status)
+        cnpj = ''.join(filter(str.isdigit, cnpj))
         self.__cnpj = cnpj if self.validateCNPJ(cnpj) else None
         self.__enterprise = enterprise
         self.events = []
 
     @staticmethod
     def validateCNPJ(cnpj: str) -> bool:
-        """_summary_
-
-        Args:
-            cnpj (str): _description_
-
-        Returns:
-            bool: _description_
-        """
-        pattern = r"^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$"
-        return bool(re.match(pattern, cnpj))
+        cnpj = ''.join(filter(str.isdigit, cnpj))
+        return len(cnpj) == 14
 
     @property
     def cnpj(self) -> str:

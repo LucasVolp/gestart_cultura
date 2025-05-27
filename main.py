@@ -1,6 +1,7 @@
 from menus.menuProducer import menuProducer
 from menus.menuSeller import sellerMenu
 from menus.userMenu import userMenu
+from getpass import getpass
 from models.producer import Producer
 from models.seller import Seller
 from models.user import User
@@ -27,7 +28,7 @@ def main():
                         email = Utils.inputEmail()
                     except MenuBackException:
                         continue
-                    password = Utils.inputBack("Digite sua senha: ")
+                    password = getpass("Digite sua senha: ", stream=None)
                     account = auth_service.authenticar(email, password)
                     if account:
                         print(f"Bem-vindo, {account.name}!")
@@ -60,7 +61,7 @@ def main():
                     cpf = Utils.inputCPF()
                     phone = Utils.inputPhone()
                     birth = Utils.inputDate("Digite sua data de nascimento (DD/MM/AAAA): ")
-                    password = Utils.inputPassword()
+                    password = getpass("Digite sua senha: ")
 
                     if account_type == "producer":
                         cnpj = Utils.inputCNPJ()

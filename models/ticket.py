@@ -1,5 +1,4 @@
 from uuid import UUID
-from models.event import Event
 from enums.status import Status
 from models.tier import Tier
 from typing import TYPE_CHECKING
@@ -9,11 +8,10 @@ if TYPE_CHECKING:
     from models.seller import Seller
 
 class Ticket:
-    def __init__(self, id: UUID, owner: "User", tier: Tier, event: Event, seller: "Seller", status: Status, code: str) -> None:
+    def __init__(self, id: UUID, owner: "User", tier: Tier, seller: "Seller", status: Status, code: str) -> None:
         self.__id = id
         self.__owner = owner
         self.__tier = tier
-        self.__event = event
         self.__seller = seller
         self.__status = status
         self.__code = code
@@ -21,7 +19,7 @@ class Ticket:
     def __str__(self):
         tipo = self.__class__.__name__
         seller = self.__seller.name
-        return f"[{tipo}] ID: {self.__id} | Proprietário: {self.__owner} | Tier: {self.__tier} | Evento: {self.__event} | Vendedor: {seller} | Status: {self.__status.name} | Código: {self.__code}"
+        return f"[{tipo}] ID: {self.__id} | Proprietário: {self.__owner} | Tier: {self.__tier} | Vendedor: {seller} | Status: {self.__status.name} | Código: {self.__code}"
     
     @property
     def owner(self):
@@ -38,14 +36,6 @@ class Ticket:
     @tier.setter
     def tier(self, value):
         self.__tier = value
-
-    @property
-    def event(self):
-        return self.__event
-    
-    @event.setter
-    def event(self, value):
-        self.__event = value
 
     @property
     def seller(self):
@@ -84,9 +74,9 @@ class Ticket:
         try:
             if self.__status == Status.VALID:
                 return True
-            elif self.__event.__status == Status.CANCELLED:
+            elif self.__tier.event.status == Status.CANCELLED:
                 raise ValueError("O evento foi cancelado.")
-            elif self.__event.__status == Status.CLOSED:
+            elif self.__tier.event.status == Status.CLOSED:
                 raise ValueError("O evento está fechado.")
         except ValueError as e:
             print(f"Erro: {str(e)}")

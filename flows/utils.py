@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 import re
+from getpass import getpass
 
 from enums.status import Status
 from enums.typeEvent import TypeEvent
@@ -102,6 +103,29 @@ class Utils:
                 print("Digite um número válido.")
 
     @staticmethod
+    def formatCPF(cpf: str) -> str:
+        cpf = ''.join(filter(str.isdigit, cpf))
+        if len(cpf) == 11:
+            return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+        return cpf
+
+    @staticmethod
+    def formatPhone(phone: str) -> str:
+        phone = ''.join(filter(str.isdigit, phone))
+        if len(phone) == 11:
+            return f"({phone[:2]}) {phone[2:7]}-{phone[7:]}"
+        elif len(phone) == 10:
+            return f"({phone[:2]}) {phone[2:6]}-{phone[6:]}"
+        return phone
+
+    @staticmethod
+    def formatCNPJ(cnpj: str) -> str:
+        cnpj = ''.join(filter(str.isdigit, cnpj))
+        if len(cnpj) == 14:
+            return f"{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:]}"
+        return cnpj
+    
+    @staticmethod
     def inputEmail(msg="Digite seu email: "):
         while True:
             email = Utils.inputBack(msg)
@@ -111,22 +135,24 @@ class Utils:
             print("Email inválido. Tente novamente.")
 
     @staticmethod
-    def inputCPF(msg="Digite seu CPF (xxx.xxx.xxx-xx): "):
+    def inputCPF(msg="Digite seu CPF (apenas números): "):
         while True:
             cpf = Utils.inputBack(msg)
-            pattern = r"^\d{3}\.\d{3}\.\d{3}-\d{2}$"
-            if re.match(pattern, cpf) and Person.validateCPF(cpf):
-                return cpf
-            print("CPF inválido. Use o formato xxx.xxx.xxx-xx e um número válido.")
+            cpf_digits = ''.join(filter(str.isdigit, cpf))
+            if len(cpf_digits) == 11:
+                return cpf_digits
+            print("CPF inválido. Digite 11 dígitos.")
 
     @staticmethod
-    def inputPhone(msg="Digite seu telefone ((xx) 9xxxx-xxxx): "):
+    def inputPhone(msg="Digite seu telefone (apenas números, com DDD): "):
         while True:
             phone = Utils.inputBack(msg)
-            pattern = r"^\(\d{2}\)\s9\d{4}-\d{4}$"
-            if re.match(pattern, phone):
-                return phone
-            print("Telefone inválido. Use o formato (xx) 9xxxx-xxxx.")
+            phone_digits = ''.join(filter(str.isdigit, phone))
+            if len(phone_digits) == 11 and phone_digits[2] == '9':
+                return phone_digits
+            elif len(phone_digits) == 10:
+                return phone_digits
+            print("Telefone inválido. Digite 10 ou 11 dígitos (com DDD).")
 
     @staticmethod
     def inputDate(msg="Digite a data (DD/MM/AAAA): "):
@@ -139,18 +165,33 @@ class Utils:
                 print("Data inválida. Use o formato DD/MM/AAAA.")
 
     @staticmethod
-    def inputPassword(msg="Digite sua senha: "):
+    def inputPassword(msg="Digite sua senha (ou 0 para voltar): "):
+        """Solicita ao usuário que digite uma senha, com opção de voltar ao menu anterior.
+        A senha é mascarada (não exibida) durante a digitação.
+        Retorna ao menu anterior se o usuário digitar '0'.
+        
+        Args:
+            msg (str): Mensagem a ser exibida ao solicitar a senha
+            
+        Returns:
+            str: A senha digitada
+            
+        Raises:
+            MenuBackException: Se o usuário digitar '0'
+        """
         while True:
-            password = Utils.inputBack(msg)
-            if len(password) >= 8 and any(c.isalpha() for c in password) and any(c.isdigit() for c in password):
+            password = getpass(msg)
+            if password == "0":
+                raise MenuBackException()
+            if len(password) >= 6:  # Validação básica de tamanho
                 return password
-            print("Senha inválida. A senha deve ter pelo menos 8 caracteres, incluindo letras e números.")
+            print("A senha deve ter pelo menos 6 caracteres.")
     
     @staticmethod
-    def inputCNPJ(msg="Digite seu CNPJ (xx.xxx.xxx/xxxx-xx): "):
+    def inputCNPJ(msg="Digite seu CNPJ (apenas números): "):
         while True:
             cnpj = Utils.inputBack(msg)
-            pattern = r"^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$"
-            if re.match(pattern, cnpj):
-                return cnpj
-            print("CNPJ inválido. Use o formato xx.xxx.xxx/xxxx-xx.")
+            cnpj_digits = ''.join(filter(str.isdigit, cnpj))
+            if len(cnpj_digits) == 14:
+                return cnpj_digits
+            print("CNPJ inválido. Digite 14 dígitos.")

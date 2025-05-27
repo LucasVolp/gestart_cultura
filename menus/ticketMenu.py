@@ -154,7 +154,7 @@ def transferTicketMenu(user):
             return
         print("Ingressos disponíveis para transferência:")
         for idx, ticket in enumerate(tickets, start=1):
-            print(f"{idx} - Proprietário: {ticket.owner.name} - Lote: {ticket.tier.name} - Evento: {ticket.event.name} - Vendedor: {ticket.seller.name} - Código do Ingresso: {ticket.code} - Status: {ticket.status.name}")
+            print(f"{idx} - Proprietário: {ticket.owner.name} - Lote: {ticket.tier.name} - Evento: {ticket.tier.event.name} - Vendedor: {ticket.seller.name} - Código do Ingresso: {ticket.code} - Status: {ticket.status.name}")
         try:
             ticketIndex = int(Utils.inputBack("Escolha o número do ingresso para transferir: ")) - 1
         except ValueError:
