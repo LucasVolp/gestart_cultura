@@ -22,61 +22,76 @@ def main():
         option = input()
         match option:
             case "1":
-                try:
-                    Utils.menu("Fazer Login - ou digite 0 para voltar")
+                while True:
                     try:
-                        email = Utils.inputEmail()
-                    except MenuBackException:
+                        Utils.menu("Fazer Login - ou digite 0 para voltar")
+                        try:
+                            email = Utils.inputEmail()
+                        except MenuBackException:
+                            break
+                        password = getpass("Digite sua senha: ", stream=None)
+                        account = auth_service.authenticar(email, password)
+                        if account:
+                            print(f"Bem-vindo, {account.name}!")
+                            if isinstance(account, Producer):
+                                try:
+                                    menuProducer(account)
+                                except KeyboardInterrupt:
+                                    pass
+                            elif isinstance(account, User):
+                                try:
+                                    userMenu(account)
+                                except KeyboardInterrupt:
+                                    pass
+                            elif isinstance(account, Seller):
+                                try:
+                                    sellerMenu(account)
+                                except KeyboardInterrupt:
+                                    pass
+                        else:
+                            print("Email ou senha incorretos.")
+                        Utils.pause()
                         continue
-                    password = getpass("Digite sua senha: ", stream=None)
-                    account = auth_service.authenticar(email, password)
-                    if account:
-                        print(f"Bem-vindo, {account.name}!")
-                        if isinstance(account, Producer):
-                            try:
-                                menuProducer(account)
-                            except KeyboardInterrupt:
-                                pass
-                        elif isinstance(account, User):
-                            try:
-                                userMenu(account)
-                            except KeyboardInterrupt:
-                                pass
-                        elif isinstance(account, Seller):
-                            try:
-                                sellerMenu(account)
-                            except KeyboardInterrupt:
-                                pass
-                    else:
-                        print("Email ou senha incorretos.")
-                    Utils.pause()
-                except KeyboardInterrupt:
-                    pass
+                    except KeyboardInterrupt:
+                        break
             case "2":
-                try:
-                    Utils.menu("Criar Conta - ou digite 0 para voltar")
-                    account_type = Utils.accountTypes()
-                    name = Utils.inputBack("Digite seu nome: ")
-                    email = Utils.inputEmail()
-                    cpf = Utils.inputCPF()
-                    phone = Utils.inputPhone()
-                    birth = Utils.inputDate("Digite sua data de nascimento (DD/MM/AAAA): ")
-                    password = getpass("Digite sua senha: ")
+                while True:
+                    try:
+                        Utils.menu("Criar Conta - ou digite 0 para voltar")
+                        account_type = Utils.accountTypes()
+                        name = Utils.inputBack("Digite seu nome: ")
+                        if not name.strip():
+                            print("Nome não pode ser vazio.")
+                            Utils.pause()
+                            continue
 
-                    if account_type == "producer":
-                        cnpj = Utils.inputCNPJ()
-                        enterprise = Utils.inputBack("Digite o nome da sua empresa: ")
-                        account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone, cnpj, enterprise)
-                    else:
-                        account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone)
-                    
-                    if account:
-                        print("Conta criada com sucesso!")
-                    else:
-                        print("Erro ao criar conta.")
-                    Utils.pause()
-                except KeyboardInterrupt:
-                    pass
+                        email = Utils.inputEmail()
+                        cpf = Utils.inputCPF()
+                        phone = Utils.inputPhone()
+                        birth = Utils.inputDate("Digite sua data de nascimento (DD/MM/AAAA): ")
+                        password = Utils.inputPassword("Digite sua senha (ou 0 para voltar): ")
+
+                        if account_type == "producer":
+                            cnpj = Utils.inputCNPJ()
+                            enterprise = Utils.inputBack("Digite o nome da sua empresa: ")
+                            if not enterprise.strip():
+                                print("Nome da empresa não pode ser vazio.")
+                                Utils.pause()
+                                continue
+                            account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone, cnpj, enterprise)
+                        else:
+                            account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone)
+
+                        if account:
+                            print("Conta criada com sucesso!")
+                        Utils.pause()
+                        break
+                    except MenuBackException:
+                        break
+                    except Exception as e:
+                        print(f"Erro: {e}")
+                        Utils.pause()
+                        continue
             case "0":
                 print("Saindo do sistema. Até logo!")
                 break

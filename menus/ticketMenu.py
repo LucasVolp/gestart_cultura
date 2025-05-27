@@ -6,7 +6,7 @@ from models.seller import Seller
 
 def listTickets(user):
     try:
-        Utils.menu(f"Meus Ingressos - {user.name}")
+        Utils.menu(f"Meus Ingressos - {user.name} - Saldo atual: {user.balance}")
         tickets = user.getTickets()
         print("Ingressos disponíveis:")
         for idx, ticket in enumerate(tickets, start=1):
@@ -21,7 +21,7 @@ def listTickets(user):
 
 def buyTicket(user):
     try:
-        Utils.menu(f"Comprar Ingressos - {user.name}")
+        Utils.menu(f"Comprar Ingressos - {user.name} - Saldo atual: {user.balance}")
         events = Event.events
         sellers = Seller.sellers
 
@@ -146,7 +146,7 @@ def buyTicket(user):
 
 def transferTicketMenu(user):
     try:
-        Utils.menu(f"Transferir Ingressos - {user.name}")
+        Utils.menu(f"Transferir Ingressos - {user.name} - Saldo atual: {user.balance}")
         tickets = user.getTickets()
         if not tickets:
             print("Nenhum ingresso disponível para transferência.")
@@ -178,7 +178,7 @@ def transferTicketMenu(user):
 def ticketMenu(user):
     while True:
         try:
-            Utils.menu(f"Bem vindo(a) ao menu de Ingressos, {user.name}")
+            Utils.menu(f"Bem vindo(a) ao menu de Ingressos, {user.name} - Saldo atual: {user.balance}")
             print("\nEscolha uma opção:")
             print("1. Comprar Ingressos")
             print("2. Meus Ingressos")

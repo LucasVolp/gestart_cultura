@@ -67,7 +67,6 @@ def showReceipts(user):
 
 def payPurchaseMenu(user):
     try:
-        
         purchases = user.getPurchases()
         pendingPurchases = [p for p in purchases if hasattr(p, 'status') and getattr(p, 'status').name == 'PENDING']
         if not pendingPurchases:

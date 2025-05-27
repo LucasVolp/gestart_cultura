@@ -13,9 +13,8 @@ def menuProducer(producer):
             Utils.menu(f"Bem vindo(a) ao menu do Produtor, {producer.name}")
             print("\nEscolha uma opção:")
             print("1. Gerenciar Eventos")
-            print("2. Gerenciar Lotes")
-            print("3. Gerenciar Conta")
-            print("4. Gerenciar Notificações")
+            print("2. Gerenciar Conta")
+            print("3. Gerenciar Notificações")
             print("0. Sair")
             option = input()
             match option:
@@ -29,21 +28,13 @@ def menuProducer(producer):
                         Utils.pause()
                 case "2":
                     try:
-                        producerTierMenu(producer)
-                    except MenuBackException:
-                        continue
-                    except Exception as e:
-                        print(f"Erro ao gerenciar lotes: {e}")
-                        Utils.pause()
-                case "3":
-                    try:
                         manageAccounts(producer)
                     except MenuBackException:
                         continue
                     except Exception as e:
                         print(f"Erro ao gerenciar conta: {e}")
                         Utils.pause()
-                case "4":
+                case "3":
                     try:
                         notifications(producer)
                     except MenuBackException:

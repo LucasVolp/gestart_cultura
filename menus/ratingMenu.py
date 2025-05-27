@@ -19,7 +19,6 @@ def showRatings(user):
 
 def createRatingMenu(user):
     try:
-        from models.event import Event
         events = [event for event in Event.events if event.status.name == "CLOSED"]
         if not events:
             print("Nenhum evento encerrado disponível para avaliação.")

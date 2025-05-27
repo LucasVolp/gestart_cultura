@@ -12,26 +12,44 @@ def createTierMenu(producer, event=None):
             print("Escolha um evento para criar um lote:")
             for idx, ev in enumerate(producer.events, start=1):
                 print(f"{idx} - Nome: {ev.name} | Descrição: {ev.description} | Data: {ev.date} | Local: {ev.local} | Capacidade: {ev.size} | Tipo: {ev.typeEvent.name} | Status: {ev.status.name}")
-            try:
-                eventIndex = int(Utils.inputBack("Escolha o número do evento: ")) - 1
-            except ValueError:
-                print("Entrada inválida. Digite um número.")
-                Utils.pause()
-                return
-            if eventIndex < 0 or eventIndex >= len(producer.events):
-                print("Evento inválido.")
-                Utils.pause()
-                return
-            selectedEvent = producer.events[eventIndex]
+            while True:
+                try:
+                    eventIndex = int(Utils.inputBack("Escolha o número do evento: ")) - 1
+                    if eventIndex < 0 or eventIndex >= len(producer.events):
+                        print("Evento inválido.")
+                        Utils.pause()
+                        continue
+                    selectedEvent = producer.events[eventIndex]
+                    break
+                except ValueError:
+                    print("Entrada inválida. Digite um número.")
+                    Utils.pause()
         else:
             selectedEvent = event
-        try:
-            amount = int(Utils.inputBack("Digite a quantidade de ingressos do lote: "))
-            price = float(Utils.inputBack("Digite o preço do lote: "))
-        except ValueError:
-            print("Quantidade ou preço inválido.")
-            Utils.pause()
-            return
+        # Loop para quantidade
+        while True:
+            try:
+                amount = int(Utils.inputBack("Digite a quantidade de ingressos do lote: "))
+                if amount <= 0:
+                    print("Quantidade deve ser maior que zero.")
+                    Utils.pause()
+                    continue
+                break
+            except ValueError:
+                print("Quantidade inválida.")
+                Utils.pause()
+        # Loop para preço
+        while True:
+            try:
+                price = float(Utils.inputBack("Digite o preço do lote: "))
+                if price < 0:
+                    print("Preço não pode ser negativo.")
+                    Utils.pause()
+                    continue
+                break
+            except ValueError:
+                print("Preço inválido.")
+                Utils.pause()
         name = Utils.inputBack("Digite o nome do lote: ")
         startDate = Utils.inputDate("Digite a data de início do lote (DD/MM/AAAA): ")
         endDate = Utils.inputDate("Digite a data de término do lote (DD/MM/AAAA): ")
@@ -60,17 +78,18 @@ def editTierMenu(producer, event=None):
             print("Escolha um evento para editar um lote:")
             for idx, ev in enumerate(producer.events, start=1):
                 print(f"{idx} - {ev.name}")
-            try:
-                eventIndex = int(Utils.inputBack("Escolha o número do evento: ")) - 1
-            except ValueError:
-                print("Entrada inválida. Digite um número.")
-                Utils.pause()
-                return
-            if eventIndex < 0 or eventIndex >= len(producer.events):
-                print("Evento inválido.")
-                Utils.pause()
-                return
-            selectedEvent = producer.events[eventIndex]
+            while True:
+                try:
+                    eventIndex = int(Utils.inputBack("Escolha o número do evento: ")) - 1
+                    if eventIndex < 0 or eventIndex >= len(producer.events):
+                        print("Evento inválido.")
+                        Utils.pause()
+                        continue
+                    selectedEvent = producer.events[eventIndex]
+                    break
+                except ValueError:
+                    print("Entrada inválida. Digite um número.")
+                    Utils.pause()
         else:
             selectedEvent = event
         if not selectedEvent.tiers:
@@ -80,17 +99,18 @@ def editTierMenu(producer, event=None):
         print("Escolha um lote para editar:")
         for idx, tier in enumerate(selectedEvent.tiers, start=1):
             print(f"{idx} - Nome: {tier.name} - Preço: {tier.price:.2f} - Ingressos restantes: {tier.amount} - Status: {tier.status.name}")
-        try:
-            tierIndex = int(Utils.inputBack("Escolha o número do lote: ")) - 1
-        except ValueError:
-            print("Entrada inválida. Digite um número.")
-            Utils.pause()
-            return
-        if tierIndex < 0 or tierIndex >= len(selectedEvent.tiers):
-            print("Lote inválido.")
-            Utils.pause()
-            return
-        tier = selectedEvent.tiers[tierIndex]
+        while True:
+            try:
+                tierIndex = int(Utils.inputBack("Escolha o número do lote: ")) - 1
+                if tierIndex < 0 or tierIndex >= len(selectedEvent.tiers):
+                    print("Lote inválido.")
+                    Utils.pause()
+                    continue
+                tier = selectedEvent.tiers[tierIndex]
+                break
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+                Utils.pause()
         print("O que deseja fazer?")
         print("1. Abrir Lote")
         print("2. Fechar Lote")
@@ -110,37 +130,57 @@ def editTierMenu(producer, event=None):
                 print("Não foi possível fechar o lote.")
         elif opcao == "3":
             try:
-                newAmountStr = Utils.inputBack(f"Digite a nova quantidade de ingressos do lote (atual: {tier.amount}): ")
-                if newAmountStr.strip() == "":
-                    newAmount = tier.amount
-                else:
-                    newAmount = int(newAmountStr)
+                while True:
+                    newAmountStr = Utils.inputBack(f"Digite a nova quantidade de ingressos do lote (atual: {tier.amount}): ")
+                    if newAmountStr.strip() == "":
+                        newAmount = tier.amount
+                        break
+                    try:
+                        newAmount = int(newAmountStr)
+                        if newAmount < 0:
+                            print("Quantidade inválida.")
+                            Utils.pause()
+                            continue
+                        break
+                    except ValueError:
+                        print("Quantidade inválida.")
+                        Utils.pause()
                 newName = Utils.inputBack(f"Digite o novo nome do lote (atual: {tier.name}): ")
                 if newName.strip() == "":
                     newName = tier.name
-                newPriceStr = Utils.inputBack(f"Digite o novo preço do lote (atual: {tier.price}): ")
-                if newPriceStr.strip() == "":
-                    newPrice = tier.price
+                while True:
+                    newPriceStr = Utils.inputBack(f"Digite o novo preço do lote (atual: {tier.price}): ")
+                    if newPriceStr.strip() == "":
+                        newPrice = tier.price
+                        break
+                    try:
+                        newPrice = float(newPriceStr)
+                        if newPrice < 0:
+                            print("Preço inválido.")
+                            Utils.pause()
+                            continue
+                        break
+                    except ValueError:
+                        print("Preço inválido.")
+                        Utils.pause()
+                newStartDate = Utils.inputDate(f"Digite a nova data de início do lote (atual: {tier.startDate}): ")
+                if not newStartDate:
+                    newStartDate = tier.startDate
+                newEndDate = Utils.inputDate(f"Digite a nova data de término do lote (atual: {tier.endDate}): ")
+                if not newEndDate:
+                    newEndDate = tier.endDate
+                newStatus = Utils.statusEnum()
+                if not newStatus:
+                    newStatus = tier.status
+                updatedTier = selectedEvent.updateTier(tier, amount=newAmount, name=newName, price=newPrice, startDate=newStartDate, endDate=newEndDate, status=newStatus)
+                if updatedTier:
+                    print(f"Lote editado com sucesso! - Lote: {updatedTier}")
                 else:
-                    newPrice = float(newPriceStr)
+                    print("Erro ao editar lote.")
             except ValueError:
                 print("Quantidade ou preço inválido.")
-                Utils.pause()
-                return
-            newStartDate = Utils.inputDate(f"Digite a nova data de início do lote (atual: {tier.startDate}): ")
-            if not newStartDate:
-                newStartDate = tier.startDate
-            newEndDate = Utils.inputDate(f"Digite a nova data de término do lote (atual: {tier.endDate}): ")
-            if not newEndDate:
-                newEndDate = tier.endDate
-            newStatus = Utils.statusEnum()
-            if not newStatus:
-                newStatus = tier.status
-            updatedTier = selectedEvent.updateTier(tier, amount=newAmount, name=newName, price=newPrice, startDate=newStartDate, endDate=newEndDate, status=newStatus)
-            if updatedTier:
-                print(f"Lote editado com sucesso! - Lote: {updatedTier}")
-            else:
-                print("Erro ao editar lote.")
+            except Exception as e:
+                print(f"Erro inesperado: {e}")
         else:
             print("Opção inválida.")
         Utils.pause()
