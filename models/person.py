@@ -70,13 +70,15 @@ class Person(Authenticable, ABC):
     def __init__(self, id: UUID, name: str, cpf: str, birth: date, email: str, password: str, phone: str, status: Status):
         if isinstance(birth, str):
             birth = datetime.strptime(birth, "%d/%m/%Y").date()
+        cpf = ''.join(filter(str.isdigit, cpf))
+        phone = ''.join(filter(str.isdigit, phone))
         self.__id = id
         self.__name = name
         self.__cpf = cpf if self.validateCPF(cpf) else None
         self.__birth = birth if birth < date.today() else None
         self.__email = email if self.validateEmail(email) else None
         self.__password = self.hashPassword(password) if self.validatePassword(password) else None
-        self._phone = phone if self.validatePhone(phone) else None
+        self.__phone = phone if self.validatePhone(phone) else None
         self.__status = status
 
     def __str__(self):
@@ -172,8 +174,8 @@ class Person(Authenticable, ABC):
         Returns:
             bool: _description_
         """
-        pattern = r"^\(\d{2}\)\s9\d{4}-\d{4}$"
-        return bool(re.match(pattern, phone))
+        phone = ''.join(filter(str.isdigit, phone))
+        return len(phone) == 11 or len(phone) == 10
 
     @staticmethod
     def hashPassword(password: str) -> bytes:
@@ -233,7 +235,7 @@ class Person(Authenticable, ABC):
             print(f"Erro inesperado na autenticação para {email}: {str(e)}")
             return False
 
-    def updateProfile(self, name: str, birth: date, email: str, password: str) -> None:
+    def updateProfile(self, name: str, birth: date, email: str, password: str) -> bool:
         """_summary_
 
         Args:
@@ -251,22 +253,25 @@ class Person(Authenticable, ABC):
         try:
             if name and not name.strip():
                 print("O nome não pode ser vazio.")
-                return
+                return False
             if birth and birth >= date.today():
                 print("A data de nascimento deve ser no passado.")
-                return
+                return False
             if email and not self.validateEmail(email):
                 print("Email inválido.")
-                return
+                return False
             if password and not self.validatePassword(password):
                 print("A senha deve ter pelo menos 8 caracteres, incluindo letras e números.")
-                return
+                return False
+            
             self.__name = name if name else self.__name
             self.__birth = birth if birth else self.__birth
             self.__email = email if email else self.__email
             self.__password = self.hashPassword(password) if password else self.__password
+            return True
         except Exception as e:
             print(f"Erro inesperado ao atualizar perfil para {self.__email}: {str(e)}")
+            return False
 
     def deleteAccount(self) -> bool:
         """_summary_

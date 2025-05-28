@@ -254,7 +254,7 @@ class User(Person):
             Rating: _description_
         """
         try:
-            if not any(ticket.event == event for ticket in self.__tickets):
+            if not any(ticket.tier.event == event for ticket in self.__tickets):
                 print("O usuário não pode avaliar o evento.")
                 return None
             if event.status == Status.CLOSED:
