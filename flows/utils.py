@@ -53,6 +53,8 @@ class Utils:
                     print("Opção inválida.")
             except ValueError:
                 print("Digite um número válido.")
+            except MenuBackException:
+                raise MenuBackException()
 
     @staticmethod
     def statusEnum():
@@ -160,6 +162,31 @@ class Utils:
             dateStr = Utils.inputBack(msg)
             try:
                 dateObj = datetime.strptime(dateStr, "%d/%m/%Y").date()
+                if dateObj < datetime.now().date():
+                    print("A data não pode ser no passado. Tente novamente.")
+                    continue
+                return dateObj
+            except ValueError:
+                print("Data inválida. Use o formato DD/MM/AAAA.")
+
+    @staticmethod
+    def inputBirth(msg="Digite sua data de nascimento (DD/MM/AAAA): "):
+        """Solicita ao usuário que digite sua data de nascimento.
+        Retorna a data como um objeto date.
+        
+        Args:
+            msg (str): Mensagem a ser exibida ao solicitar a data
+            
+        Returns:
+            date: A data de nascimento digitada pelo usuário
+        """
+        while True:
+            dateStr = Utils.inputBack(msg)
+            try:
+                dateObj = datetime.strptime(dateStr, "%d/%m/%Y").date()
+                if dateObj >= datetime.now().date():
+                    print("A data de nascimento não pode ser no futuro. Tente novamente.")
+                    continue
                 return dateObj
             except ValueError:
                 print("Data inválida. Use o formato DD/MM/AAAA.")
@@ -183,7 +210,7 @@ class Utils:
             password = getpass(msg)
             if password == "0":
                 raise MenuBackException()
-            if len(password) >= 6:  # Validação básica de tamanho
+            if len(password) >= 6:
                 return password
             print("A senha deve ter pelo menos 6 caracteres.")
     

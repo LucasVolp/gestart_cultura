@@ -12,7 +12,7 @@ from seeders import seed_data
 
 def main():
     auth_service = AuthService()
-    create_account_service = CreateAccountService()
+    createAccountService = CreateAccountService()
     while True:
         Utils.menu("Bem vindo ao Gestart Cultura")
         print("Escolha uma opção:")
@@ -58,7 +58,7 @@ def main():
                 while True:
                     try:
                         Utils.menu("Criar Conta - ou digite 0 para voltar")
-                        account_type = Utils.accountTypes()
+                        accountType = Utils.accountTypes()
                         name = Utils.inputBack("Digite seu nome: ")
                         if not name.strip():
                             print("Nome não pode ser vazio.")
@@ -68,19 +68,19 @@ def main():
                         email = Utils.inputEmail()
                         cpf = Utils.inputCPF()
                         phone = Utils.inputPhone()
-                        birth = Utils.inputDate("Digite sua data de nascimento (DD/MM/AAAA): ")
+                        birth = Utils.inputBirth("Digite sua data de nascimento (DD/MM/AAAA): ")
                         password = Utils.inputPassword("Digite sua senha (ou 0 para voltar): ")
 
-                        if account_type == "producer":
+                        if accountType == "producer":
                             cnpj = Utils.inputCNPJ()
                             enterprise = Utils.inputBack("Digite o nome da sua empresa: ")
                             if not enterprise.strip():
                                 print("Nome da empresa não pode ser vazio.")
                                 Utils.pause()
                                 continue
-                            account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone, cnpj, enterprise)
+                            account = createAccountService.createAccount(accountType, name, cpf, birth, email, password, phone, cnpj, enterprise)
                         else:
-                            account = create_account_service.createAccount(account_type, name, cpf, birth, email, password, phone)
+                            account = createAccountService.createAccount(accountType, name, cpf, birth, email, password, phone)
 
                         if account:
                             print("Conta criada com sucesso!")

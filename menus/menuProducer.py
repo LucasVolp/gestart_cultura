@@ -53,8 +53,3 @@ def menuProducer(producer):
         except Exception as e:
             print(f"Erro inesperado: {e}")
             Utils.pause()
-
-producer = Producer(id=uuid4(), name="Produtor Teste", cpf="12345678900", birth="01/01/2000", email="teste@teste.com", password="senha123", phone="(11) 91234-5678", cnpj="12.345.678/0001-90", enterprise="Empresa Teste", status=Status.ACTIVE)
-
-if __name__ == "__main__":
-    menuProducer(producer)
