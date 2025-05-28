@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:17
+    container_name: gestart_db
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gestart_app
+    env_file:
+      - .env
+    depends_on:
+      - database
+    stdin_open: true
+    tty: true
+
+volumes:
+  pgdata:
