@@ -2,8 +2,8 @@ from models.models import Producer
 from modules.producer.repository.find_producer_by_id_repository import FindProducerByIdRepository
 
 class FindProducerByIdUseCase:
-    def __init__(self, repository=FindProducerByIdRepository()):
-        self.repository = repository
+    def __init__(self, repository = None):
+        self.repository = repository or FindProducerByIdRepository()
 
     def execute(self, id: str) -> Producer:
         """

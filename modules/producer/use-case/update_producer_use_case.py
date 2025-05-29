@@ -4,9 +4,9 @@ from modules.producer.repository.find_producer_by_id_repository import FindProdu
 from modules.producer.repository.update_producer_repository import UpdateProducerRepository
 
 class UpdateProducerUseCase:
-    def __init__(self, ProducerRepository=UpdateProducerRepository(), FindProducerByIdRepository=FindProducerByIdRepository()):
-        self.repository = ProducerRepository
-        self.findRepository = FindProducerByIdRepository
+    def __init__(self, ProducerRepository = None, findProducer = None):
+        self.repository = ProducerRepository or UpdateProducerRepository()
+        self.findRepository = findProducer or FindProducerByIdRepository()
 
     def execute(self, id: str, data: UpdateProducerDTO) -> Producer:
         """

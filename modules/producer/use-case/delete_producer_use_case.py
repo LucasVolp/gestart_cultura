@@ -3,9 +3,9 @@ from modules.producer.repository.delete_producer_repository import DeleteProduce
 from modules.producer.repository.find_producer_by_id_repository import FindProducerByIdRepository
 
 class DeleteProducerUseCase:
-    def __init__(self, repository=DeleteProducerRepository(), FindProducerByIdRepository=FindProducerByIdRepository()):
-        self.repository = repository
-        self.findRepository = FindProducerByIdRepository
+    def __init__(self, producerRepository = None, findProducer = None):
+        self.repository = producerRepository or DeleteProducerRepository()
+        self.findRepository = findProducer or FindProducerByIdRepository()
 
     def execute(self, id: str) -> bool:
         """
