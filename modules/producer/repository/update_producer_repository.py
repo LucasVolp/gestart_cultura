@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from models.models import Producer
 from db import SessionLocal
 from modules.producer.dto.update_producer_dto import UpdateProducerDTO
@@ -14,8 +15,9 @@ class UpdateProducerRepository:
         :param data: Dados do produtor a serem atualizados.
         :return: Instância do modelo Producer atualizada.
         """
+        data = asdict(data)
         producer = self.session.query(Producer).filter(Producer.id == id).first()
-        for key, value in data.dict().items():
+        for key, value in data.items():
             setattr(producer, key, value)
         self.session.commit()
         self.session.refresh(producer)

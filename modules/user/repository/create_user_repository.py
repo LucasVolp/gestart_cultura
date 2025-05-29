@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from models.models import User
 from modules.user.dto.create_user_dto import CreateUserDTO
 from db import SessionLocal
@@ -13,7 +14,8 @@ class CreateUserRepository:
         :param data: Dados do usuário a ser criado.
         :return: Instância do modelo User criada.
         """
-        user = User(**data.dict())
+        data = asdict(data)
+        user = User(**data)
         self.session.add(user)
         self.session.commit()
         self.session.refresh(user)

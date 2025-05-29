@@ -1,15 +1,15 @@
 from models.models import Producer
 from db import SessionLocal
 
-class FindProducerByIdRepository:
+class FindProducerByEmailRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def findById(self, id: str) -> Producer:
+    def findByEmail(self, email: str) -> Producer:
         """
         Encontra um produtor pelo ID no banco de dados.
         
-        :param id: ID do produtor a ser encontrado.
+        :param email: ID do produtor a ser encontrado.
         :return: Instância do modelo Producer ou None se não encontrado.
         """
-        return self.session.query(Producer).filter(Producer.id == id).first()
+        return self.session.query(Producer).filter(Producer.email == email).first()

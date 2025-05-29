@@ -9,10 +9,13 @@ from services.authService import AuthService
 from services.createAccountService import CreateAccountService
 from flows.utils import MenuBackException, Utils
 from seeders import seed_data
+from modules.producer.use_case.create_producer_use_case import CreateProducerUseCase
+from modules.producer.dto.create_producer_dto import CreateProducerDTO
 
 def main():
-    auth_service = AuthService()
+    authService = AuthService()
     createAccountService = CreateAccountService()
+    producerUseCase = CreateProducerUseCase()
     while True:
         Utils.menu("Bem vindo ao Gestart Cultura")
         print("Escolha uma opção:")
@@ -30,7 +33,7 @@ def main():
                         except MenuBackException:
                             break
                         password = getpass("Digite sua senha: ", stream=None)
-                        account = auth_service.authenticar(email, password)
+                        account = authService.authenticar(email, password)
                         if account:
                             print(f"Bem-vindo, {account.name}!")
                             if isinstance(account, Producer):
@@ -78,7 +81,17 @@ def main():
                                 print("Nome da empresa não pode ser vazio.")
                                 Utils.pause()
                                 continue
-                            account = createAccountService.createAccount(accountType, name, cpf, birth, email, password, phone, cnpj, enterprise)
+                            dto = CreateProducerDTO(
+                                name=name,
+                                cpf=cpf,
+                                birth=birth,
+                                email=email,
+                                password=password,
+                                phone=phone,
+                                cnpj=cnpj,
+                                enterprise=enterprise
+                            )
+                            account = producerUseCase.execute(dto)
                         else:
                             account = createAccountService.createAccount(accountType, name, cpf, birth, email, password, phone)
 
