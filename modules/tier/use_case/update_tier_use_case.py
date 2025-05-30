@@ -5,11 +5,24 @@ class UpdateTierUseCase:
         self.repository = repository or UpdateTierRepository()
         self.findTierByIdRepo = findTierByIdRepo or FindTierByIdRepository()
     def execute(self, id: str, data: UpdateTierDTO):
+        """Updates a tier by its ID with the provided data.
+
+        Args:
+            id (str): ID of the tier to be updated.
+            data (UpdateTierDTO): Data transfer object containing the updated tier information.
+
+        Raises:
+            ValueError: If the tier with the given ID does not exist.
+            e: Exception raised during the update process.
+
+        Returns:
+            _type_: Updated Tier model instance if successful.
+        """
         try:
             tierExists = self.findTierByIdRepo.findById(id)
             if not tierExists:
                 raise ValueError("Tier não encontrado.")
-            tier = self.repository.update(id, data)
+            tier = self.repository.update(tierExists, data)
             print(f"Tier {tier.name} atualizado com sucesso.")
             return tier
         except Exception as e:

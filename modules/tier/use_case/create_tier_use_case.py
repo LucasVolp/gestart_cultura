@@ -5,6 +5,18 @@ class CreateTierUseCase:
         self.repository = repository or CreateTierRepository()
         self.findTierByName = findTierByName or FindTierByNameRepository()
     def execute(self, data: CreateTierDTO):
+        """Executes the use case to create a new tier.
+
+        Args:
+            data (CreateTierDTO): Data Transfer Object containing the tier information to be created.
+
+        Raises:
+            ValueError: If a tier with the same name already exists or if there is an error during creation.
+            e: If any other error occurs during the creation process.
+
+        Returns:
+            _type_: Created Tier model instance.
+        """
         try:
             tierExists = self.findTierByName.findByName(data.name)
             if tierExists:

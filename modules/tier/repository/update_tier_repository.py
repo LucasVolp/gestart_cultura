@@ -7,7 +7,7 @@ class UpdateTierRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def update(self, id: str, data: UpdateTierDTO):
+    def update(self, tier, data: UpdateTierDTO):
         """
         Updates an existing tier in the database.
 
@@ -19,7 +19,6 @@ class UpdateTierRepository:
             Tier: Updated Tier instance.
         """
         data = asdict(data)
-        tier = self.session.query(Tier).filter(Tier.id == id).first()
         for key, value in data.items():
             if value is not None:
                 setattr(tier, key, value)
