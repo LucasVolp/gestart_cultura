@@ -5,10 +5,20 @@ class DeleteEventRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def delete(self, id):
-        event = self.session.query(Event).filter(Event.id == id).first()
-        if not event:
+    def delete(self, event):
+        """
+        Deletes an existing event from the database.
+
+        Args:
+            event (_type_): Event model instance to be deleted.
+
+        Returns:
+            _type_: True if deletion was successful, False otherwise.
+        """
+        try:
+            self.session.delete(event)
+            self.session.commit()
+            return True
+        except Exception as e:
+            self.session.rollback()
             return False
-        self.session.delete(event)
-        self.session.commit()
-        return True

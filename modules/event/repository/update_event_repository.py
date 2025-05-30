@@ -7,10 +7,18 @@ class UpdateEventRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def update(self, id, data: UpdateEventDTO):
-        
+    def update(self, event, data: UpdateEventDTO):
+        """
+        Updates an existing event in the database.
+
+        Args:
+            event (_type_): Event model instance to be updated.
+            data (UpdateEventDTO): Data of the event to be updated.
+
+        Returns:
+            _type_: Updated Event model instance.
+        """
         data = asdict(data)
-        event = self.session.query(Event).filter(Event.id == id).first()
         for key, value in data.items():
             if value is not None:
                 setattr(event, key, value)

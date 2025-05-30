@@ -7,16 +7,20 @@ class CreateEventRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def create(self, data: CreateEventDTO):
+    def create(self, data: CreateEventDTO) -> Event:
         """
         Cria um novo evento no banco de dados.
 
         :param data: Dados do evento a ser criado.
         :return: Instância do modelo Event criada.
         """
-        data = asdict(data)
-        event = Event(**data)
-        self.session.add(event)
-        self.session.commit()
-        self.session.refresh(event)
-        return event
+        try:
+            data = asdict(data)
+            event = Event(**data)
+            self.session.add(event)
+            self.session.commit()
+            self.session.refresh(event)
+            return event
+        except Exception as e:
+            self.session.rollback()
+            raise e
