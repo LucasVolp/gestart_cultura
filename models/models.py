@@ -48,7 +48,7 @@ class User(Base):
     phone = Column(String, nullable=False)
     status = Column(Enum(Status), default=Status.ACTIVE)
     role = Column(Enum(Role), nullable=False)
-    balance = Column(Float, default=0)
+    balance = Column(Float, default=1000)
     createdAt = Column(DateTime, nullable=False, default=datetime.now)
     updatedAt = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
 

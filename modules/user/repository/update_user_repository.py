@@ -1,5 +1,5 @@
 from models.models import User
-from modules.user.dto.update_user_dto import UpdateUserDTO
+from modules.user import UpdateUserDTO
 from db import SessionLocal
 
 class UpdateUserRepository:

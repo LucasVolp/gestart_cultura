@@ -1,4 +1,4 @@
-from modules.user.repository.find_all_users_repository import FindAllUsersRepository
+from modules.user import FindAllUsersRepository
 
 
 class FindAllUserUseCase:

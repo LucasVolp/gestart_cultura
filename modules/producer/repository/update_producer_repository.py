@@ -1,7 +1,7 @@
 from dataclasses import asdict
 from models.models import Producer
 from db import SessionLocal
-from modules.producer.dto.update_producer_dto import UpdateProducerDTO
+from modules.producer import UpdateProducerDTO
 
 class UpdateProducerRepository:
     def __init__(self, session=None):

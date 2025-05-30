@@ -1,7 +1,7 @@
 from dataclasses import asdict
 from models.models import Producer
 from db import SessionLocal
-from modules.producer.dto.create_producer_dto import CreateProducerDTO
+from modules.producer import CreateProducerDTO
 from sqlalchemy.exc import IntegrityError
 
 class CreateProducerRepository:

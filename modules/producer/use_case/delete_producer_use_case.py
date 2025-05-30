@@ -1,6 +1,6 @@
 from models.models import Producer
-from modules.producer.repository.delete_producer_repository import DeleteProducerRepository
-from modules.producer.repository.find_producer_by_id_repository import FindProducerByIdRepository
+from modules.producer import DeleteProducerRepository
+from modules.producer import FindProducerByIdRepository
 
 class DeleteProducerUseCase:
     def __init__(self, producerRepository = None, findProducer = None):

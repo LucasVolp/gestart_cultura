@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 @dataclass
-class UpdateUserDTO:
+class UpdateSellerDTO:
     name: str | None = None
     cpf: str | None = None
     birth: str | None = None
@@ -11,3 +11,4 @@ class UpdateUserDTO:
 
     def isEmpty(self) -> bool:
         return all(value is None for value in self.__dict__.values())
+

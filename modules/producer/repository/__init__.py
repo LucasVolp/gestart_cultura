@@ -1,0 +1,7 @@
+from .create_producer_repository import CreateProducerRepository
+from .delete_producer_repository import DeleteProducerRepository
+from .find_all_producers_repository import FindAllProducersRepository
+from .find_producer_by_cpf_repository import FindProducerByCPFRepository
+from .find_producer_by_email_repository import FindProducerByEmailRepository
+from .find_producer_by_id_repository import FindProducerByIdRepository
+from .update_producer_repository import UpdateProducerRepository

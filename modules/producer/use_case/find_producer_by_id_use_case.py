@@ -1,5 +1,5 @@
 from models.models import Producer
-from modules.producer.repository.find_producer_by_id_repository import FindProducerByIdRepository
+from modules.producer import FindProducerByIdRepository
 
 class FindProducerByIdUseCase:
     def __init__(self, repository = None):

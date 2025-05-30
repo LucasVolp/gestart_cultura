@@ -1,7 +1,7 @@
 from models.models import Producer
-from modules.producer.dto.update_producer_dto import UpdateProducerDTO
-from modules.producer.repository.find_producer_by_id_repository import FindProducerByIdRepository
-from modules.producer.repository.update_producer_repository import UpdateProducerRepository
+from modules.producer import UpdateProducerDTO
+from modules.producer import FindProducerByIdRepository
+from modules.producer import UpdateProducerRepository
 
 class UpdateProducerUseCase:
     def __init__(self, ProducerRepository = None, findProducer = None):

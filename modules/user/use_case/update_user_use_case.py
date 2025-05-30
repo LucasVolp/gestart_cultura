@@ -1,6 +1,6 @@
-from modules.user.dto.update_user_dto import UpdateUserDTO
-from modules.user.repository.find_user_by_id_repository import FindUserByIdRepository
-from modules.user.repository.update_user_repository import UpdateUserRepository
+from modules.user import UpdateUserDTO
+from modules.user import FindUserByIdRepository
+from modules.user import UpdateUserRepository
 
 
 class UpdateUserUseCase:

@@ -1,4 +1,4 @@
-from modules.user.repository.find_user_by_id_repository import FindUserByIdRepository
+from modules.user import FindUserByIdRepository
 
 
 class FindUserByIdUseCase:

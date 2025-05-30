@@ -4,7 +4,6 @@ services:
   database:
     image: postgres:17
     container_name: gestart_db
-    restart: always
     env_file:
       - .env
     ports:

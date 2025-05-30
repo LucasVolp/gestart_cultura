@@ -1,5 +1,5 @@
 from models.models import Producer
-from modules.producer.repository.find_all_producers_repository import FindAllProducersRepository
+from modules.producer import FindAllProducersRepository
 
 class FindAllProducersUseCase:
     def __init__(self, repository = None):
@@ -12,7 +12,9 @@ class FindAllProducersUseCase:
         """
         try:
             producers = self.repository.findAll()
-            print(f"{len(producers)} produtores encontrados.")
+            if not producers:
+                print("Nenhum produtor encontrado.")
+                return []
             return producers
         except Exception as e:
             print(f"Erro ao buscar produtores: {e}")

@@ -11,5 +11,5 @@ class UpdateProducerDTO:
     cnpj: str | None = None
     enterprise: str | None = None
 
-    def is_empty(self) -> bool:
+    def isEmpty(self) -> bool:
         return all(value is None for value in self.__dict__.values())
