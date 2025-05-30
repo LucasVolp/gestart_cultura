@@ -1,0 +1,5 @@
+from .create_ticket_repository import CreateTicketRepository
+from .find_all_tickets_repository import FindAllTicketsRepository
+from .find_ticket_by_id_repository import FindTicketByIdRepository
+from .update_ticket_repository import UpdateTicketRepository
+from .delete_ticket_repository import DeleteTicketRepository

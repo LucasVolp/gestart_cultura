@@ -130,7 +130,7 @@ class Ticket(Base):
     tierId = Column(UUID(as_uuid=True), ForeignKey('tiers.id'))
     sellerId = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     status = Column(Enum(Status), default=Status.VALID)
-    code = Column(String, unique=True, nullable=False)
+    code = Column(String, unique=True, nullable=False, default=lambda: str(uuid.uuid4()).replace('-', ''))
     createdAt = Column(DateTime, nullable=False, default=datetime.now)
     updatedAt = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
 
