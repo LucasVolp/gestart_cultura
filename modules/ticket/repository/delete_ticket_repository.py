@@ -14,6 +14,10 @@ class DeleteTicketRepository:
         Returns:
             bool: True if the ticket was deleted successfully, False otherwise.
         """
-        self.session.delete(ticket)
-        self.session.commit()
-        return True
+        try:
+            self.session.delete(ticket)
+            self.session.commit()
+            return True
+        except Exception as e:
+            self.session.rollback()
+            return False
