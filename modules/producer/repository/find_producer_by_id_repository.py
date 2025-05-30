@@ -7,9 +7,11 @@ class FindProducerByIdRepository:
 
     def findById(self, id: str) -> Producer:
         """
-        Encontra um produtor pelo ID no banco de dados.
-        
-        :param id: ID do produtor a ser encontrado.
-        :return: Instância do modelo Producer ou None se não encontrado.
+        Finds a producer by ID in the database.
+
+        Args:
+            id (str): ID of the producer to be found.
+        Returns:
+            Producer | None: Producer model instance or None if not found.
         """
         return self.session.query(Producer).filter(Producer.id == id).first()

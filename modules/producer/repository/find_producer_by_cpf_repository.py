@@ -7,9 +7,11 @@ class FindProducerByCPFRepository:
 
     def findByCPF(self, cpf: str) -> Producer:
         """
-        Encontra um produtor pelo cpf no banco de dados.
-        
-        :param cpf: cpf do produtor a ser encontrado.
-        :return: Instância do modelo Producer ou None se não encontrado.
+        Finds a producer by CPF in the database.
+
+        Args:
+            cpf (str): CPF of the producer to be found.
+        Returns:
+            Producer | None: Producer model instance or None if not found.
         """
         return self.session.query(Producer).filter(Producer.cpf == cpf).first()

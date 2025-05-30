@@ -10,10 +10,12 @@ class CreateProducerRepository:
 
     def create(self, data: CreateProducerDTO):
         """
-        Cria um novo produtor no banco de dados.
+        Creates a new producer in the database.
 
-        :param data: Dados do produtor a ser criado.
-        :return: Instância do modelo Producer criada.
+        Args:
+            data (CreateProducerDTO): Data of the producer to be created.
+        Returns:
+            Producer: Created Producer model instance.
         """
         try:
             data = asdict(data)

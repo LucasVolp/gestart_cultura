@@ -9,11 +9,13 @@ class UpdateProducerRepository:
 
     def update(self, id, data: UpdateProducerDTO):
         """
-        Atualiza um produtor existente no banco de dados.
+        Updates an existing producer in the database.
 
-        :param id: ID do produtor a ser atualizado.
-        :param data: Dados do produtor a serem atualizados.
-        :return: Instância do modelo Producer atualizada.
+        Args:
+            id: ID of the producer to be updated.
+            data: Data of the producer to be updated.
+        Returns:
+            Producer: Updated Producer model instance.
         """
         data = asdict(data)
         producer = self.session.query(Producer).filter(Producer.id == id).first()

@@ -1,13 +1,14 @@
 from dataclasses import dataclass
+from typing import Optional
 
 @dataclass
 class UpdateUserDTO:
-    name: str | None = None
-    cpf: str | None = None
-    birth: str | None = None
-    email: str | None = None
-    password: str | None = None
-    phone: str | None = None
+    name: Optional[str] = None
+    cpf: Optional[str] = None
+    birth: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
+    phone: Optional[str] = None
 
     def isEmpty(self) -> bool:
         return all(value is None for value in self.__dict__.values())

@@ -7,8 +7,9 @@ class FindAllProducersRepository:
 
     def findAll(self):
         """
-        Retorna todos os produtores do banco de dados.
-        
-        :return: Lista de instâncias do modelo Producer.
+        Returns all producers from the database.
+
+        Returns:
+            list[Producer]: List of Producer model instances.
         """
         return self.session.query(Producer).all()

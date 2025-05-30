@@ -7,10 +7,12 @@ class DeleteProducerRepository:
 
     def delete(self, id: str) -> bool:
         """
-        Deleta um produtor do banco de dados pelo ID.
+        Deletes a producer from the database by ID.
 
-        :param id: ID do produtor a ser deletado.
-        :return: True se o produtor foi deletado com sucesso, False caso contrário.
+        Args:
+            id (str): ID of the producer to be deleted.
+        Returns:
+            bool: True if the producer was successfully deleted, False otherwise.
         """
         producer = self.session.query(Producer).filter(Producer.id == id).first()
         if not producer:
