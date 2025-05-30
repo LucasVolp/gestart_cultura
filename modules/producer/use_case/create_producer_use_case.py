@@ -11,11 +11,18 @@ class CreateProducerUseCase:
         self.findProducerByCPF = findProducerByCPF or FindProducerByCpfRepository()
 
     def execute(self, data: CreateProducerDTO) -> Producer:
-        """
-        Cria um novo produtor no banco de dados.
+        """Creates a new producer in the database.
 
-        :param data: Dados do produtor a ser criado.
-        :return: Instância do modelo Producer criada.
+        Args:
+            data (CreateProducerDTO): Data of the producer to be created.
+
+        Raises:
+            ValueError: If a producer with the same email or CPF already exists.
+            ValueError: If there is an error during the creation process.
+            e: If any other error occurs during the creation process.
+
+        Returns:
+            Producer: Created Producer model instance.
         """
         try:
             producerEmail = self.findProducerByEmail.findByEmail(data.email)

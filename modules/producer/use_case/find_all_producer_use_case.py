@@ -6,9 +6,13 @@ class FindAllProducersUseCase:
         self.repository = repository or FindAllProducersRepository()
 
     def execute(self) -> list[Producer]:
-        """
-        Retorna todos os produtores do banco de dados.
-        :return: Lista de instâncias do modelo Producer.
+        """        Executes the use case to find all producers.
+
+        Raises:
+            e: Exception if an error occurs during the operation.
+
+        Returns:
+            list[Producer]: List of Producer model instances.
         """
         try:
             producers = self.repository.findAll()

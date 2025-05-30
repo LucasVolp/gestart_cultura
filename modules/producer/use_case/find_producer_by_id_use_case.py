@@ -7,10 +7,17 @@ class FindProducerByIdUseCase:
 
     def execute(self, id: str) -> Producer:
         """
-        Encontra um produtor pelo ID no banco de dados.
+        Finds a producer by ID in the database.
 
-        :param id: ID do produtor a ser encontrado.
-        :return: Instância do modelo Producer ou None se não encontrado.
+        Args:
+            id (str): ID of the producer to be found.
+
+        Raises:
+            ValueError: If the producer with the given ID does not exist.
+            e: Exception raised during the search process.
+
+        Returns:
+            Producer: Producer model instance if found.
         """
         try:
             producer = self.repository.findById(id)

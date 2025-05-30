@@ -7,7 +7,7 @@ class UpdateProducerRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def update(self, id, data: UpdateProducerDTO):
+    def update(self, producer, data: UpdateProducerDTO):
         """
         Updates an existing producer in the database.
 
@@ -18,7 +18,6 @@ class UpdateProducerRepository:
             Producer: Updated Producer model instance.
         """
         data = asdict(data)
-        producer = self.session.query(Producer).filter(Producer.id == id).first()
         for key, value in data.items():
             setattr(producer, key, value)
         self.session.commit()

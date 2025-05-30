@@ -8,18 +8,26 @@ class DeleteProducerUseCase:
         self.findRepository = findProducer or FindProducerByIdRepository()
 
     def execute(self, id: str) -> bool:
-        """
-        Deleta um produtor do banco de dados pelo ID.
+        """Delete a producer by ID from the database.
 
-        :param id: ID do produtor a ser deletado.
-        :return: True se o produtor foi deletado com sucesso, False caso contrário.
+        Args:
+            id (str): ID of the producer to be deleted.
+
+        Raises:
+            ValueError: If the producer with the given ID does not exist.
+            Exception: If an error occurs during the deletion process.
+            e: Exception raised during the deletion process.
+
+        Returns:
+            bool: True if the producer was successfully deleted, False otherwise.
         """
         try:
             producerExists = self.findRepository.findById(id)
             if not producerExists:
                 raise ValueError(f"Produtor não encontrado.")
-            producer = self.repository.delete(id)
-            print(f"Produtor deletado com sucesso.")
+            producer = self.repository.delete(producerExists)
+            if producer:
+                print(f"Produtor {producerExists.name} deletado com sucesso.")
             return producer
         except Exception as e:
             print(f"Erro ao deletar produtor: {e}")
