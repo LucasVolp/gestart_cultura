@@ -5,10 +5,19 @@ class DeleteSellerRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def delete(self, id: int):
-        seller = self.session.query(Seller).filter(Seller.id == id).first()
-        if not seller:
+    def delete(self, seller):
+        """
+        Deletes a seller from the database.
+
+        Args:
+            seller (Seller): Seller model instance to be deleted.
+        Returns:
+            bool: True if the seller was deleted successfully, False otherwise.
+        """
+        try:
+            self.session.delete(seller)
+            self.session.commit()
+            return True
+        except Exception:
+            self.session.rollback()
             return False
-        self.session.delete(seller)
-        self.session.commit()
-        return True

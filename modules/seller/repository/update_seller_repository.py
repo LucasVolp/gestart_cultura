@@ -7,10 +7,17 @@ class UpdateSellerRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def update(self, id: int, data: UpdateSellerDTO):
+    def update(self, seller, data: UpdateSellerDTO):
+        """
+        Updates an existing seller in the database.
 
+        Args:
+            seller (Seller): Seller model instance to be updated.
+            data (UpdateSellerDTO): Data Transfer Object containing the updated seller information.
+        Returns:
+            Seller: Updated Seller instance.
+        """
         data = asdict(data)
-        seller = self.session.query(Seller).filter(Seller.id == id).first()
         for key, value in data.items():
             if value is not None:
                 setattr(seller, key, value)

@@ -7,6 +7,20 @@ class CreateSellerUseCase:
         self.findSellerByCPF = findSellerByCPF or FindSellerByCpfRepository()
         self.findSellerByEmail = findSellerByEmail or FindSellerByEmailRepository()
     def execute(self, data: CreateSellerDTO):
+        """        Executes the use case to create a new seller.
+
+        Args:
+            data (CreateSellerDTO): Data Transfer Object containing the seller information.
+
+        Raises:
+            ValueError: Usuário com CPF já cadastrado.
+            ValueError: Usuário com email já cadastrado.
+            ValueError: Usuário com CPF, email ou telefone já cadastrado.
+            e: Exception raised during the creation process.
+
+        Returns:
+            _type_: Created Seller model instance.
+        """
         try:
             cpfExists = self.findSellerByCPF.findByCPF(data.cpf)
             if cpfExists:

@@ -9,6 +9,16 @@ class CreateSellerRepository:
         self.session = session or SessionLocal()
 
     def create(self, data: CreateSellerDTO):
+        """
+        Creates a new seller in the database.
+
+        Args:
+            data (CreateSellerDTO): Data of the seller to be created.
+        Returns:
+            Seller: Created Seller model instance.
+        Raises:
+            ValueError: If a seller with the same CPF, email, or phone already exists.
+        """
         try:
             data = asdict(data)
             seller = Seller(**data)

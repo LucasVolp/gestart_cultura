@@ -6,4 +6,9 @@ class FindAllSellersRepository:
         self.session = session or SessionLocal()
 
     def findAll(self):
+        """        Finds all sellers in the database.
+
+        Returns:
+            _type_: List[Seller]: List of all Seller model instances.
+        """
         return self.session.query(Seller).all()
