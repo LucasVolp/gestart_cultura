@@ -109,7 +109,7 @@ class Tier(Base):
     __tablename__ = 'tiers'
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     amount = Column(Integer, nullable=False)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
     price = Column(Float, nullable=False)
     startDate = Column(Date, nullable=False)
     endDate = Column(Date, nullable=False)
