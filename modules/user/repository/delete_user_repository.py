@@ -5,16 +5,20 @@ class DeleteUserRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def delete(self, id: str) -> bool:
+    def delete(self, user) -> bool:
         """
-        Deleta um usuário do banco de dados pelo ID.
+        Deletes a user from the database.
 
-        :param id: ID do usuário a ser deletado.
-        :return: Instância do modelo User deletada.
+        Args:
+            user (_type_): User model instance to be deleted.
+
+        Returns:
+            bool: True if deletion was successful, False otherwise.
         """
-        user = self.session.query(User).filter(User.id == id).first()
-        if not user:
+        try:
+            self.session.delete(user)
+            self.session.commit()
+            return True
+        except Exception as e:
+            self.session.rollback()
             return False
-        self.session.delete(user)
-        self.session.commit()
-        return True

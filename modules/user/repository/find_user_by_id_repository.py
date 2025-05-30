@@ -6,11 +6,13 @@ class FindUserByIdRepository:
         self.session = session or SessionLocal()
 
     def findById(self, id: str) -> User | None:
-        """
-        Busca um usuário no banco de dados pelo ID.
+        """        Retrieves a user by their ID from the database.
 
-        :param id: ID do usuário a ser buscado.
-        :return: Instância do modelo User ou None se não encontrado.
+        Args:
+            id (str): ID of the user to be retrieved.
+
+        Returns:
+            User | None: User model instance if found, None otherwise.
         """
         user = self.session.query(User).filter(User.id == id).first()
         return user

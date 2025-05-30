@@ -6,10 +6,13 @@ class FindAllUserUseCase:
         self.userRepository = userRepository or FindAllUsersRepository()
 
     def execute(self) -> list:
-        """
-        Busca todos os usuários no banco de dados.
+        """        Executes the use case to find all users.
 
-        :return: Lista de instâncias do modelo User.
+        Raises:
+            e: Exception if an error occurs during the operation.
+
+        Returns:
+            list: List of User model instances or an empty list if no users are found.
         """
         try:
             users = self.userRepository.findAll()

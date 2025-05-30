@@ -6,11 +6,17 @@ class FindUserByIdUseCase:
         self.userRepository = userRepository or FindUserByIdRepository()
 
     def execute(self, id: str):
-        """
-        Encontra um usuário pelo ID no banco de dados.
+        """Finds a user by ID in the database.
 
-        :param id: ID do usuário a ser encontrado.
-        :return: Instância do modelo User ou None se não encontrado.
+        Args:
+            id (str): ID of the user to be found.
+
+        Raises:
+            ValueError: If the user with the given ID does not exist.
+            e: Exception raised during the search process.
+
+        Returns:
+            _type_: User model instance if found, None otherwise.
         """
         try:
             user = self.userRepository.findById(id)

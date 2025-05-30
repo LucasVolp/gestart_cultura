@@ -8,18 +8,25 @@ class DeleteUserUseCase:
         self.findUser = findUser or FindUserByIdRepository()
 
     def execute(self, id: str) -> bool:
-        """
-        Deleta um usuário do banco de dados pelo ID.
+        """Deletes a user by its ID.
 
-        :param id: ID do usuário a ser deletado.
-        :return: True se o usuário foi deletado com sucesso, False caso contrário.
+        Args:
+            id (str): ID of the user to be deleted.
+
+        Raises:
+            ValueError: If the user with the given ID does not exist.
+            e: Exception raised during the deletion process.
+
+        Returns:
+            bool: True if deletion was successful, False otherwise.
         """
         try:
             userExists = self.findUser.findById(id)
             if not userExists:
                 raise ValueError(f"Usuário não encontrado.")
-            user = self.userRepository.delete(id)
-            print(f"Usuário deletado com sucesso.")
+            user = self.userRepository.delete(userExists)
+            if user:
+                print(f"Usuário deletado com sucesso.")
             return user
         except Exception as e:
             print(f"Erro ao deletar usuário: {e}")

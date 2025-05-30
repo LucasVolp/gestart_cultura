@@ -7,9 +7,10 @@ class FindAllUsersRepository:
 
     def findAll(self) -> list[User]:
         """
-        Busca todos os usuários no banco de dados.
+        Retrieves all users from the database.
 
-        :return: Lista de instâncias do modelo User.
+        Returns:
+            list[User]: List of User model instances.
         """
         users = self.session.query(User).all()
         return users

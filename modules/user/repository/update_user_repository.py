@@ -6,15 +6,17 @@ class UpdateUserRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def update(self, id: str, data: UpdateUserDTO) -> User:
+    def update(self, user, data: UpdateUserDTO) -> User:
         """
-        Atualiza um usuário no banco de dados pelo ID.
+        Updates an existing user in the database.
 
-        :param id: ID do usuário a ser atualizado.
-        :param data: Dados a serem atualizados.
-        :return: Instância do modelo User atualizada.
-        """
-        user = self.session.query(User).filter(User.id == id).first()
+        Args:
+            user (_type_): User model instance to be updated.
+            data (UpdateUserDTO): Data Transfer Object containing the updated user information.
+
+        Returns:
+            User: Updated User model instance.
+        """                
         for key, value in data.items():
             setattr(user, key, value)
         self.session.commit()

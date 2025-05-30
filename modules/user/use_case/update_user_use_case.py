@@ -10,17 +10,24 @@ class UpdateUserUseCase:
 
     def execute(self, id: str, data: UpdateUserDTO) -> bool:
         """
-        Atualiza um usuário no banco de dados pelo ID.
+        Updates an existing user in the database.
 
-        :param id: ID do usuário a ser atualizado.
-        :param data: Dados a serem atualizados.
-        :return: True se o usuário foi atualizado com sucesso, False caso contrário.
-        """
+        Args:
+            id (str): ID of the user to be updated.
+            data (UpdateUserDTO): Data Transfer Object containing the updated user information.
+
+        Raises:
+            ValueError: If the user with the given ID does not exist.
+            e: Exception raised during the update process.
+
+        Returns:
+            bool: True if the user was updated successfully, otherwise raises an exception.
+        """        
         try:
             userExists = self.findUser.findById(id)
             if not userExists:
                 raise ValueError(f"Usuário não encontrado.")
-            user = self.userRepository.update(id, data)
+            user = self.userRepository.update(userExists, data)
             print(f"Usuário {user.name} atualizado com sucesso.")
             return user
         except Exception as e:

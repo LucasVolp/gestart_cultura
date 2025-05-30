@@ -8,11 +8,13 @@ class CreateUserRepository:
         self.session = session or SessionLocal()
 
     def create(self, data: CreateUserDTO) -> User:
-        """
-        Cria um novo usuário no banco de dados.
+        """        Creates a new user in the database.
 
-        :param data: Dados do usuário a ser criado.
-        :return: Instância do modelo User criada.
+        Args:
+            data (CreateUserDTO): Data Transfer Object containing the user information to be created.
+
+        Returns:
+            User: Created User model instance.
         """
         data = asdict(data)
         user = User(**data)

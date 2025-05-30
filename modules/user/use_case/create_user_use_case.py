@@ -9,10 +9,18 @@ class CreateUserUseCase:
         self.findUserByCpf = findUserByCpf or FindUserByCpfRepository()
 
     def execute(self, data: CreateUserDTO) -> User:
-        """
-        Cria um novo usuário no banco de dados.
-        :param data: Dados do usuário a ser criado.
-        :return: Instância do modelo User criada.
+        """        Executes the use case to create a new user.
+
+        Args:
+            data (CreateUserDTO): Data Transfer Object containing the user information to be created.
+
+        Raises:
+            ValueError: If a user with the same email or CPF already exists.
+            ValueError: If there is an error during the creation process.
+            e: If any other error occurs during the creation process.
+
+        Returns:
+            User: Created User model instance.
         """
         try:
             userEmail = self.findUserByEmail.findByEmail(data.email)
