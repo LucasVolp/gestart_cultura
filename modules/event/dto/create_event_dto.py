@@ -26,42 +26,42 @@ class CreateEventDTO(BaseModel):
 
     @field_validator('name')
     @classmethod
-    def validateName(cls, v):
-        if not v or not v.strip():
+    def validateName(cls, value):
+        if not value or not value.strip():
             raise ValueError('name cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('description')
     @classmethod
-    def validateDescription(cls, v):
-        if not v or not v.strip():
+    def validateDescription(cls, value):
+        if not value or not value.strip():
             raise ValueError('description cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('local')
     @classmethod
-    def validateLocal(cls, v):
-        if not v or not v.strip():
+    def validateLocal(cls, value):
+        if not value or not value.strip():
             raise ValueError('local cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('size')
     @classmethod
-    def validateSize(cls, v):
-        if v <= 0:
+    def validateSize(cls, value):
+        if value <= 0:
             raise ValueError('size must be greater than 0')
-        return v
+        return value
     
     @field_validator('date')
     @classmethod
-    def validateDate(cls, v):
-        if not isinstance(v, Date) or v < Date.today():
+    def validateDate(cls, value):
+        if not isinstance(value, Date) or value < Date.today():
             raise ValueError('date must be a valid date and cannot be in the past')
-        return v
+        return value
 
     @field_validator('producers')
     @classmethod
-    def validateProducers(cls, v):
-        if not v or len(v) == 0:
+    def validateProducers(cls, value):
+        if not value or len(value) == 0:
             raise ValueError('at least one producer is required')
-        return v
+        return value

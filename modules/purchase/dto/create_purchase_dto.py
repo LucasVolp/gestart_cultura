@@ -21,21 +21,21 @@ class CreatePurchaseDTO(BaseModel):
 
     @field_validator('buyerId')
     @classmethod
-    def validateBuyerId(cls, v):
-        if not v or not v.strip():
+    def validateBuyerId(cls, value):
+        if not value or not value.strip():
             raise ValueError('buyerId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('sellerId')
     @classmethod
-    def validateSellerId(cls, v):
-        if not v or not v.strip():
+    def validateSellerId(cls, value):
+        if not value or not value.strip():
             raise ValueError('sellerId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('totalPrice')
     @classmethod
-    def validateTotalPrice(cls, v):
-        if v < 0:
+    def validateTotalPrice(cls, value):
+        if value < 0:
             raise ValueError('totalPrice cannot be negative')
-        return v
+        return value

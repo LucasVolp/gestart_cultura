@@ -18,24 +18,24 @@ class UpdateTicketDTO(BaseModel):
 
     @field_validator('ownerId')
     @classmethod
-    def validateOwnerId(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateOwnerId(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('ownerId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('tierId')
     @classmethod
-    def validateTierId(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateTierId(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('tierId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('sellerId')
     @classmethod
-    def validateSellerId(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateSellerId(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('sellerId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     def isEmpty(self) -> bool:
         """Check if all fields are None or empty."""

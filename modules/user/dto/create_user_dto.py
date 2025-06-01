@@ -29,68 +29,68 @@ class CreateUserDTO(BaseModel):
 
     @field_validator('name')
     @classmethod
-    def validateName(cls, v):
-        if not v or not v.strip():
+    def validateName(cls, value):
+        if not value or not value.strip():
             raise ValueError('name cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('cpf')
     @classmethod
-    def validateCpf(cls, v):
-        if not v or not v.strip():
+    def validateCpf(cls, value):
+        if not value or not value.strip():
             raise ValueError('cpf cannot be empty')
         # Remove caracteres não numéricos
-        cpf_clean = re.sub(r'\D', '', v.strip())
+        cpf_clean = re.sub(r'\D', '', value.strip())
         if len(cpf_clean) != 11:
             raise ValueError('cpf must have exactly 11 digits')
         return cpf_clean
 
     @field_validator('email')
     @classmethod
-    def validateEmail(cls, v):
-        if not v or not v.strip():
+    def validateEmail(cls, value):
+        if not value or not value.strip():
             raise ValueError('email cannot be empty')
         email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        if not re.match(email_regex, v.strip()):
+        if not re.match(email_regex, value.strip()):
             raise ValueError('email must be a valid email address')
-        return v.strip().lower()
+        return value.strip().lower()
 
     @field_validator('password')
     @classmethod
-    def validatePassword(cls, v):
-        if not v or not v.strip():
+    def validatePassword(cls, value):
+        if not value or not value.strip():
             raise ValueError('password cannot be empty')
-        if len(v.strip()) < 6:
+        if len(value.strip()) < 6:
             raise ValueError('password must have at least 6 characters')
-        return v.strip()
+        return value.strip()
 
     @field_validator('phone')
     @classmethod
-    def validatePhone(cls, v):
-        if not v or not v.strip():
+    def validatePhone(cls, value):
+        if not value or not value.strip():
             raise ValueError('phone cannot be empty')
         # Remove caracteres não numéricos
-        phone_clean = re.sub(r'\D', '', v.strip())
+        phone_clean = re.sub(r'\D', '', value.strip())
         if len(phone_clean) < 10 or len(phone_clean) > 11:
             raise ValueError('phone must have 10 or 11 digits')
         return phone_clean
 
     @field_validator('cnpj')
     @classmethod
-    def validateCnpj(cls, v):
-        if v is not None:
-            if not v.strip():
+    def validateCnpj(cls, value):
+        if value is not None:
+            if not value.strip():
                 raise ValueError('cnpj cannot be empty if provided')
             # Remove caracteres não numéricos
-            cnpj_clean = re.sub(r'\D', '', v.strip())
+            cnpj_clean = re.sub(r'\D', '', value.strip())
             if len(cnpj_clean) != 14:
                 raise ValueError('cnpj must have exactly 14 digits if provided')
             return cnpj_clean
-        return v
+        return value
 
     @field_validator('enterprise')
     @classmethod
-    def validateEnterprise(cls, v):
-        if v is not None and not v.strip():
+    def validateEnterprise(cls, value):
+        if value is not None and not value.strip():
             raise ValueError('enterprise cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value

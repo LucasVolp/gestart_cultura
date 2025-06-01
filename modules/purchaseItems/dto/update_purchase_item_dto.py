@@ -19,38 +19,38 @@ class UpdatePurchaseItemDTO(BaseModel):
 
     @field_validator('purchaseId')
     @classmethod
-    def validatePurchaseId(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validatePurchaseId(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('purchaseId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('tierId')
     @classmethod
-    def validateTierId(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateTierId(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('tierId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('quantity')
     @classmethod
-    def validateQuantity(cls, v):
-        if v is not None and v <= 0:
+    def validateQuantity(cls, value):
+        if value is not None and value <= 0:
             raise ValueError('quantity must be greater than 0 if provided')
-        return v
+        return value
 
     @field_validator('unitPrice')
     @classmethod
-    def validateUnitPrice(cls, v):
-        if v is not None and v < 0:
+    def validateUnitPrice(cls, value):
+        if value is not None and value < 0:
             raise ValueError('unitPrice cannot be negative if provided')
-        return v
+        return value
 
     @field_validator('totalPrice')
     @classmethod
-    def validateTotalPrice(cls, v):
-        if v is not None and v < 0:
+    def validateTotalPrice(cls, value):
+        if value is not None and value < 0:
             raise ValueError('totalPrice cannot be negative if provided')
-        return v
+        return value
 
     def isEmpty(self) -> bool:
         """Check if all fields are None or empty."""

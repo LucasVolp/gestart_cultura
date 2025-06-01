@@ -26,31 +26,31 @@ class UpdateEventDTO(BaseModel):
 
     @field_validator('name')
     @classmethod
-    def validate_name(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validate_name(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('name cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('local')
     @classmethod
-    def validate_local(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validate_local(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('local cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('size')
     @classmethod
-    def validate_size(cls, v):
-        if v is not None and v <= 0:
+    def validate_size(cls, value):
+        if value is not None and value <= 0:
             raise ValueError('size must be greater than 0 if provided')
-        return v
+        return value
     
     @field_validator('date')
     @classmethod
-    def validate_date(cls, v):
-        if v is not None and (not isinstance(v, Date) or v < Date.today()):
+    def validate_date(cls, value):
+        if value is not None and (not isinstance(value, Date) or value < Date.today()):
             raise ValueError('date must be a valid date and cannot be in the past if provided')
-        return v
+        return value
 
     def isEmpty(self) -> bool:
         """Check if all fields are None or empty."""

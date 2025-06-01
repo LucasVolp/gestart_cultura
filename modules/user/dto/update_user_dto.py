@@ -31,83 +31,83 @@ class UpdateUserDTO(BaseModel):
 
     @field_validator('name')
     @classmethod
-    def validateName(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateName(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('name cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('cpf')
     @classmethod
-    def validateCpf(cls, v):
-        if v is not None:
-            if not v or not v.strip():
+    def validateCpf(cls, value):
+        if value is not None:
+            if not value or not value.strip():
                 raise ValueError('cpf cannot be empty if provided')
-            cpf_clean = re.sub(r'\D', '', v.strip())
+            cpf_clean = re.sub(r'\D', '', value.strip())
             if len(cpf_clean) != 11:
                 raise ValueError('cpf must have exactly 11 digits if provided')
             return cpf_clean
-        return v
+        return value
 
     @field_validator('email')
     @classmethod
-    def validateEmail(cls, v):
-        if v is not None:
-            if not v or not v.strip():
+    def validateEmail(cls, value):
+        if value is not None:
+            if not value or not value.strip():
                 raise ValueError('email cannot be empty if provided')
             email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-            if not re.match(email_regex, v.strip()):
+            if not re.match(email_regex, value.strip()):
                 raise ValueError('email must be a valid email address if provided')
-            return v.strip().lower()
-        return v
+            return value.strip().lower()
+        return value
 
     @field_validator('password')
     @classmethod
-    def validatePassword(cls, v):
-        if v is not None:
-            if not v or not v.strip():
+    def validatePassword(cls, value):
+        if value is not None:
+            if not value or not value.strip():
                 raise ValueError('password cannot be empty if provided')
-            if len(v.strip()) < 6:
+            if len(value.strip()) < 6:
                 raise ValueError('password must have at least 6 characters if provided')
-            return v.strip()
-        return v
+            return value.strip()
+        return value
 
     @field_validator('phone')
     @classmethod
-    def validatePhone(cls, v):
-        if v is not None:
-            if not v or not v.strip():
+    def validatePhone(cls, value):
+        if value is not None:
+            if not value or not value.strip():
                 raise ValueError('phone cannot be empty if provided')
-            phone_clean = re.sub(r'\D', '', v.strip())
+            phone_clean = re.sub(r'\D', '', value.strip())
             if len(phone_clean) < 10 or len(phone_clean) > 11:
                 raise ValueError('phone must have 10 or 11 digits if provided')
             return phone_clean
-        return v
+        return value
 
     @field_validator('balance')
     @classmethod
-    def validateBalance(cls, v):
-        if v is not None and v < 0:
+    def validateBalance(cls, value):
+        if value is not None and value < 0:
             raise ValueError('balance cannot be negative if provided')
-        return v
+        return value
 
     @field_validator('cnpj')
     @classmethod
-    def validateCnpj(cls, v):
-        if v is not None:
-            if not v.strip():
+    def validateCnpj(cls, value):
+        if value is not None:
+            if not value.strip():
                 raise ValueError('cnpj cannot be empty if provided')
-            cnpj_clean = re.sub(r'\D', '', v.strip())
+            cnpj_clean = re.sub(r'\D', '', value.strip())
             if len(cnpj_clean) != 14:
                 raise ValueError('cnpj must have exactly 14 digits if provided')
             return cnpj_clean
-        return v
+        return value
 
     @field_validator('enterprise')
     @classmethod
-    def validateEnterprise(cls, v):
-        if v is not None and not v.strip():
+    def validateEnterprise(cls, value):
+        if value is not None and not value.strip():
             raise ValueError('enterprise cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     def isEmpty(self) -> bool:
         """Check if all fields are None or empty."""

@@ -14,22 +14,22 @@ class UpdateReceiptDTO(BaseModel):
     description: Optional[str] = None
 
     @validator('userId')
-    def validate_user_id(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validate_user_id(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('userId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @validator('purchaseId')
-    def validate_purchase_id(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validate_purchase_id(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('purchaseId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @validator('description')
-    def validate_description(cls, v):
-        if v is not None and not v.strip():
+    def validate_description(cls, value):
+        if value is not None and not value.strip():
             raise ValueError('description cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     def isEmpty(self) -> bool:
         """Check if all fields are None or empty."""

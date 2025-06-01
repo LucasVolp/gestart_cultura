@@ -14,19 +14,19 @@ class CreateReceiptDTO(BaseModel):
     description: Optional[str] = None
 
     @field_validator('userId')
-    def validate_user_id(cls, v):
-        if not v or not v.strip():
+    def validate_user_id(cls, value):
+        if not value or not value.strip():
             raise ValueError('userId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('purchaseId')
-    def validate_purchase_id(cls, v):
-        if not v or not v.strip():
+    def validate_purchase_id(cls, value):
+        if not value or not value.strip():
             raise ValueError('purchaseId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('description')
-    def validate_description(cls, v):
-        if v is not None and not v.strip():
+    def validate_description(cls, value):
+        if value is not None and not value.strip():
             raise ValueError('description cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value

@@ -24,31 +24,31 @@ class CreateTierDTO(BaseModel):
 
     @field_validator('name')
     @classmethod
-    def validateName(cls, v):
-        if not v or not v.strip():
+    def validateName(cls, value):
+        if not value or not value.strip():
             raise ValueError('name cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('amount')
     @classmethod
-    def validateAmount(cls, v):
-        if v <= 0:
+    def validateAmount(cls, value):
+        if value <= 0:
             raise ValueError('amount must be greater than 0')
-        return v
+        return value
 
     @field_validator('price')
     @classmethod
-    def validatePrice(cls, v):
-        if v < 0:
+    def validatePrice(cls, value):
+        if value < 0:
             raise ValueError('price must be greater than or equal to 0')
-        return v
+        return value
 
     @field_validator('eventId')
     @classmethod
-    def validateEventId(cls, v):
-        if not v or not v.strip():
+    def validateEventId(cls, value):
+        if not value or not value.strip():
             raise ValueError('eventId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @model_validator(mode='after')
     def validateDates(self):

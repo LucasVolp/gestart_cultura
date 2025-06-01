@@ -17,22 +17,22 @@ class CreateTicketDTO(BaseModel):
 
     @field_validator('ownerId')
     @classmethod
-    def validateOwnerId(cls, v):
-        if not v or not v.strip():
+    def validateOwnerId(cls, value):
+        if not value or not value.strip():
             raise ValueError('ownerId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('tierId')
     @classmethod
-    def validateTierId(cls, v):
-        if not v or not v.strip():
+    def validateTierId(cls, value):
+        if not value or not value.strip():
             raise ValueError('tierId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('sellerId')
     @classmethod
-    def validateSellerId(cls, v):
-        if not v or not v.strip():
+    def validateSellerId(cls, value):
+        if not value or not value.strip():
             raise ValueError('sellerId cannot be empty')
-        return v.strip()
+        return value.strip()
 

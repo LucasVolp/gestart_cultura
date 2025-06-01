@@ -18,35 +18,35 @@ class CreatePurchaseItemDTO(BaseModel):
 
     @field_validator('purchaseId')
     @classmethod
-    def validatePurchaseId(cls, v):
-        if not v or not v.strip():
+    def validatePurchaseId(cls, value):
+        if not value or not value.strip():
             raise ValueError('purchaseId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('tierId')
     @classmethod
-    def validateTierId(cls, v):
-        if not v or not v.strip():
+    def validateTierId(cls, value):
+        if not value or not value.strip():
             raise ValueError('tierId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('quantity')
     @classmethod
-    def validateQuantity(cls, v):
-        if v <= 0:
+    def validateQuantity(cls, value):
+        if value <= 0:
             raise ValueError('quantity must be greater than 0')
-        return v
+        return value
 
     @field_validator('unitPrice')
     @classmethod
-    def validateUnitPrice(cls, v):
-        if v < 0:
+    def validateUnitPrice(cls, value):
+        if value < 0:
             raise ValueError('unitPrice cannot be negative')
-        return v
+        return value
 
     @field_validator('totalPrice')
     @classmethod
-    def validateTotalPrice(cls, v):
-        if v < 0:
+    def validateTotalPrice(cls, value):
+        if value < 0:
             raise ValueError('totalPrice cannot be negative')
-        return v
+        return value

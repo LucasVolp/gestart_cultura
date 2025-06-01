@@ -13,17 +13,17 @@ class UpdateRatingDTO(BaseModel):
 
     @field_validator('rate')
     @classmethod
-    def validateRate(cls, v):
-        if v is not None and (v < 1 or v > 5):
+    def validateRate(cls, value):
+        if value is not None and (value < 1 or value > 5):
             raise ValueError('rate must be between 1 and 5 if provided')
-        return v
+        return value
 
     @field_validator('comment')
     @classmethod
-    def validateComment(cls, v):
-        if v is not None and not v.strip():
+    def validateComment(cls, value):
+        if value is not None and not value.strip():
             raise ValueError('comment cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     def isEmpty(self) -> bool:
         """Check if all fields are None or empty."""

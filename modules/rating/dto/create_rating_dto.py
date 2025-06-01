@@ -17,28 +17,28 @@ class CreateRatingDTO(BaseModel):
 
     @field_validator('userId')
     @classmethod
-    def validateUserId(cls, v):
-        if not v or not v.strip():
+    def validateUserId(cls, value):
+        if not value or not value.strip():
             raise ValueError('userId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('eventId')
     @classmethod
-    def validateEventId(cls, v):
-        if not v or not v.strip():
+    def validateEventId(cls, value):
+        if not value or not value.strip():
             raise ValueError('eventId cannot be empty')
-        return v.strip()
+        return value.strip()
 
     @field_validator('rate')
     @classmethod
-    def validateRate(cls, v):
-        if v < 1 or v > 5:
+    def validateRate(cls, value):
+        if value < 1 or value > 5:
             raise ValueError('rate must be between 1 and 5')
-        return v
+        return value
 
     @field_validator('comment')
     @classmethod
-    def validateComment(cls, v):
-        if v is not None and not v.strip():
+    def validateComment(cls, value):
+        if value is not None and not value.strip():
             raise ValueError('comment cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value

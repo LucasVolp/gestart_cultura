@@ -25,31 +25,31 @@ class UpdateTierDTO(BaseModel):
 
     @field_validator('name')
     @classmethod
-    def validateName(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateName(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('name cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('amount')
     @classmethod
-    def validateAmount(cls, v):
-        if v is not None and v <= 0:
+    def validateAmount(cls, value):
+        if value is not None and value <= 0:
             raise ValueError('amount must be greater than 0 if provided')
-        return v
+        return value
 
     @field_validator('price')
     @classmethod
-    def validatePrice(cls, v):
-        if v is not None and v < 0:
+    def validatePrice(cls, value):
+        if value is not None and value < 0:
             raise ValueError('price must be greater than or equal to 0 if provided')
-        return v
+        return value
 
     @field_validator('eventId')
     @classmethod
-    def validateEventId(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateEventId(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('eventId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @model_validator(mode='after')
     def validateDates(self):

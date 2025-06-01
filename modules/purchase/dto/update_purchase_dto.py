@@ -21,24 +21,24 @@ class UpdatePurchaseDTO(BaseModel):
 
     @field_validator('buyerId')
     @classmethod
-    def validateBuyerId(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateBuyerId(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('buyerId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('sellerId')
     @classmethod
-    def validateSellerId(cls, v):
-        if v is not None and (not v or not v.strip()):
+    def validateSellerId(cls, value):
+        if value is not None and (not value or not value.strip()):
             raise ValueError('sellerId cannot be empty if provided')
-        return v.strip() if v else v
+        return value.strip() if value else value
 
     @field_validator('totalPrice')
     @classmethod
-    def validateTotalPrice(cls, v):
-        if v is not None and v < 0:
+    def validateTotalPrice(cls, value):
+        if value is not None and value < 0:
             raise ValueError('totalPrice cannot be negative if provided')
-        return v
+        return value
 
     def isEmpty(self) -> bool:
         """Check if all fields are None or empty."""
