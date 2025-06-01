@@ -1,4 +1,4 @@
-from models import User
+from models.models import User
 from db import SessionLocal
 
 class FindUserByEmailRepository:

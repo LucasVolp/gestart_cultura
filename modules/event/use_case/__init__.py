@@ -1,5 +1,5 @@
 from .create_event_use_case import CreateEventUseCase
-from .find_all_event_use_case import FindAllEventUseCase
+from .find_all_event_use_case import FindAllEventsUseCase
 from .find_event_by_id_use_case import FindEventByIdUseCase
 from .update_event_use_case import UpdateEventUseCase
 from .delete_event_use_case import DeleteEventUseCase

@@ -1,9 +1,11 @@
 from modules.event import DeleteEventRepository, FindEventByIdRepository
+from fastapi import HTTPException
 
 class DeleteEventUseCase:
     def __init__(self, repository=None, FindEventByIdRepo=None):
         self.repository = repository or DeleteEventRepository()
         self.findEventByIdRepo = FindEventByIdRepo or FindEventByIdRepository()
+    
     def execute(self, id):
         """Delete an event by its ID from the database.
 
@@ -20,13 +22,14 @@ class DeleteEventUseCase:
         try:
             eventExists = self.findEventByIdRepo.findById(id)
             if not eventExists:
-                raise ValueError(f"Evento não encontrado.")
+                raise HTTPException(status_code=404, detail=f"Evento com ID {id} não encontrado.")
+            print(f"Evento encontrado: {eventExists.name}. Deletando...")
             event = self.repository.delete(eventExists)
             if event:
                 print(f"Evento {event.name} deletado com sucesso.")
             return event
         except Exception as e:
             print(f"Erro ao deletar evento: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Erro ao deletar evento")
         finally:
             self.repository.session.close()

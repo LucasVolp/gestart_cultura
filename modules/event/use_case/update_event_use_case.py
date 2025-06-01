@@ -1,4 +1,5 @@
 from modules.event import UpdateEventRepository, UpdateEventDTO, FindEventByIdRepository
+from fastapi import HTTPException
 
 class UpdateEventUseCase:
     def __init__(self, repository=None, findEventById=None):
@@ -21,12 +22,12 @@ class UpdateEventUseCase:
         try:
             eventExists = self.findEventById.findById(id)
             if not eventExists:
-                raise ValueError(f"Evento não encontrado.")
+                raise HTTPException(status_code=404, detail=f"Evento com ID {id} não encontrado.")
             event = self.repository.update(eventExists, data)
             print(f"Evento {event.name} atualizado com sucesso.")
             return event
         except Exception as e:
             print(f"Erro ao atualizar evento: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Erro ao atualizar evento")
         finally:
             self.repository.session.close()

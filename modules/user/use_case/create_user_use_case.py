@@ -1,6 +1,7 @@
 from models.models import User
-from modules.user import CreateUserDTO, CreateUserRepository, FindUserByEmailRepository, FindUserByCpfRepository
-
+from modules.user.dto import CreateUserDTO
+from modules.user.repository import CreateUserRepository, FindUserByEmailRepository, FindUserByCpfRepository
+from fastapi import HTTPException
 
 class CreateUserUseCase:
     def __init__(self, userRepository=None, findUserByEmail=None, findUserByCpf=None):
@@ -26,14 +27,17 @@ class CreateUserUseCase:
             userEmail = self.findUserByEmail.findByEmail(data.email)
             userCPF = self.findUserByCpf.findByCPF(data.cpf)
             if userEmail:
-                raise ValueError("Usuário com este email já cadastrado.")
+                raise HTTPException(status_code=400, detail="Usuário com este email já cadastrado.")
             if userCPF:
-                raise ValueError("Usuário com este CPF já cadastrado.")
+                raise HTTPException(status_code=400, detail="Usuário com este CPF já cadastrado.")
             user = self.repository.create(data)
             print(f"Usuário {user.name} criado com sucesso.")
             return user
+        except HTTPException as e:
+            print(f"Erro ao criar usuário: {e.detail}")
+            raise e
         except Exception as e:
             print(f"Erro ao criar usuário: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail="Erro ao criar usuário.")
         finally:
             self.repository.session.close()

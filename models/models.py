@@ -61,44 +61,28 @@ class User(Base):
     status = Column(Enum(Status), default=Status.ACTIVE)
     role = Column(Enum(Role), nullable=False)
     balance = Column(Float, default=1000)
+    
+    # Fields for Producers
+    cnpj = Column(String(14), unique=True, nullable=True)
+    enterprise = Column(String, nullable=True)
+    
     createdAt = Column(DateTime, nullable=False, default=datetime.now)
     updatedAt = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-
-    __mapper_args__ = {
-        "polymorphic_identity": Role.USER,
-        "polymorphic_on": role,
-    }
 
     tickets = relationship('Ticket', back_populates='owner', foreign_keys='Ticket.ownerId')
     ratings = relationship('Rating', back_populates='user')
     purchases = relationship('Purchase', back_populates='buyer', foreign_keys='Purchase.buyerId')
     receipts = relationship('Receipt', back_populates='user')
+    
+    # Relation for Producers Events
     events = relationship('Event', secondary='eventProducers', back_populates='producers')
-
-class Producer(User):
-    __tablename__ = 'producers'
-
-    id = Column(UUID(as_uuid=True), ForeignKey('users.id'), primary_key=True)
-    cnpj = Column(String(14), unique=True, nullable=False)
-    enterprise = Column(String, nullable=False)
-
-    __mapper_args__ = {
-        "polymorphic_identity": Role.PRODUCER,
-    }
-
-class Seller(User):
-    __tablename__ = 'sellers'
-
-    id = Column(UUID(as_uuid=True), ForeignKey('users.id'), primary_key=True)
-
-    __mapper_args__ = {
-        "polymorphic_identity": Role.SELLER,
-    }
-
+    
+    # Relation for Seller sales
     sales = relationship('Purchase', back_populates='seller', foreign_keys='Purchase.sellerId')
 
 class Event(Base):
     __tablename__ = 'events'
+
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
     description = Column(Text)
@@ -114,11 +98,13 @@ class Event(Base):
 
 class EventProducer(Base):
     __tablename__ = 'eventProducers'
+
     eventId = Column(UUID(as_uuid=True), ForeignKey('events.id'), primary_key=True)
     producerId = Column(UUID(as_uuid=True), ForeignKey('users.id'), primary_key=True)
 
 class Tier(Base):
     __tablename__ = 'tiers'
+
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     amount = Column(Integer, nullable=False)
     name = Column(String, nullable=False, unique=True)
@@ -152,6 +138,7 @@ class Ticket(Base):
 
 class Rating(Base):
     __tablename__ = 'ratings'
+
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     userId = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     eventId = Column(UUID(as_uuid=True), ForeignKey('events.id'))
@@ -168,7 +155,7 @@ class Purchase(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     buyerId = Column(UUID(as_uuid=True), ForeignKey('users.id'))
-    sellerId = Column(UUID(as_uuid=True), ForeignKey('sellers.id'))
+    sellerId = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     purchaseDate = Column(DateTime, nullable=False)
     status = Column(Enum(PaymentStatus), default=PaymentStatus.PENDING)
     totalPrice = Column(Float, nullable=False)
@@ -177,12 +164,13 @@ class Purchase(Base):
     updatedAt = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
 
     buyer = relationship('User', back_populates='purchases', foreign_keys=[buyerId])
-    seller = relationship('Seller', back_populates='sales', foreign_keys=[sellerId])
+    seller = relationship('User', back_populates='sales', foreign_keys=[sellerId])
     items = relationship('PurchaseItem', back_populates='purchase')
     receipt = relationship('Receipt', uselist=False, back_populates='purchase')
 
 class PurchaseItem(Base):
     __tablename__ = 'purchaseItems'
+
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     purchaseId = Column(UUID(as_uuid=True), ForeignKey('purchases.id'))
     tierId = Column(UUID(as_uuid=True), ForeignKey('tiers.id'))
@@ -197,6 +185,7 @@ class PurchaseItem(Base):
 
 class Receipt(Base):
     __tablename__ = 'receipts'
+    
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     userId = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     purchaseId = Column(UUID(as_uuid=True), ForeignKey('purchases.id'))

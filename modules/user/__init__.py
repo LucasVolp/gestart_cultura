@@ -10,8 +10,11 @@ from .repository import (
 )
 from .use_case import (
     CreateUserUseCase,
-    DeleteUserUseCase,
-    FindAllUserUseCase,
+    FindAllUsersUseCase,
     FindUserByIdUseCase,
-    UpdateUserUseCase
+    UpdateUserUseCase,
+    DeleteUserUseCase
 )
+
+from .user_service import UserService
+from .user_controller import router as UserRouters

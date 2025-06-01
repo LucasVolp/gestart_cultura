@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from enums import PaymentStatus, PaymentMethods
+from models.models import PaymentStatus, PaymentMethod
 
 @dataclass
 class CreatePurchaseDTO:
@@ -9,4 +9,4 @@ class CreatePurchaseDTO:
     purchaseDate: str
     status: Optional[PaymentStatus] = None
     totalPrice: float = 0.0
-    paymentMethod: PaymentMethods
+    paymentMethod: PaymentMethod

@@ -1,4 +1,5 @@
 from modules.event import FindEventByIdRepository
+from fastapi import HTTPException
 
 class FindEventByIdUseCase:
     def __init__(self, repository=None):
@@ -20,10 +21,11 @@ class FindEventByIdUseCase:
         try:
             event = self.repository.findById(id)
             if not event:
-                raise ValueError("Evento não encontrado.")
+                raise HTTPException(status_code=404, detail=f"Evento com ID {id} não encontrado.")
+            print(f"Evento com ID {id} encontrado: {event.name}")
             return event
         except Exception as e:
             print(f"Erro ao buscar evento: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Erro ao buscar evento")
         finally:
             self.repository.session.close()

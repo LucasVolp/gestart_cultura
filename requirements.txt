@@ -2,3 +2,6 @@ sqlalchemy
 bcrypt
 python-dotenv
 psycopg2-binary
+fastapi[standard]
+uvicorn
+alembic

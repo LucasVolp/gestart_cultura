@@ -9,8 +9,10 @@ from .repository import (
 )
 from .use_case import (
     CreateEventUseCase,
-    FindAllEventUseCase,
+    FindAllEventsUseCase,
     FindEventByIdUseCase,
     UpdateEventUseCase,
     DeleteEventUseCase
 )
+from .event_service import EventService
+from .event_controller import router as EventRouters

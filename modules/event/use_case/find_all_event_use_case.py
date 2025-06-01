@@ -1,8 +1,10 @@
 from modules.event import FindAllEventsRepository
+from fastapi import HTTPException
 
-class FindAllEventUseCase:
+class FindAllEventsUseCase:
     def __init__(self, repository=None):
         self.repository = repository or FindAllEventsRepository()
+    
     def execute(self):
         """Returns all events from the database.
 
@@ -20,6 +22,6 @@ class FindAllEventUseCase:
             return events
         except Exception as e:
             print(f"Erro ao buscar eventos: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Erro ao buscar eventos")
         finally:
             self.repository.session.close()

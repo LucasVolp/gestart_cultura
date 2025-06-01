@@ -1,0 +1,23 @@
+meta {
+  name: Create
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/events
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Festival de Jazz de Verão 2025",
+    "description": "Um incrível festival de jazz com artistas nacionais e internacionais na beira da praia",
+    "date": "2025-08-15",
+    "local": "Praia de Copacabana - Rio de Janeiro",
+    "size": 5000,
+    "typeEvent": "MUSIC_FESTIVAL",
+    "producers": ["224661ba-2a39-49fe-8f9f-035570742030"]
+  }
+}

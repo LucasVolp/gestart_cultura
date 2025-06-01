@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from enums import PaymentStatus, PaymentMethod
+from models.models import PaymentStatus, PaymentMethod
 
 @dataclass
 class UpdatePurchaseDTO:

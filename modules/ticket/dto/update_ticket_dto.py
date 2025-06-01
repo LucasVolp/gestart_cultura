@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from enums import Status
+from models.models import Status
 
 @dataclass
 class UpdateTicketDTO:
