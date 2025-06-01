@@ -1,34 +1,40 @@
-from modules.purchase import DeletePurchaseRepository, FindPurchaseByIdRepository
+from modules.purchase.repository import DeletePurchaseRepository, FindPurchaseByIdRepository
+from fastapi import HTTPException
 
 class DeletePurchaseUseCase:
-    """
-    Use case for deleting a Purchase.
-    """
+    """Use case for deleting a Purchase."""
+    
     def __init__(self, repository=None, findPurchaseByIdRepo=None):
         self.repository = repository or DeletePurchaseRepository()
         self.findPurchaseByIdRepo = findPurchaseByIdRepo or FindPurchaseByIdRepository()
 
     def execute(self, id: str):
-        """
-        Deletes a purchase from the repository.
+        """Deletes a purchase from the repository.
+
         Args:
-            purchase (Purchase): The purchase object to delete.
+            id (str): The ID of the purchase to delete.
+
         Returns:
-            bool: True if deletion was successful.
+            Purchase: The deleted Purchase object.
+
         Raises:
-            Exception: If an error occurs during deletion.
+            HTTPException: If the purchase is not found or an error occurs during deletion.
         """
         try:
             purchaseExists = self.findPurchaseByIdRepo.findById(id)
             if not purchaseExists:
-                raise ValueError(f"Compra não encontrada.")
+                raise HTTPException(status_code=404, detail=f"Compra com ID {id} não encontrada.")
+
             purchase = self.repository.delete(purchaseExists)
-            if purchase:
-                print(f"Compra {purchase.id} deletada com sucesso.")
+            print(f"Compra {purchase.id} deletada com sucesso.")
             return purchase
+            
+        except HTTPException as e:
+            print(f"Erro ao deletar compra: {e.detail}")
+            raise e
         except Exception as e:
             print(f"Erro ao deletar compra: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail="Erro interno do servidor ao deletar compra.")
         finally:
             self.repository.session.close()
             self.findPurchaseByIdRepo.session.close()
