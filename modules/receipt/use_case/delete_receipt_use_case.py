@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from modules.receipt import DeleteReceiptRepository, FindReceiptByIdRepository
 
 class DeleteReceiptUseCase:
@@ -14,23 +15,19 @@ class DeleteReceiptUseCase:
         Returns:
             bool: True if deletion was successful.
         Raises:
-            ValueError: If the receipt is not found.
-            Exception: If an error occurs during deletion.
+            HTTPException: If receipt is not found or an error occurs during deletion.
         """
         try:
             receipt = self.findReceiptByIdRepo.findById(id)
             if not receipt:
-                raise ValueError(f"Recibo com ID {id} não encontrado.")
+                raise HTTPException(status_code=404, detail=f"Receipt with ID {id} not found")
             
             self.repository.delete(receipt)
-            print(f"Recibo com ID {id} deletado com sucesso.")
             return True
-        except ValueError as e:
-            print(e)
-            raise e
+        except HTTPException:
+            raise
         except Exception as e:
-            print(f"Erro ao deletar recibo: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Internal server error while deleting receipt: {str(e)}")
         finally:
             self.repository.session.close()
             self.findReceiptByIdRepo.session.close()

@@ -1,13 +1,43 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, field_validator
 from typing import Optional
 from models.models import Status
 
-@dataclass
-class UpdateTicketDTO:
+class UpdateTicketDTO(BaseModel):
+    """Data Transfer Object for updating a ticket.
+
+    Attributes:
+        ownerId (Optional[str]): The ID of the ticket owner (user).
+        tierId (Optional[str]): The ID of the tier this ticket belongs to.
+        sellerId (Optional[str]): The ID of the seller who sold this ticket.
+        status (Optional[Status]): The status of the ticket.
+    """
     ownerId: Optional[str] = None
     tierId: Optional[str] = None
     sellerId: Optional[str] = None
     status: Optional[Status] = None
 
+    @field_validator('ownerId')
+    @classmethod
+    def validateOwnerId(cls, v):
+        if v is not None and (not v or not v.strip()):
+            raise ValueError('ownerId cannot be empty if provided')
+        return v.strip() if v else v
+
+    @field_validator('tierId')
+    @classmethod
+    def validateTierId(cls, v):
+        if v is not None and (not v or not v.strip()):
+            raise ValueError('tierId cannot be empty if provided')
+        return v.strip() if v else v
+
+    @field_validator('sellerId')
+    @classmethod
+    def validateSellerId(cls, v):
+        if v is not None and (not v or not v.strip()):
+            raise ValueError('sellerId cannot be empty if provided')
+        return v.strip() if v else v
+
     def isEmpty(self) -> bool:
-        return all(value is None for value in self.__dict__.values())
+        """Check if all fields are None or empty."""
+        return all(value is None for value in self.model_dump().values())
+

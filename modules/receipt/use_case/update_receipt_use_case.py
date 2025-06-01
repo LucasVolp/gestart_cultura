@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from modules.receipt import UpdateReceiptDTO, UpdateReceiptRepository, FindReceiptByIdRepository
 
 class UpdateReceiptUseCase:
@@ -14,19 +15,24 @@ class UpdateReceiptUseCase:
         Returns:
             Receipt: The updated Receipt object.
         Raises:
-            Exception: If an error occurs during update.
+            HTTPException: If receipt is not found or an error occurs during update.
         """
         try:
             receiptExists = self.findReceiptByIdRepo.findById(id)
             if not receiptExists:
-                raise ValueError(f"Recibo não encontrado.")
+                raise HTTPException(status_code=404, detail=f"Receipt with ID {id} not found")
+            
+            if data.isEmpty():
+                raise HTTPException(status_code=400, detail="No data provided for update")
+            
             receipt = self.repository.update(receiptExists, data)
-            if receipt:
-                print(f"Recibo {receipt.id} atualizado com sucesso.")
             return receipt
+        except HTTPException:
+            raise
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
         except Exception as e:
-            print(f"Erro ao atualizar recibo: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Internal server error while updating receipt: {str(e)}")
         finally:
             self.repository.session.close()
             self.findReceiptByIdRepo.session.close()

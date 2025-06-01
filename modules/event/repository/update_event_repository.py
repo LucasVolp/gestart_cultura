@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from db import SessionLocal
 from models.models import Event, User
 from modules.event import UpdateEventDTO
@@ -19,9 +18,13 @@ class UpdateEventRepository:
             _type_: Updated Event model instance.
         """
         try:
+            # Merge the event instance into this session if it's not already attached
+            if event not in self.session:
+                event = self.session.merge(event)
+            
             producer_ids = data.producers
 
-            data_dict = asdict(data)
+            data_dict = data.model_dump(exclude_unset=True)
             if 'producers' in data_dict:
                 del data_dict['producers']
 

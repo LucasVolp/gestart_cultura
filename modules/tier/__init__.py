@@ -14,3 +14,5 @@ from .use_case import (
     UpdateTierUseCase,
     DeleteTierUseCase
 )
+from .tier_service import TierService
+from .tier_controller import router as TierRouters

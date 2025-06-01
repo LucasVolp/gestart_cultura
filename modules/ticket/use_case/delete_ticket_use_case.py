@@ -1,4 +1,5 @@
-from modules.ticket import DeleteTicketRepository, FindTicketByIdRepository
+from modules.ticket.repository import DeleteTicketRepository, FindTicketByIdRepository
+from fastapi import HTTPException
 
 class DeleteTicketUseCase:
     def __init__(self, repository=None, findTicketByIdRepo=None):
@@ -12,22 +13,24 @@ class DeleteTicketUseCase:
             id (str): ID of the ticket to be deleted.
 
         Raises:
-            ValueError: If the ticket with the given ID does not exist.
-            e: Exception raised during the deletion process.
+            HTTPException: If the ticket with the given ID does not exist or if an error occurs.
 
         Returns:
-            _type_: Deleted Ticket model instance or None if not found.
+            bool: True if deletion was successful.
         """
         try:
             ticketExists = self.findTicketByIdRepo.findById(id)
             if not ticketExists:
-                raise ValueError("Ingresso não encontrado.")
+                raise HTTPException(status_code=404, detail="Ingresso não encontrado.")
             ticket = self.repository.delete(ticketExists)
             if ticket:
                 print(f"Ingresso deletado com sucesso.")
             return ticket
-        except Exception as e:
-            print(f"Erro ao deletar o ingresso {e}")
+        except HTTPException as e:
+            print(f"Erro ao deletar ingresso: {e.detail}")
             raise e
+        except Exception as e:
+            print(f"Erro ao deletar ingresso: {e}")
+            raise HTTPException(status_code=500, detail="Erro ao deletar ingresso.")
         finally:
             self.repository.session.close()

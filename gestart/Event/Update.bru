@@ -1,0 +1,17 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/event/b3411356-42a7-49ed-97f7-6fb69efea577
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name":"Event Update Test"
+  }
+}

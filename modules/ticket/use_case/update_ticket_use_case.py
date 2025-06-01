@@ -1,34 +1,38 @@
-from modules.ticket import UpdateTicketRepository, UpdateTicketDTO, FindTicketByIdRepository
+from modules.ticket.repository import UpdateTicketRepository, FindTicketByIdRepository
+from modules.ticket.dto import UpdateTicketDTO
+from fastapi import HTTPException
 
 class UpdateTicketUseCase:
-    def __init__(self, repository=None, FindTicketByIdRepo=None):
+    def __init__(self, repository=None, findTicketByIdRepo=None):
         self.repository = repository or UpdateTicketRepository()
-        self.findTicketByIdRepo = FindTicketByIdRepo or FindTicketByIdRepository()
+        self.findTicketByIdRepo = findTicketByIdRepo or FindTicketByIdRepository()
 
     def execute(self, id, data: UpdateTicketDTO):
         """Executes the use case to update an existing ticket.
 
         Args:
-            id (_type_): ID of the ticket to be updated.
+            id (str): ID of the ticket to be updated.
             data (UpdateTicketDTO): Data Transfer Object containing the updated ticket information.
 
         Raises:
-            ValueError: If the ticket with the given ID does not exist.
-            e: Exception raised during the update process.
+            HTTPException: If the ticket with the given ID does not exist or if an error occurs.
 
         Returns:
-            _type_: Updated Ticket model instance if successful, otherwise raises ValueError.
+            Ticket: Updated Ticket model instance.
         """
         try:
             ticketExists = self.findTicketByIdRepo.findById(id)
             if not ticketExists:
-                raise ValueError(f"Ingresso não encontrado.")
+                raise HTTPException(status_code=404, detail="Ingresso não encontrado.")
             
             ticket = self.repository.update(ticketExists, data)
             print(f"Ingresso atualizado com sucesso.")
             return ticket
-        except Exception as e:
-            print(f"Erro ao atualizar o ingresso {e}")
+        except HTTPException as e:
+            print(f"Erro ao atualizar ingresso: {e.detail}")
             raise e
+        except Exception as e:
+            print(f"Erro ao atualizar ingresso: {e}")
+            raise HTTPException(status_code=500, detail="Erro ao atualizar ingresso.")
         finally:
             self.repository.session.close()

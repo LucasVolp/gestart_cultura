@@ -5,6 +5,7 @@ class UpdateEventUseCase:
     def __init__(self, repository=None, findEventById=None):
         self.repository = repository or UpdateEventRepository()
         self.findEventById = findEventById or FindEventByIdRepository()
+    
     def execute(self, id: str, data: UpdateEventDTO):
         """Update an existing event in the database.
 
@@ -13,21 +14,27 @@ class UpdateEventUseCase:
             data (UpdateEventDTO): Data transfer object containing the updated event data.
 
         Raises:
-            ValueError: If the event with the given ID does not exist.
-            e: Error while updating the event.
+            HTTPException: If the event with the given ID does not exist or an error occurs.
 
         Returns:
-            _type_: Updated Event model instance or None if not found.
+            Event: Updated Event model instance.
         """
         try:
             eventExists = self.findEventById.findById(id)
             if not eventExists:
-                raise HTTPException(status_code=404, detail=f"Evento com ID {id} não encontrado.")
+                raise HTTPException(status_code=404, detail=f"Event with ID {id} not found")
+            
+            if data.isEmpty():
+                raise HTTPException(status_code=400, detail="No data provided for update")
+            
             event = self.repository.update(eventExists, data)
-            print(f"Evento {event.name} atualizado com sucesso.")
             return event
+        except HTTPException:
+            raise
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
         except Exception as e:
-            print(f"Erro ao atualizar evento: {e}")
-            raise HTTPException(status_code=500, detail=f"Erro ao atualizar evento")
+            raise HTTPException(status_code=500, detail=f"Internal server error while updating event: {str(e)}")
         finally:
             self.repository.session.close()
+            self.findEventById.session.close()

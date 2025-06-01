@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from modules.receipt import FindAllReceiptsRepository
 
 class FindAllReceiptsUseCase:
@@ -10,16 +11,12 @@ class FindAllReceiptsUseCase:
         Returns:
             list: List of Receipt objects.
         Raises:
-            Exception: If an error occurs during retrieval.
+            HTTPException: If an error occurs during retrieval.
         """
         try:
             receipts = self.repository.findAll()
-            if not receipts:
-                print("Nenhum recibo encontrado.")
-                return []
             return receipts
         except Exception as e:
-            print(f"Erro ao buscar recibos: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Internal server error while retrieving receipts: {str(e)}")
         finally:
             self.repository.session.close()

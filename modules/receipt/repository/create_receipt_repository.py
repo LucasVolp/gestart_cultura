@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from db import SessionLocal
 from models.models import Receipt
 from modules.receipt import CreateReceiptDTO
@@ -18,8 +17,8 @@ class CreateReceiptRepository:
         Raises:
             ValueError: If an integrity error occurs while creating the receipt.
         """
-        data = asdict(data)
-        receipt = Receipt(**data)
+        data_dict = data.model_dump()
+        receipt = Receipt(**data_dict)
         self.session.add(receipt)
         self.session.commit()
         self.session.refresh(receipt)

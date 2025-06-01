@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from db import SessionLocal
 from modules.receipt import UpdateReceiptDTO
 
@@ -16,8 +15,8 @@ class UpdateReceiptRepository:
         Returns:
             Receipt: Updated Receipt instance.
         """
-        data = asdict(data)
-        for key, value in data.items():
+        data_dict = data.model_dump(exclude_unset=True)
+        for key, value in data_dict.items():
             if value is not None:
                 setattr(receipt, key, value)
         self.session.commit()

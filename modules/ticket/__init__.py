@@ -13,3 +13,5 @@ from .use_case import (
     UpdateTicketUseCase,
     DeleteTicketUseCase
 )
+from .ticket_service import TicketService
+from .ticket_controller import router as TicketRouters

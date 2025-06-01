@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from db import SessionLocal
 from models.models import Tier
 from sqlalchemy.exc import IntegrityError
@@ -21,8 +20,8 @@ class CreateTierRepository:
             Tier: Created Tier model instance.
         """
         try:
-            data = asdict(data)
-            tier = Tier(**data)
+            data_dict = data.model_dump()
+            tier = Tier(**data_dict)
             self.session.add(tier)
             self.session.commit()
             self.session.refresh(tier)

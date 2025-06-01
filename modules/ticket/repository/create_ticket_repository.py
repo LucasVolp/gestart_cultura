@@ -1,7 +1,6 @@
-from dataclasses import asdict
 from db import SessionLocal
 from models.models import Ticket
-from modules.ticket import CreateTicketDTO
+from modules.ticket.dto import CreateTicketDTO
 
 class CreateTicketRepository:
     def __init__(self, session=None):
@@ -18,8 +17,8 @@ class CreateTicketRepository:
         Raises:
             ValueError: If an integrity error occurs while creating the ticket.
         """
-        data = asdict(data)
-        ticket = Ticket(**data)
+        data_dict = data.model_dump()
+        ticket = Ticket(**data_dict)
         self.session.add(ticket)
         self.session.commit()
         self.session.refresh(ticket)

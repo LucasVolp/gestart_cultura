@@ -1,8 +1,10 @@
-from modules.tier import FindTierByIdRepository
+from modules.tier.repository import FindTierByIdRepository
+from fastapi import HTTPException
 
 class FindTierByIdUseCase:
     def __init__(self, repository=None):
         self.repository = repository or FindTierByIdRepository()
+        
     def execute(self, id: str):
         """Finds a tier by its ID.
 
@@ -10,20 +12,22 @@ class FindTierByIdUseCase:
             id (str): ID of the tier to be found.
 
         Raises:
-            ValueError: If the tier with the given ID does not exist.
-            e: Exception raised during the search process.
+            HTTPException: If the tier with the given ID does not exist or if an error occurs.
 
         Returns:
-            _type_: Tier model instance if found.
+            Tier: Tier model instance if found.
         """
         try:
             tier = self.repository.findById(id)
             if not tier:
-                raise ValueError("Tier não encontrado.")
+                raise HTTPException(status_code=404, detail="Tier não encontrado.")
             print(f"Tier {tier.name} encontrado com sucesso.")
             return tier
+        except HTTPException as e:
+            print(f"Erro ao buscar tier: {e.detail}")
+            raise e
         except Exception as e:
             print(f"Erro ao buscar tier: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail="Erro ao buscar tier.")
         finally:
             self.repository.session.close()

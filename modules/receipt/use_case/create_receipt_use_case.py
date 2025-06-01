@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from modules.receipt import CreateReceiptDTO, CreateReceiptRepository
 
 class CreateReceiptUseCase:
@@ -12,14 +13,14 @@ class CreateReceiptUseCase:
         Returns:
             Receipt: The created Receipt object.
         Raises:
-            Exception: If an error occurs during creation.
+            HTTPException: If an error occurs during creation.
         """
         try:
             receipt = self.repository.create(data)
-            print("Recibo criado com sucesso.")
             return receipt
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
         except Exception as e:
-            print(f"Erro ao criar recibo: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Internal server error while creating receipt: {str(e)}")
         finally:
             self.repository.session.close()

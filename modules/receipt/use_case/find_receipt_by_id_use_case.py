@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from modules.receipt import FindReceiptByIdRepository
 
 class FindReceiptByIdUseCase:
@@ -11,18 +12,18 @@ class FindReceiptByIdUseCase:
         Args:
             id (str): The ID of the receipt to find.
         Returns:
-            Receipt: The found Receipt object or None if not found.
+            Receipt: The found Receipt object.
         Raises:
-            Exception: If an error occurs during retrieval.
+            HTTPException: If receipt is not found or an error occurs during retrieval.
         """
         try:
             receipt = self.repository.findById(id)
             if not receipt:
-                print(f"Recibo com ID {id} não encontrado.")
-                return None
+                raise HTTPException(status_code=404, detail=f"Receipt with ID {id} not found")
             return receipt
+        except HTTPException:
+            raise
         except Exception as e:
-            print(f"Erro ao buscar recibo: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail=f"Internal server error while retrieving receipt: {str(e)}")
         finally:
             self.repository.session.close()

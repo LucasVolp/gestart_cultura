@@ -1,9 +1,11 @@
-from modules.tier import DeleteTierRepository, FindTierByIdRepository
+from modules.tier.repository import DeleteTierRepository, FindTierByIdRepository
+from fastapi import HTTPException
 
 class DeleteTierUseCase:
     def __init__(self, repository=None, findTierById=None):
         self.repository = repository or DeleteTierRepository()
         self.findTierById = findTierById or FindTierByIdRepository()
+        
     def execute(self, id: str):
         """Deletes a tier by its ID.
 
@@ -11,22 +13,24 @@ class DeleteTierUseCase:
             id (str): ID of the tier to be deleted.
 
         Raises:
-            ValueError: If the tier with the given ID does not exist.
-            e: Exception raised during the deletion process.
+            HTTPException: If the tier with the given ID does not exist or if an error occurs.
 
         Returns:
-            _type_: Deleted Tier model instance or None if not found.
+            bool: True if deletion was successful.
         """
         try:
             tierExists = self.findTierById.findById(id)
             if not tierExists:
-                raise ValueError(f"Tier não encontrado.")
+                raise HTTPException(status_code=404, detail="Tier não encontrado.")
             tier = self.repository.delete(tierExists)
             if tier:
                 print(f"Tier deletado com sucesso.")
             return tier
+        except HTTPException as e:
+            print(f"Erro ao deletar tier: {e.detail}")
+            raise e
         except Exception as e:
             print(f"Erro ao deletar tier: {e}")
-            raise e
+            raise HTTPException(status_code=500, detail="Erro ao deletar tier.")
         finally:
             self.repository.session.close()

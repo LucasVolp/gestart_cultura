@@ -156,7 +156,7 @@ class Purchase(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     buyerId = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     sellerId = Column(UUID(as_uuid=True), ForeignKey('users.id'))
-    purchaseDate = Column(DateTime, nullable=False)
+    purchaseDate = Column(DateTime, nullable=False, default=datetime.now)
     status = Column(Enum(PaymentStatus), default=PaymentStatus.PENDING)
     totalPrice = Column(Float, nullable=False)
     paymentMethod = Column(Enum(PaymentMethod), nullable=False)
