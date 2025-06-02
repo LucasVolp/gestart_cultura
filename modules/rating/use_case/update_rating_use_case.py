@@ -1,32 +1,43 @@
+from fastapi import HTTPException, status
 from modules.rating import UpdateRatingRepository, UpdateRatingDTO, FindRatingByIdRepository
 
 class UpdateRatingUseCase:
     def __init__(self, repository=None, findRatingById=None):
         self.repository = repository or UpdateRatingRepository()
         self.findRatingById = findRatingById or FindRatingByIdRepository()
+        
     def execute(self, id, data: UpdateRatingDTO):
-        """        Executes the use case to update an existing rating by its ID.
+        """
+        Executes the use case to update an existing rating by its ID.
 
         Args:
-            id (_type_): ID of the rating to be updated.
+            id (int): ID of the rating to be updated.
             data (UpdateRatingDTO): Data Transfer Object containing the updated rating information.
 
         Raises:
-            ValueError: If the rating with the given ID does not exist.
-            e: Exception raised during the update process.
+            HTTPException: 404 if the rating with the given ID does not exist.
+            HTTPException: 500 if an error occurs during the update process.
 
         Returns:
-            _type_: Updated Rating model instance if successful, None if not found.
+            Rating: Updated Rating model instance if successful.
         """        
         try:
             ratingExists = self.findRatingById.findById(id)
             if not ratingExists:
-                raise ValueError("Avaliação não encontrada.")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Rating not found"
+                )
+                
             rating = self.repository.update(ratingExists, data)
-            print(f"Avaliação atualizada com sucesso.")
             return rating
+        except HTTPException:
+            raise
         except Exception as e:
-            print(f"Erro ao atualizar avaliação: {e}")
-            raise e
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error updating rating: {str(e)}"
+            )
         finally:
-            self.repository.session.close()
+            if hasattr(self.repository, 'session') and self.repository.session:
+                self.repository.session.close()

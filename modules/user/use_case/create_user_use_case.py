@@ -2,6 +2,7 @@ from models.models import User
 from modules.user.dto import CreateUserDTO
 from modules.user.repository import CreateUserRepository, FindUserByEmailRepository, FindUserByCpfRepository
 from fastapi import HTTPException
+from passlib.hash import bcrypt
 
 class CreateUserUseCase:
     def __init__(self, userRepository=None, findUserByEmail=None, findUserByCpf=None):
@@ -30,6 +31,7 @@ class CreateUserUseCase:
                 raise HTTPException(status_code=400, detail="Usuário com este email já cadastrado.")
             if userCPF:
                 raise HTTPException(status_code=400, detail="Usuário com este CPF já cadastrado.")
+            data.password = bcrypt.hash(data.password)
             user = self.repository.create(data)
             print(f"Usuário {user.name} criado com sucesso.")
             return user

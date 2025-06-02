@@ -24,9 +24,10 @@ class DeleteUserUseCase:
             if not userExists:
                 raise HTTPException(status_code=404, detail="Usuário não encontrado.")
             user = self.userRepository.delete(userExists)
-            if user:
-                print(f"Usuário deletado com sucesso.")
-            return user
+            if not user:
+                raise HTTPException(status_code=400, detail="Erro ao deletar usuário.")
+            print(f"Usuário deletado com sucesso.")
+            return True
         except HTTPException as e:
             print(f"Erro ao deletar usuário: {e.detail}")
             raise e
@@ -34,4 +35,7 @@ class DeleteUserUseCase:
             print(f"Erro ao deletar usuário: {e}")
             raise HTTPException(status_code=500, detail="Erro ao deletar usuário.")
         finally:
-            self.userRepository.session.close()
+            if hasattr(self.userRepository, 'session'):
+                self.userRepository.session.close()
+            if hasattr(self.findUser, 'session'):
+                self.findUser.session.close()

@@ -1,3 +1,4 @@
+
 from .dto import CreateRatingDTO, UpdateRatingDTO
 from .repository import (
     CreateRatingRepository,
@@ -13,3 +14,5 @@ from .use_case import (
     UpdateRatingUseCase,
     DeleteRatingUseCase
 )
+from .rating_service import RatingService
+from .rating_controller import router as RatingRouters

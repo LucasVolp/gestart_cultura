@@ -1,10 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException
 from modules.user import UserService, CreateUserDTO, UpdateUserDTO
-
+from fastapi.security import OAuth2PasswordRequestForm
 router = APIRouter(prefix="/user", tags=["User"])
 
 def getUserService():
     return UserService()
+
+@router.post("/auth")
+def auth(formData: OAuth2PasswordRequestForm = Depends(), service: UserService = Depends(getUserService)):
+    """
+    Authenticates a user based on email and password.
+    
+    Args:
+        formData (OAuth2PasswordRequestForm): Form data containing email and password.
+    
+    Returns:
+        Access token if authentication is successful.
+    
+    Raises:
+        HTTPException: If authentication fails due to invalid credentials.
+    """
+    return service.authenticate(formData.email, formData.password)
 
 @router.get("/")
 def findAll(service: UserService = Depends(getUserService)):
@@ -79,5 +95,4 @@ def remove(id: str, service: UserService = Depends(getUserService)):
     Raises:
         HTTPException: If the user is not found or if an error occurs during deletion.
     """
-    service.remove(id)
-    return {"message": f"User with ID {id} deleted successfully."}
+    return service.remove(id)

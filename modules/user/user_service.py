@@ -6,6 +6,7 @@ from modules.user.use_case import (
     UpdateUserUseCase,
 )
 from modules.user.dto import CreateUserDTO, UpdateUserDTO
+from modules.user.auth import AuthenthicateUser
 
 class UserService:
     def __init__(
@@ -14,13 +15,15 @@ class UserService:
         FindAllUsersUseCase=FindAllUsersUseCase, 
         FindUserByIdUseCase=FindUserByIdUseCase, 
         UpdateUserUseCase=UpdateUserUseCase, 
-        DeleteUserUseCase=DeleteUserUseCase
+        DeleteUserUseCase=DeleteUserUseCase,
+        AuthenthicateUser=AuthenthicateUser
     ):
         self.CreateUserUseCase = CreateUserUseCase()
         self.FindAllUsersUseCase = FindAllUsersUseCase()
         self.FindUserByIdUseCase = FindUserByIdUseCase()
         self.UpdateUserUseCase = UpdateUserUseCase()
         self.DeleteUserUseCase = DeleteUserUseCase()
+        self.AuthenthicateUser = AuthenthicateUser()
 
     def create(self, data: CreateUserDTO):
         """
@@ -79,3 +82,19 @@ class UserService:
             Deleted user instance.
         """
         return self.DeleteUserUseCase.execute(id)
+    
+    def authenticate(self, username: str, password: str):
+        """
+        Authenticates a user using the AuthenthicateUser use case.
+
+        Args:
+            username: The email of the user to be authenticated.
+            password: The password of the user to be authenticated.
+        
+        Returns:
+            Dictionary containing the access token and token type if authentication is successful.
+        
+        Raises:
+            HTTPException: If authentication fails due to invalid credentials.
+        """
+        return self.AuthenthicateUser.execute(username, password)

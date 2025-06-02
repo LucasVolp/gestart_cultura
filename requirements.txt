@@ -1,7 +1,8 @@
 sqlalchemy
-bcrypt
+passlib[bcrypt]
 python-dotenv
 psycopg2-binary
 fastapi[standard]
 uvicorn
 alembic
+python-jose[cryptography]
