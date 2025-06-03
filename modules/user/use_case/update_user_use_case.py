@@ -1,3 +1,4 @@
+from passlib.hash import bcrypt
 from modules.user.dto import UpdateUserDTO
 from modules.user.repository import FindUserByIdRepository, UpdateUserRepository
 from fastapi import HTTPException
@@ -26,6 +27,8 @@ class UpdateUserUseCase:
             userExists = self.findUser.findById(id)
             if not userExists:
                 raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+            if data.password:
+                data.password = bcrypt.hash(data.password)
             user = self.userRepository.update(userExists, data)
             print(f"Usuário {user.name} atualizado com sucesso.")
             return user

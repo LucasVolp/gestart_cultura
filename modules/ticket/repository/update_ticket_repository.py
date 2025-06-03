@@ -17,7 +17,7 @@ class UpdateTicketRepository:
         Returns:
             Ticket: Updated Ticket instance.
         """
-        data = asdict(data)
+        data = data.model_dump(exclude_unset=True)
         for key, value in data.items():
             if value is not None:
                 setattr(ticket, key, value)

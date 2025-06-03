@@ -13,6 +13,8 @@ class DeletePurchaseItemRepository:
             bool: True if the purchase item was deleted successfully, False otherwise.
         """
         try:
+            if purchaseItem not in self.session:
+                self.session.merge(purchaseItem)
             self.session.delete(purchaseItem)
             self.session.commit()
             return True

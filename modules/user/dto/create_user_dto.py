@@ -1,6 +1,7 @@
 from pydantic import BaseModel, field_validator
 from typing import Optional
 from models.models import Role
+from datetime import date as Date
 import re
 
 class CreateUserDTO(BaseModel):
@@ -19,7 +20,7 @@ class CreateUserDTO(BaseModel):
     """
     name: str
     cpf: str
-    birth: str
+    birth: Date
     email: str
     password: str
     phone: str

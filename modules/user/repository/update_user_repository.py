@@ -16,7 +16,10 @@ class UpdateUserRepository:
 
         Returns:
             User: Updated User model instance.
-        """                
+        """
+        if user not in self.session:
+            user = self.session.merge(user)
+        data = data.model_dump(exclude_unset=True)                
         for key, value in data.items():
             setattr(user, key, value)
         self.session.commit()

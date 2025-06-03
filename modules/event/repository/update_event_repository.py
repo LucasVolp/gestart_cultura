@@ -18,7 +18,6 @@ class UpdateEventRepository:
             _type_: Updated Event model instance.
         """
         try:
-            # Merge the event instance into this session if it's not already attached
             if event not in self.session:
                 event = self.session.merge(event)
             

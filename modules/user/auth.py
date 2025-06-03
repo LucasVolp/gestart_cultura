@@ -19,5 +19,5 @@ class AuthenthicateUser:
         user = self.repository.findByEmail(email)
         if not user or not bcrypt.verify(password, user.password):
             raise HTTPException(status_code=401, detail="Invalid credentials")
-        token = createAccessToken({"sub": str(user.id), "email": user.email, "role": user.role})
+        token = createAccessToken({"sub": str(user.id), "email": user.email, "role": user.role.value})
         return {"access_token": token, "token_type": "bearer"}

@@ -17,7 +17,9 @@ class UpdateRatingRepository:
         Returns:
             Rating: Updated Rating instance.
         """
-        data = asdict(data)
+        data = data.model_dump(exclude_unset=True)
+        if rating not in self.session:
+            rating = self.session.merge(rating)
         for key, value in data.items():
             if value is not None:
                 setattr(rating, key, value)

@@ -21,8 +21,9 @@ class DeleteReceiptUseCase:
             receipt = self.findReceiptByIdRepo.findById(id)
             if not receipt:
                 raise HTTPException(status_code=404, detail=f"Receipt with ID {id} not found")
-            
-            self.repository.delete(receipt)
+            deleted = self.repository.delete(id)
+            if not deleted:
+                raise HTTPException(status_code=500, detail="Error deleting receipt.")
             return True
         except HTTPException:
             raise

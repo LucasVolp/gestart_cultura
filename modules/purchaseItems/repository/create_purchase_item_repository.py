@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from db import SessionLocal
 from models.models import PurchaseItem
 from modules.purchaseItems import CreatePurchaseItemDTO
@@ -18,7 +17,7 @@ class CreatePurchaseItemRepository:
             Exception: If an integrity error occurs while creating the purchase item.
         """
         try:
-            data = asdict(data)
+            data = data.model_dump()
             purchase_item = PurchaseItem(**data)
             self.session.add(purchase_item)
             self.session.commit()

@@ -1,3 +1,4 @@
+from models.models import Status
 from modules.ticket.repository import DeleteTicketRepository, FindTicketByIdRepository
 from fastapi import HTTPException
 
@@ -22,10 +23,16 @@ class DeleteTicketUseCase:
             ticketExists = self.findTicketByIdRepo.findById(id)
             if not ticketExists:
                 raise HTTPException(status_code=404, detail="Ingresso não encontrado.")
-            ticket = self.repository.delete(ticketExists)
-            if ticket:
-                print(f"Ingresso deletado com sucesso.")
-            return ticket
+            if not ticketExists.ownerId:
+                self.repository.delete(id)
+                raise HTTPException(status_code=200, detail="Ingresso deletado com sucesso.")
+            if ticketExists.status == Status.CANCELLED:
+                raise HTTPException(status_code=400, detail="Ingresso já cancelado.")
+            deleted = self.repository.delete(id)
+            if not deleted:
+                raise HTTPException(status_code=500, detail="Erro ao deletar ingresso.")
+            print(f"Ingresso {ticketExists.id} deletado com sucesso.")
+            raise HTTPException(status_code=200, detail="Ingresso deletado com sucesso.")
         except HTTPException as e:
             print(f"Erro ao deletar ingresso: {e.detail}")
             raise e

@@ -1,0 +1,16 @@
+meta {
+  name: Auth
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/user/auth
+  body: formUrlEncoded
+  auth: inherit
+}
+
+body:form-urlencoded {
+  username: teste2@email.com
+  password: senhaSegura123
+}

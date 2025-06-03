@@ -15,7 +15,7 @@ class DeletePurchaseUseCase:
             id (str): The ID of the purchase to delete.
 
         Returns:
-            Purchase: The deleted Purchase object.
+            bool: True if deleted successfully.
 
         Raises:
             HTTPException: If the purchase is not found or an error occurs during deletion.
@@ -24,11 +24,11 @@ class DeletePurchaseUseCase:
             purchaseExists = self.findPurchaseByIdRepo.findById(id)
             if not purchaseExists:
                 raise HTTPException(status_code=404, detail=f"Compra com ID {id} não encontrada.")
-
-            purchase = self.repository.delete(purchaseExists)
-            print(f"Compra {purchase.id} deletada com sucesso.")
-            return purchase
-            
+            deleted = self.repository.delete(id)
+            if not deleted:
+                raise HTTPException(status_code=500, detail="Erro ao deletar compra.")
+            print(f"Compra deletada com sucesso.")
+            return True
         except HTTPException as e:
             print(f"Erro ao deletar compra: {e.detail}")
             raise e

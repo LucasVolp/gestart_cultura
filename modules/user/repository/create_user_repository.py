@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from models.models import User
 from modules.user import CreateUserDTO
 from db import SessionLocal
@@ -16,7 +15,7 @@ class CreateUserRepository:
         Returns:
             User: Created User model instance.
         """
-        data = asdict(data)
+        data = data.model_dump()
         user = User(**data)
         self.session.add(user)
         self.session.commit()

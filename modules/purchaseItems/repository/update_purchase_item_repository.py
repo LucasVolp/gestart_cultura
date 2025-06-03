@@ -15,7 +15,7 @@ class UpdatePurchaseItemRepository:
         Returns:
             PurchaseItem: Updated PurchaseItem instance.
         """
-        data = asdict(data)
+        data = data.model_dump(exclude_unset=True)
         for key, value in data.items():
             if value is not None:
                 setattr(purchaseItems, key, value)

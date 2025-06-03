@@ -6,7 +6,7 @@ class DeleteTierRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def delete(self, tier) -> bool:
+    def delete(self, id) -> bool:
         """
         Deletes a tier from the database by ID.
 
@@ -16,7 +16,10 @@ class DeleteTierRepository:
         Returns:
             bool: True if the tier was deleted successfully, False otherwise.
         """
-        try:            
+        try:
+            tier = self.session.query(Tier).filter(Tier.id == id).first()
+            if not tier:
+                return False
             self.session.delete(tier)
             self.session.commit()
             return True

@@ -24,10 +24,17 @@ class DeleteEventUseCase:
             if not eventExists:
                 raise HTTPException(status_code=404, detail=f"Evento com ID {id} não encontrado.")
             print(f"Evento encontrado: {eventExists.name}. Deletando...")
-            event = self.repository.delete(eventExists)
+            if not eventExists.producers:
+                event = self.repository.delete(id)
+                print(f"Evento {eventExists.name} deletado com sucesso.")
+                raise HTTPException(status_code=200, detail=f"Evento {eventExists.name} deletado com sucesso.")
+            event = self.repository.softDelete(id)
             if event:
-                print(f"Evento {event.name} deletado com sucesso.")
-            return event
+                print(f"Evento {eventExists.name} deletado com sucesso.")
+                raise HTTPException(status_code=200, detail=f"Evento {eventExists.name} deletado com sucesso.")
+        except HTTPException as e:
+            print(f"Erro ao deletar evento: {e.detail}")
+            raise e
         except Exception as e:
             print(f"Erro ao deletar evento: {e}")
             raise HTTPException(status_code=500, detail=f"Erro ao deletar evento")

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from modules.event import EventService, CreateEventDTO, UpdateEventDTO
+from modules.user.utils.dependencies import getCurrentUser
 
 router = APIRouter(prefix="/event", tags=["Event"])
 

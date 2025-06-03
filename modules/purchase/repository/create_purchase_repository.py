@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from db import SessionLocal
 from models.models import Purchase
 from modules.purchase import CreatePurchaseDTO
@@ -18,7 +17,7 @@ class CreatePurchaseRepository:
         Raises:
             ValueError: If an integrity error occurs while creating the purchase.
         """
-        data = asdict(data)
+        data = data.model_dump()
         purchase = Purchase(**data)
         self.session.add(purchase)
         self.session.commit()

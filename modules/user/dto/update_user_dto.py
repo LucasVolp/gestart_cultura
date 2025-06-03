@@ -1,6 +1,7 @@
 from pydantic import BaseModel, field_validator
 from typing import Optional
 from models.models import Role
+from datetime import date as Date
 import re
 
 class UpdateUserDTO(BaseModel):
@@ -20,7 +21,7 @@ class UpdateUserDTO(BaseModel):
     """
     name: Optional[str] = None
     cpf: Optional[str] = None
-    birth: Optional[str] = None
+    birth: Optional[Date] = None
     email: Optional[str] = None
     password: Optional[str] = None
     phone: Optional[str] = None

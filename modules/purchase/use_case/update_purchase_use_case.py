@@ -40,7 +40,7 @@ class UpdatePurchaseUseCase:
             if data.isEmpty():
                 raise HTTPException(status_code=400, detail="Nenhum dado fornecido para atualização.")
             
-            # Atualizar a compra
+
             purchase = self.repository.update(purchaseExists, data)
             print(f"Compra {purchase.id} atualizada com sucesso.")
             return purchase

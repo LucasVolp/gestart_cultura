@@ -20,7 +20,7 @@ class CreateRatingRepository:
             ValueError: If an integrity error occurs while creating the rating.
         """
         try:
-            data = asdict(data)
+            data = data.model_dump()
             rating = Rating(**data)
             self.session.add(rating)
             self.session.commit()

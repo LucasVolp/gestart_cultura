@@ -6,16 +6,19 @@ class DeleteRatingRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def delete(self, rating):
+    def delete(self, id):
         """
-        Deletes a rating from the database.
+        Deletes a rating from the database by ID.
 
         Args:
-            rating (Rating): Rating model instance to be deleted.
+            id (int): ID of the rating to be deleted.
         Returns:
             bool: True if the rating was deleted successfully, False otherwise.
         """
         try:
+            rating = self.session.query(Rating).filter(Rating.id == id).first()
+            if not rating:
+                return False
             self.session.delete(rating)
             self.session.commit()
             return True

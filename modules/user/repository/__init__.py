@@ -5,3 +5,4 @@ from .find_user_by_id_repository import FindUserByIdRepository
 from .update_user_repository import UpdateUserRepository
 from .find_user_by_cpf_repository import FindUserByCpfRepository
 from .find_user_by_email_repository import FindUserByEmailRepository
+from .find_user_by_phone_repository import FindUserByPhoneRepository

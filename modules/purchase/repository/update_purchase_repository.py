@@ -16,7 +16,9 @@ class UpdatePurchaseRepository:
         Returns:
             Purchase: Updated Purchase instance.
         """
-        data = asdict(data)
+        data = data.model_dump(exclude_unset=True)
+        if purchase not in self.session:
+            purchase = self.session.merge(purchase)
         for key, value in data.items():
             if value is not None:
                 setattr(purchase, key, value)

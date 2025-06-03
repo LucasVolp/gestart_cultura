@@ -18,7 +18,7 @@ class DeleteRatingUseCase:
             HTTPException: 500 if an error occurs during the deletion process.
 
         Returns:
-            Rating: Deleted Rating model instance if successful.
+            bool: True if deleted successfully.
         """
         try:
             ratingExists = self.findRatingById.findById(id)
@@ -27,9 +27,10 @@ class DeleteRatingUseCase:
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail="Rating not found"
                 )
-                
-            rating = self.repository.delete(ratingExists)
-            return rating
+            deleted = self.repository.delete(id)
+            if not deleted:
+                raise HTTPException(status_code=500, detail="Error deleting rating.")
+            return True
         except HTTPException:
             raise
         except Exception as e:
@@ -40,3 +41,5 @@ class DeleteRatingUseCase:
         finally:
             if hasattr(self.repository, 'session') and self.repository.session:
                 self.repository.session.close()
+            if hasattr(self.findRatingById, 'session') and self.findRatingById.session:
+                self.findRatingById.session.close()

@@ -1,12 +1,13 @@
 from db import SessionLocal
 from models.models import Tier
+from modules.tier.dto import CreateTierDTO
 from sqlalchemy.exc import IntegrityError
 
 class CreateTierRepository:
     def __init__(self, session=None):
         self.session = session or SessionLocal()
 
-    def create(self, data):
+    def create(self, data: CreateTierDTO) -> Tier:
         """
         Creates a new tier in the database.
 
@@ -20,8 +21,8 @@ class CreateTierRepository:
             Tier: Created Tier model instance.
         """
         try:
-            data_dict = data.model_dump()
-            tier = Tier(**data_dict)
+            data = data.model_dump()
+            tier = Tier(**data)
             self.session.add(tier)
             self.session.commit()
             self.session.refresh(tier)

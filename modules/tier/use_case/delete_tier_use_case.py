@@ -22,10 +22,11 @@ class DeleteTierUseCase:
             tierExists = self.findTierById.findById(id)
             if not tierExists:
                 raise HTTPException(status_code=404, detail="Tier não encontrado.")
-            tier = self.repository.delete(tierExists)
-            if tier:
-                print(f"Tier deletado com sucesso.")
-            return tier
+            deleted = self.repository.delete(id)
+            if not deleted:
+                raise HTTPException(status_code=500, detail="Erro ao deletar tier.")
+            print(f"Tier deletado com sucesso.")
+            return True
         except HTTPException as e:
             print(f"Erro ao deletar tier: {e.detail}")
             raise e

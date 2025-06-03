@@ -29,7 +29,8 @@ class CreatePurchaseUseCase:
             seller = self.findUserById.findById(data.sellerId)
             if not seller:
                 raise HTTPException(status_code=404, detail=f"Vendedor com ID {data.sellerId} não encontrado.")
-            
+            if seller.role != "SELLER":
+                raise HTTPException(status_code=400, detail="O Vendedor selecionado não é um vendedor válido.")
             purchase = self.repository.create(data)
             print(f"Compra '{purchase.id}' realizada com sucesso entre {buyer.name} e {seller.name}.")
             return purchase

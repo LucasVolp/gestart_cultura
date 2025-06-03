@@ -1,0 +1,23 @@
+meta {
+  name: Update
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{base_url}}/user
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Lucas PRODUCER",
+    "email": "teste2@email.com",
+    "password": "senhaSegura123",
+    "cpf": "12345672904",
+    "birth": "2005-05-10",
+    "phone": "11987654321",
+    "role": "PRODUCER"
+  }
+}

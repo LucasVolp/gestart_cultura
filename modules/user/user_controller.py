@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from modules.user import UserService, CreateUserDTO, UpdateUserDTO
 from fastapi.security import OAuth2PasswordRequestForm
+from modules.user.utils.dependencies import requiredRole
+
 router = APIRouter(prefix="/user", tags=["User"])
 
 def getUserService():
@@ -20,7 +22,7 @@ def auth(formData: OAuth2PasswordRequestForm = Depends(), service: UserService =
     Raises:
         HTTPException: If authentication fails due to invalid credentials.
     """
-    return service.authenticate(formData.email, formData.password)
+    return service.authenticate(formData.username, formData.password)
 
 @router.get("/")
 def findAll(service: UserService = Depends(getUserService)):
