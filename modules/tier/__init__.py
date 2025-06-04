@@ -1,4 +1,4 @@
-from .dto import CreateTierDTO, UpdateTierDTO
+from .dto import CreateTierDTO, UpdateTierDTO, TierResponse
 from .repository import (
     CreateTierRepository,
     FindAllTiersRepository,

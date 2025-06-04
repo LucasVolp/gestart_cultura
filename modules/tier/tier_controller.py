@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
-from modules.tier import TierService, CreateTierDTO, UpdateTierDTO
+from modules.tier import TierService, CreateTierDTO, UpdateTierDTO, TierResponse
 
 router = APIRouter(prefix="/tier", tags=["Tier"])
 
 def getTierService():
     return TierService()
 
-@router.get("/")
+@router.get("/", response_model=list[TierResponse])
 def findAll(service: TierService = Depends(getTierService)):
     """
     Retrieves all tiers.

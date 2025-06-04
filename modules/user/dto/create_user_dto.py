@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 from typing import Optional
 from models.models import Role
 from datetime import date as Date
@@ -28,6 +28,16 @@ class CreateUserDTO(BaseModel):
     cnpj: Optional[str] = None
     enterprise: Optional[str] = None
 
+    @model_validator(mode='after')
+    def checkProducerFields(self):
+        if self.role == Role.PRODUCER:
+            if not self.cnpj or not self.enterprise:
+                raise ValueError('cnpj and enterprise must be provided for producers')
+        else:
+            if self.cnpj or self.enterprise:
+                raise ValueError('cnpj and enterprise should not be provided for non-producer roles')
+        return self
+
     @field_validator('name')
     @classmethod
     def validateName(cls, value):
@@ -40,7 +50,6 @@ class CreateUserDTO(BaseModel):
     def validateCpf(cls, value):
         if not value or not value.strip():
             raise ValueError('cpf cannot be empty')
-        # Remove caracteres não numéricos
         cpf_clean = re.sub(r'\D', '', value.strip())
         if len(cpf_clean) != 11:
             raise ValueError('cpf must have exactly 11 digits')
@@ -70,7 +79,6 @@ class CreateUserDTO(BaseModel):
     def validatePhone(cls, value):
         if not value or not value.strip():
             raise ValueError('phone cannot be empty')
-        # Remove caracteres não numéricos
         phone_clean = re.sub(r'\D', '', value.strip())
         if len(phone_clean) < 10 or len(phone_clean) > 11:
             raise ValueError('phone must have 10 or 11 digits')
@@ -82,7 +90,6 @@ class CreateUserDTO(BaseModel):
         if value is not None:
             if not value.strip():
                 raise ValueError('cnpj cannot be empty if provided')
-            # Remove caracteres não numéricos
             cnpj_clean = re.sub(r'\D', '', value.strip())
             if len(cnpj_clean) != 14:
                 raise ValueError('cnpj must have exactly 14 digits if provided')

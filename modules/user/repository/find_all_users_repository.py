@@ -1,5 +1,6 @@
 from models.models import User
 from db import SessionLocal
+from sqlalchemy.orm import joinedload
 
 class FindAllUsersRepository:
     def __init__(self, session=None):
@@ -12,5 +13,15 @@ class FindAllUsersRepository:
         Returns:
             list[User]: List of User model instances.
         """
-        users = self.session.query(User).all()
-        return users
+        return (
+            self.session.query(User)
+            .options(
+                joinedload(User.events),
+                joinedload(User.sales),
+                joinedload(User.tickets),
+                joinedload(User.ratings),
+                joinedload(User.purchases),
+                joinedload(User.receipts),
+            )
+            .all()
+        )

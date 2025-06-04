@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from modules.user import UserService, CreateUserDTO, UpdateUserDTO
+from modules.user import UserService, CreateUserDTO, UpdateUserDTO, UserResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from modules.user.utils.dependencies import requiredRole
 
@@ -24,7 +24,7 @@ def auth(formData: OAuth2PasswordRequestForm = Depends(), service: UserService =
     """
     return service.authenticate(formData.username, formData.password)
 
-@router.get("/")
+@router.get("/", response_model=list[UserResponse])
 def findAll(service: UserService = Depends(getUserService)):
     """
     Retrieves all users.

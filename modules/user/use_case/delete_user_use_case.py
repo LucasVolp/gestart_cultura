@@ -1,3 +1,4 @@
+from models.models import Status
 from modules.user.repository import DeleteUserRepository, FindUserByIdRepository
 from fastapi import HTTPException
 
@@ -21,16 +22,26 @@ class DeleteUserUseCase:
         """
         try:
             userExists = self.findUser.findById(id)
+            
             if not userExists:
                 raise HTTPException(status_code=404, detail="Usuário não encontrado.")
-            if not userExists.events and not userExists.tickets and not userExists.sales:
+            
+            if not (userExists.events or userExists.tickets or userExists.sales):
                 self.userRepository.delete(id)
                 raise HTTPException(status_code=200, detail="Usuário deletado com sucesso.")
+            
+            if userExists.status == Status.DELETED:
+                raise HTTPException(status_code=400, detail="Usuário já deletado.")
+            
+            print(f"Usuário {userExists.name} encontrado, iniciando processo de deleção.")
             user = self.userRepository.softDelete(id)
+            
             if not user:
                 raise HTTPException(status_code=400, detail="Erro ao deletar usuário.")
+            
             print(f"Usuário deletado com sucesso.")
             raise HTTPException(status_code=200, detail="Usuário deletado com sucesso.")
+        
         except HTTPException as e:
             print(f"Erro ao deletar usuário: {e.detail}")
             raise e

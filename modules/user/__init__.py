@@ -1,4 +1,4 @@
-from .dto import CreateUserDTO, UpdateUserDTO
+from .dto import CreateUserDTO, UpdateUserDTO, UserResponse, ProducerResponse
 from .repository import (
     CreateUserRepository,
     DeleteUserRepository,

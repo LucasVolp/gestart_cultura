@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from modules.event import EventService, CreateEventDTO, UpdateEventDTO
+from modules.event.dto.event_response import EventResponse
 from modules.user.utils.dependencies import getCurrentUser
 
 router = APIRouter(prefix="/event", tags=["Event"])
@@ -7,7 +8,7 @@ router = APIRouter(prefix="/event", tags=["Event"])
 def getEventService():
     return EventService()
 
-@router.get("/")
+@router.get("/", response_model=list[EventResponse])
 def findAll(service: EventService = Depends(getEventService)):
     """
     Retrieves all events.
