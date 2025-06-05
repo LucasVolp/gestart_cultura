@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
-from modules.rating import RatingService, CreateRatingDTO, UpdateRatingDTO
+from modules.rating import RatingService, CreateRatingDTO, UpdateRatingDTO, RatingResponse
 
 router = APIRouter(prefix="/rating", tags=["Rating"])
 
 def getRatingService():
     return RatingService()
 
-@router.get("/")
+@router.get("/", response_model=list[RatingResponse])
 def findAll(service: RatingService = Depends(getRatingService)):
     """
     Retrieves all ratings.
@@ -17,7 +17,7 @@ def findAll(service: RatingService = Depends(getRatingService)):
     return service.findAll()
 
     
-@router.get("/{id}")
+@router.get("/{id}", response_model=RatingResponse)
 def findOne(id: str, service: RatingService = Depends(getRatingService)):
     """
     Retrieves a rating by its ID.
@@ -33,7 +33,7 @@ def findOne(id: str, service: RatingService = Depends(getRatingService)):
     """
     return service.findOne(id)
 
-@router.post("/")
+@router.post("/", response_model=RatingResponse)
 def create(data: CreateRatingDTO, service: RatingService = Depends(getRatingService)):
     """
     Creates a new rating.
@@ -49,7 +49,7 @@ def create(data: CreateRatingDTO, service: RatingService = Depends(getRatingServ
     """
     return service.create(data)
     
-@router.patch("/{id}")
+@router.patch("/{id}", response_model=RatingResponse)
 def update(id: str, data: UpdateRatingDTO, service: RatingService = Depends(getRatingService)):
     """
     Updates an existing rating.

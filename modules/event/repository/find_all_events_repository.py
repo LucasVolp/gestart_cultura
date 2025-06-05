@@ -13,11 +13,17 @@ class FindAllEventsRepository:
         Returns:
             Return: List of Event model instances.
         """
-        return (
-            self.session.query(Event)
-            .options(
-                joinedload(Event.tiers),
-                joinedload(Event.ratings),
-                joinedload(Event.producers),
-        ).all()
-        )
+        try:
+            return (
+                self.session.query(Event)
+                .options(
+                    joinedload(Event.tiers),
+                    joinedload(Event.ratings),
+                    joinedload(Event.producers),
+            ).all()
+            )
+        except Exception as e:
+            self.session.rollback()
+            raise e
+        finally:
+            self.session.close()

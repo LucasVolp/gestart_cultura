@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from modules.rating import UpdateRatingRepository, UpdateRatingDTO, FindRatingByIdRepository
 
 class UpdateRatingUseCase:
@@ -25,18 +25,18 @@ class UpdateRatingUseCase:
             ratingExists = self.findRatingById.findById(id)
             if not ratingExists:
                 raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Rating not found"
+                    status_code=404,
+                    detail="Avaliação não encontrada."
                 )
-                
+    
             rating = self.repository.update(ratingExists, data)
             return rating
         except HTTPException:
             raise
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Error updating rating: {str(e)}"
+                status_code=400,
+                detail="Erro ao atualizar avaliação"
             )
         finally:
             if hasattr(self.repository, 'session') and self.repository.session:

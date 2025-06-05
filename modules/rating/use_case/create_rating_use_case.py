@@ -1,3 +1,4 @@
+from models.models import Status
 from modules.rating.repository import CreateRatingRepository
 from modules.rating.dto import CreateRatingDTO
 from modules.user.repository import FindUserByIdRepository
@@ -24,13 +25,16 @@ class CreateRatingUseCase:
         """
         try:
             user = self.findUserById.findById(data.userId)
+            event = self.findEventById.findById(data.eventId)
             if not user:
                 raise HTTPException(status_code=404, detail=f"Usuário com ID {data.userId} não encontrado.")
-
-            event = self.findEventById.findById(data.eventId)
+            
             if not event:
                 raise HTTPException(status_code=404, detail=f"Evento com ID {data.eventId} não encontrado.")
 
+            if event.status != Status.CLOSED:
+                raise HTTPException(status_code=400, detail="Avaliações só podem ser feitas após o evento ser fechado.")
+            
             rating = self.repository.create(data)
             print(f"Avaliação '{rating.id}' criada com sucesso por {user.name} para o evento {event.name}.")
             return rating
@@ -40,7 +44,7 @@ class CreateRatingUseCase:
             raise e
         except Exception as e:
             print(f"Erro ao criar avaliação: {e}")
-            raise HTTPException(status_code=500, detail="Erro interno do servidor ao criar avaliação.")
+            raise HTTPException(status_code=400, detail="Erro ao criar avaliação.")
         finally:
             self.repository.session.close()
             if hasattr(self.findUserById, 'session'):

@@ -1,0 +1,22 @@
+meta {
+  name: Create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/tier
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "amount": 1000,
+    "name": "LOTE 2",
+    "price": 100,
+    "startDate": "2025-10-20",
+    "endDate": "2025-11-20",
+    "eventId": "c90022d0-ac2f-4001-ad6d-46ec88bdd7f6"
+  }
+}

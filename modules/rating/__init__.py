@@ -1,5 +1,5 @@
 
-from .dto import CreateRatingDTO, UpdateRatingDTO
+from .dto import CreateRatingDTO, UpdateRatingDTO, RatingResponse
 from .repository import (
     CreateRatingRepository,
     FindAllRatingsRepository,

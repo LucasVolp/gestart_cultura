@@ -1,5 +1,6 @@
-from models.models import User
+from models.models import Event, User
 from db import SessionLocal
+from sqlalchemy.orm import joinedload
 
 class FindUserByIdRepository:
     def __init__(self, session=None):
@@ -14,5 +15,15 @@ class FindUserByIdRepository:
         Returns:
             User | None: User model instance if found, None otherwise.
         """
-        user = self.session.query(User).filter(User.id == id).first()
-        return user
+        return self.session.query(User).filter(User.id == id).options(
+                joinedload(User.events).options(
+                    joinedload(Event.tiers),
+                    joinedload(Event.ratings),
+                    joinedload(Event.producers),
+                ),
+                joinedload(User.sales),
+                joinedload(User.tickets),
+                joinedload(User.ratings),
+                joinedload(User.purchases),
+                joinedload(User.receipts),
+        ).first()

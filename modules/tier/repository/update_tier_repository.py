@@ -17,8 +17,10 @@ class UpdateTierRepository:
         Returns:
             Tier: Updated Tier instance.
         """
-        data_dict = data.model_dump(exclude_unset=True)
-        for key, value in data_dict.items():
+        if not tier in self.session:
+            tier = self.session.merge(tier)
+        data = data.model_dump(exclude_unset=True)
+        for key, value in data.items():
             if value is not None:
                 setattr(tier, key, value)
         self.session.commit()

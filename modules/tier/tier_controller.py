@@ -16,7 +16,7 @@ def findAll(service: TierService = Depends(getTierService)):
     """
     return service.findAll()
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=TierResponse)
 def findOne(id: str, service: TierService = Depends(getTierService)):
     """
     Retrieves a tier by its ID.
@@ -29,7 +29,7 @@ def findOne(id: str, service: TierService = Depends(getTierService)):
     """
     return service.findOne(id)
 
-@router.post("/")
+@router.post("/", response_model=TierResponse)
 def create(data: CreateTierDTO, service: TierService = Depends(getTierService)):
     """
     Creates a new tier.
@@ -45,7 +45,7 @@ def create(data: CreateTierDTO, service: TierService = Depends(getTierService)):
     """
     return service.create(data)
     
-@router.patch("/{id}")
+@router.patch("/{id}", response_model=TierResponse)
 def update(id: str, data: UpdateTierDTO, service: TierService = Depends(getTierService)):
     """
     Updates an existing tier.

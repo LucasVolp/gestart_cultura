@@ -1,12 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
-from modules.purchase import PurchaseService, CreatePurchaseDTO, UpdatePurchaseDTO
+from fastapi import APIRouter, Depends
+from modules.purchase import PurchaseService, CreatePurchaseDTO, UpdatePurchaseDTO, PurchaseResponse
 
 router = APIRouter(prefix="/purchase", tags=["Purchase"])
 
 def getPurchaseService():
     return PurchaseService()
 
-@router.get("/")
+@router.get("/", response_model=list[PurchaseResponse])
 def findAll(service: PurchaseService = Depends(getPurchaseService)):
     """
     Retrieves all purchases.
@@ -17,7 +17,7 @@ def findAll(service: PurchaseService = Depends(getPurchaseService)):
     return service.findAll()
 
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=PurchaseResponse)
 def findOne(id: str, service: PurchaseService = Depends(getPurchaseService)):
     """
     Retrieves a purchase by its ID.
@@ -33,7 +33,7 @@ def findOne(id: str, service: PurchaseService = Depends(getPurchaseService)):
     """
     return service.findOne(id)
 
-@router.post("/")
+@router.post("/", response_model=PurchaseResponse)
 def create(data: CreatePurchaseDTO, service: PurchaseService = Depends(getPurchaseService)):
     """
     Creates a new purchase.
@@ -49,7 +49,7 @@ def create(data: CreatePurchaseDTO, service: PurchaseService = Depends(getPurcha
     """
     return service.create(data)
     
-@router.patch("/{id}")
+@router.patch("/{id}", response_model=PurchaseResponse)
 def update(id: str, data: UpdatePurchaseDTO, service: PurchaseService = Depends(getPurchaseService)):
     """
     Updates an existing purchase.

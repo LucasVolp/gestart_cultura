@@ -4,6 +4,7 @@ from datetime import date as Date, datetime
 from models.models import TypeEvent, Status
 from modules.user.dto import ProducerResponse
 from modules.tier.dto import TierResponse
+from modules.rating.dto import RatingResponse
 
 class EventResponse(BaseModel):
     """Data Transfer Object for user response.
@@ -24,6 +25,9 @@ class EventResponse(BaseModel):
     status: Status
     producers: list[ProducerResponse] = []
     tiers: list[TierResponse] = []
+    ratings: list[RatingResponse] = []
+    createdAt: datetime
+    updatedAt: datetime
 
     class Config:
         from_attributes = True

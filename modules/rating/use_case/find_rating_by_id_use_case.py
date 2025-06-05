@@ -32,6 +32,6 @@ class FindRatingByIdUseCase:
             raise e
         except Exception as e:
             print(f"Erro ao buscar avaliação: {e}")
-            raise HTTPException(status_code=500, detail="Erro interno do servidor ao buscar avaliação.")
+            raise HTTPException(status_code=400, detail="Erro ao buscar avaliação.")
         finally:
             self.repository.session.close()

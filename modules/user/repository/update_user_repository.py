@@ -1,5 +1,5 @@
 from models.models import User
-from modules.user import UpdateUserDTO
+from modules.user.dto.update_user_dto import UpdateUserDTO
 from db import SessionLocal
 
 class UpdateUserRepository:
@@ -21,7 +21,8 @@ class UpdateUserRepository:
             user = self.session.merge(user)
         data = data.model_dump(exclude_unset=True)                
         for key, value in data.items():
-            setattr(user, key, value)
+            if value is not None:
+                setattr(user, key, value)
         self.session.commit()
         self.session.refresh(user)
         return user

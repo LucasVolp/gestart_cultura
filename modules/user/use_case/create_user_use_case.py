@@ -1,5 +1,5 @@
 from models.models import User
-from modules.user.dto import CreateUserDTO
+from modules.user.dto.create_user_dto import CreateUserDTO
 from modules.user.repository import CreateUserRepository, FindUserByEmailRepository, FindUserByCpfRepository, FindUserByPhoneRepository
 from fastapi import HTTPException
 from passlib.hash import bcrypt

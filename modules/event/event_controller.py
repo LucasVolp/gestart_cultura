@@ -19,7 +19,7 @@ def findAll(service: EventService = Depends(getEventService)):
     return service.findAll()
 
     
-@router.get("/{id}")
+@router.get("/{id}", response_model=EventResponse) 
 def findOne(id: str, service: EventService = Depends(getEventService)):
     """
     Retrieves an event by its ID.

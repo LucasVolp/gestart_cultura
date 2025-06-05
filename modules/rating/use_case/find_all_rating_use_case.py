@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from modules.rating import FindAllRatingsRepository
 
 class FindAllRatingUseCase:
@@ -20,8 +20,8 @@ class FindAllRatingUseCase:
             return ratings if ratings else []
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Error retrieving ratings: {str(e)}"
+                status_code=400,
+                detail="Erro ao buscar avaliações"
             )
         finally:
             if hasattr(self.repository, 'session') and self.repository.session:

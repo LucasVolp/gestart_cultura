@@ -1,4 +1,4 @@
-from .dto import CreatePurchaseDTO, UpdatePurchaseDTO
+from .dto import CreatePurchaseDTO, UpdatePurchaseDTO, PurchaseResponse
 from .repository import (
     CreatePurchaseRepository,
     FindAllPurchasesRepository,

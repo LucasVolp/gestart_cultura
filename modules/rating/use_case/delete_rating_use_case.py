@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from modules.rating import DeleteRatingRepository, FindRatingByIdRepository
 
 class DeleteRatingUseCase:
@@ -24,19 +24,20 @@ class DeleteRatingUseCase:
             ratingExists = self.findRatingById.findById(id)
             if not ratingExists:
                 raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Rating not found"
+                    status_code=404,
+                    detail="Avaliação não encontrada."
                 )
             deleted = self.repository.delete(id)
             if not deleted:
-                raise HTTPException(status_code=500, detail="Error deleting rating.")
+                raise HTTPException(status_code=400, detail="Erro ao deletar avaliação.")
+            print(f"Avaliação com ID {id} deletada com sucesso.")
             return True
         except HTTPException:
             raise
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Error deleting rating: {str(e)}"
+                status_code=400,
+                detail="Erro ao deletar avaliação: "
             )
         finally:
             if hasattr(self.repository, 'session') and self.repository.session:

@@ -1,5 +1,5 @@
 from passlib.hash import bcrypt
-from modules.user.dto import UpdateUserDTO
+from modules.user.dto.update_user_dto import UpdateUserDTO
 from modules.user.repository import FindUserByIdRepository, UpdateUserRepository
 from fastapi import HTTPException
 

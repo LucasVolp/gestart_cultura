@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends
-from modules.user import UserService, CreateUserDTO, UpdateUserDTO, UserResponse
+from modules.user import UserService, UserResponse
+from modules.user.dto.create_user_dto import CreateUserDTO
+from modules.user.dto.update_user_dto import UpdateUserDTO
 from fastapi.security import OAuth2PasswordRequestForm
 from modules.user.utils.dependencies import requiredRole
 
@@ -34,7 +36,7 @@ def findAll(service: UserService = Depends(getUserService)):
     """
     return service.findAll()
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=UserResponse)
 def findOne(id: str, service: UserService = Depends(getUserService)):
     """
     Retrieves a user by its ID.
@@ -50,7 +52,7 @@ def findOne(id: str, service: UserService = Depends(getUserService)):
     """
     return service.findOne(id)
 
-@router.post("/")
+@router.post("/", response_model=UserResponse)
 def create(data: CreateUserDTO, service: UserService = Depends(getUserService)):
     """
     Creates a new user.
@@ -66,7 +68,7 @@ def create(data: CreateUserDTO, service: UserService = Depends(getUserService)):
     """
     return service.create(data)
     
-@router.patch("/{id}")
+@router.patch("/{id}", response_model=UserResponse)
 def update(id: str, data: UpdateUserDTO, service: UserService = Depends(getUserService)):
     """
     Updates an existing user.

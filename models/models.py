@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, String, Integer, Float, Date, DateTime, ForeignKey, Enum, Text
+from sqlalchemy import Column, String, Integer, Float, Date, DateTime, ForeignKey, Enum, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import enum
@@ -91,6 +91,8 @@ class Event(Base):
     size = Column(Integer, nullable=False)
     typeEvent = Column(Enum(TypeEvent), nullable=False)
     status = Column(Enum(Status), default=Status.ACTIVE)
+    createdAt = Column(DateTime, nullable=False, default=datetime.now)
+    updatedAt = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
 
     tiers = relationship('Tier', back_populates='event')
     ratings = relationship('Rating', back_populates='event')
@@ -104,10 +106,13 @@ class EventProducer(Base):
 
 class Tier(Base):
     __tablename__ = 'tiers'
+    __table_args__ = (
+        UniqueConstraint('eventId', 'name', name='uq_event_tier_name'),
+    )
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     amount = Column(Integer, nullable=False)
-    name = Column(String, nullable=False, unique=True)
+    name = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     startDate = Column(Date, nullable=False)
     endDate = Column(Date, nullable=False)

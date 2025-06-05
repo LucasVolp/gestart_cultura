@@ -1,5 +1,6 @@
 from db import SessionLocal
 from models.models import Purchase
+from sqlalchemy.orm import joinedload
 
 class FindPurchaseByIdRepository:
     def __init__(self, session=None):
@@ -14,4 +15,8 @@ class FindPurchaseByIdRepository:
         Returns:
             Purchase | None: Purchase model instance or None if not found.
         """
-        return self.session.query(Purchase).filter(Purchase.id == id).first()
+        return self.session.query(Purchase).filter(Purchase.id == id).options(
+            joinedload(Purchase.buyer),
+            joinedload(Purchase.seller),
+            joinedload(Purchase.items)
+        ).first()

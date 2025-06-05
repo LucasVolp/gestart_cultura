@@ -1,5 +1,5 @@
 from models.models import User
-from modules.user import CreateUserDTO
+from modules.user.dto.create_user_dto import CreateUserDTO
 from db import SessionLocal
 
 class CreateUserRepository:

@@ -26,12 +26,12 @@ class CreateTierUseCase:
         try:
 
             event = self.findEventById.findById(data.eventId)
+            existingTiers = self.findTiersByEvent.findByEventId(data.eventId)
+            tierExists = self.findTierByName.findByName(data.name)
+            
             if not event:
                 raise HTTPException(status_code=404, detail=f"Evento com ID {data.eventId} não encontrado.")
  
-            existingTiers = self.findTiersByEvent.findByEventId(data.eventId)
-
-            tierExists = self.findTierByName.findByName(data.name)
             if tierExists and tierExists.eventId == data.eventId:
                 raise HTTPException(status_code=400, detail=f"Já existe um tier com o nome '{data.name}' para este evento.")
 
@@ -43,17 +43,34 @@ class CreateTierUseCase:
                     status_code=400, 
                     detail=f"Quantidade solicitada ({data.amount}) excede a capacidade disponível do evento ({availableSize} de {event.size} total)."
                 )
+            
+            if data.startDate >= event.date:
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"A data de início do tier ({data.startDate}) deve ser anterior à data do evento ({event.date})."
+                )
+            
+            if data.endDate >= event.date:
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"A data de fim do tier ({data.endDate}) deve ser anterior à data do evento ({event.date})."
+                )
+            
+            if data.startDate >= data.endDate:
+                raise HTTPException(
+                    status_code=400, 
+                    detail="A data de início do tier deve ser anterior à data de fim."
+                )
 
             tier = self.repository.create(data)
             print(f"Tier '{tier.name}' criado com sucesso. Capacidade restante: {availableSize - data.amount}")
             return tier
-            
         except HTTPException as e:
             print(f"Erro ao criar tier: {e.detail}")
             raise e
         except Exception as e:
             print(f"Erro ao criar tier: {e}")
-            raise HTTPException(status_code=500, detail="Erro interno do servidor ao criar tier.")
+            raise HTTPException(status_code=400, detail=f"Erro ao criar tier: {str(e)}")
         finally:
             self.repository.session.close()
             if hasattr(self.findTiersByEvent, 'session'):

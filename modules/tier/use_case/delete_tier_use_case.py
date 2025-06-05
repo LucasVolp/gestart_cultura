@@ -24,7 +24,7 @@ class DeleteTierUseCase:
                 raise HTTPException(status_code=404, detail="Tier não encontrado.")
             deleted = self.repository.delete(id)
             if not deleted:
-                raise HTTPException(status_code=500, detail="Erro ao deletar tier.")
+                raise HTTPException(status_code=400, detail="Erro ao deletar tier.")
             print(f"Tier deletado com sucesso.")
             return True
         except HTTPException as e:
@@ -32,6 +32,6 @@ class DeleteTierUseCase:
             raise e
         except Exception as e:
             print(f"Erro ao deletar tier: {e}")
-            raise HTTPException(status_code=500, detail="Erro ao deletar tier.")
+            raise HTTPException(status_code=400, detail="Erro ao deletar tier.")
         finally:
             self.repository.session.close()

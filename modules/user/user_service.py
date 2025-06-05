@@ -5,7 +5,8 @@ from modules.user.use_case import (
     FindUserByIdUseCase,
     UpdateUserUseCase,
 )
-from modules.user.dto import CreateUserDTO, UpdateUserDTO
+from modules.user.dto.create_user_dto import CreateUserDTO
+from modules.user.dto.update_user_dto import UpdateUserDTO
 from modules.user.auth import AuthenthicateUser
 
 class UserService:

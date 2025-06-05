@@ -23,6 +23,6 @@ class FindAllTierUseCase:
             return tiers
         except Exception as e:
             print(f"Erro ao buscar tiers: {e}")
-            raise HTTPException(status_code=500, detail="Erro ao buscar tiers.")
+            raise HTTPException(status_code=400, detail="Erro ao buscar tiers.")
         finally:
             self.repository.session.close()

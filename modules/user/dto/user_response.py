@@ -2,8 +2,9 @@ from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel
 from datetime import datetime, date as Date
-
 from models.models import Role, Status, TypeEvent
+from modules.purchase.dto.purchase_response import PurchaseItemResponse, PurchaseResponse
+from modules.tier.dto.tier_response import TierResponse
 
 class EventOut(BaseModel):
     """Data Transfer Object for user response.
@@ -22,9 +23,14 @@ class EventOut(BaseModel):
     date: Date
     typeEvent: TypeEvent
     status: Status
+    producers: list['ProducerResponse'] = []
+    tiers: list[TierResponse] = []
+    ratings: list[None] = []
+
 
     class Config:
         from_attributes = True
+
 
 class UserResponse(BaseModel):
     """Data Transfer Object for user response.
@@ -51,10 +57,10 @@ class UserResponse(BaseModel):
     createdAt: datetime
     updatedAt: datetime
     events: list[EventOut] = []
-    sales: list[None] = []
+    sales: list[PurchaseResponse] = []
     tickets: list[None] = []
     ratings: list[None] = []
-    purchases: list[None] = []
+    purchases: list[PurchaseResponse] = []
     receipts: list[None] = []
 
     class Config:
