@@ -1,0 +1,23 @@
+meta {
+  name: Create
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/event
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Tazraia",
+    "description": "Festa Junina",
+    "date": "2026-12-15",
+    "local": "ArenaMix",
+    "size": 5000,
+    "typeEvent": "MUSIC_FESTIVAL",
+    "producers": ["e1f2e65c-6ee7-4bff-8e9e-efa1d87e8a96"]
+  }
+}

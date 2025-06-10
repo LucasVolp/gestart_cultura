@@ -1,0 +1,17 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/event/5bda531d-bb55-47ac-a2ce-1aad1eadc38f
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "producers": ["e1f2e65c-6ee7-4bff-8e9e-efa1d87e8a96", "b766ce3a-ebfa-40bb-989c-ff5e41627f73"]
+  }
+}

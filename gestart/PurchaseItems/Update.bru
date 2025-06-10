@@ -1,0 +1,17 @@
+meta {
+  name: Update
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{base_url}}/purchase-items/af905080-d459-4900-a49a-10ca9cf4205d
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "tierId": "e9d08dba-9307-4593-816d-3c2e464485f8"
+  }
+}

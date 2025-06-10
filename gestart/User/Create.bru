@@ -1,0 +1,25 @@
+meta {
+  name: Create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/user
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Lucas O PRODUTOR",
+    "email": "produtorLucas@email.com",
+    "password": "senhaSegura123",
+    "cpf": "08269244162",
+    "birth": "2005-10-22",
+    "phone": "67992441204",
+    "role": "PRODUCER",
+    "cnpj": "00.623.904/0001-73",
+    "enterprise": "PRODUTORA LUCAS"
+  }
+}

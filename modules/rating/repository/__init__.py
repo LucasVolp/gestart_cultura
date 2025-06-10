@@ -1,0 +1,5 @@
+from .create_rating_repository import CreateRatingRepository
+from .find_all_ratings_repository import FindAllRatingsRepository
+from .find_rating_by_id_repository import FindRatingByIdRepository
+from .update_rating_repository import UpdateRatingRepository
+from .delete_rating_repository import DeleteRatingRepository

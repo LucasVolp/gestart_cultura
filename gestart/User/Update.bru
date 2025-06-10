@@ -1,0 +1,17 @@
+meta {
+  name: Update
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{base_url}}/user/71a97717-5f6d-491f-9a87-c7b4757d4d56
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Lucas Usuário"
+  }
+}

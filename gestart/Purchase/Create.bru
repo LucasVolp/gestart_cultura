@@ -1,0 +1,26 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/purchase
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "buyerId": "71a97717-5f6d-491f-9a87-c7b4757d4d56",
+    "sellerId": "10e2df08-1095-4153-8d28-f59a4c2b4ccf",
+    "paymentMethod": "CREDIT",
+    "totalPrice": 0.0,
+    "items": [
+      {
+        "tierId": "aae19e27-15ba-46e7-a9eb-b1ed7c7ce297",
+        "quantity": 2
+      }
+    ]
+  }
+}

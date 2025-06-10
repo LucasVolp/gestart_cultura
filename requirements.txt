@@ -1,0 +1,9 @@
+sqlalchemy
+passlib[bcrypt]
+bcrypt<4.0.0
+python-dotenv
+psycopg2-binary
+fastapi[standard]
+uvicorn
+alembic
+python-jose[cryptography]
