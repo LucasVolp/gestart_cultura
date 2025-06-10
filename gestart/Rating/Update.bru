@@ -1,0 +1,17 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/rating/2ee06455-66d6-4b9f-8167-d849f1c929ed
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "rate": "5"
+  }
+}

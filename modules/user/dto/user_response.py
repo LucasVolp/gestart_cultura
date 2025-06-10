@@ -13,7 +13,7 @@ class EventOut(BaseModel):
     """Data Transfer Object for user response.
 
     Attributes:
-        id (str): The unique identifier of the user.
+        id (UUID): The unique identifier of the user.
         name (str): The name of the user.
         email (str): The email of the user.
         role (str): The role of the user.
@@ -28,7 +28,7 @@ class EventOut(BaseModel):
     status: Status
     producers: list['ProducerResponse'] = []
     tiers: list[TierResponse] = []
-    ratings: list[None] = []
+    ratings: list[RatingResponse] = []
 
 
     class Config:
@@ -39,7 +39,7 @@ class UserResponse(BaseModel):
     """Data Transfer Object for user response.
 
     Attributes:
-        id (str): The unique identifier of the user.
+        id (UUID): The unique identifier of the user.
         name (str): The name of the user.
         email (str): The email of the user.
         role (str): The role of the user.
@@ -73,7 +73,7 @@ class ProducerResponse(BaseModel):
     """Data Transfer Object for producer response.
 
     Attributes:
-        id (str): The unique identifier of the producer.
+        id (UUID): The unique identifier of the producer.
         name (str): The name of the producer.
         cnpj (str): The CNPJ of the producer.
         enterprise (str): The enterprise name of the producer.
