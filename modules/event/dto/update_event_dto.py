@@ -1,6 +1,6 @@
 from pydantic import BaseModel, field_validator
 from typing import Optional, List
-from models.models import TypeEvent
+from models.models import Status, TypeEvent
 from datetime import date as Date
 from uuid import UUID
 
@@ -22,6 +22,7 @@ class UpdateEventDTO(BaseModel):
     local: Optional[str] = None
     size: Optional[int] = None
     typeEvent: Optional[TypeEvent] = None
+    status: Optional[Status] = None
     producers: Optional[List[UUID]] = None
 
     @field_validator('name')
@@ -50,6 +51,20 @@ class UpdateEventDTO(BaseModel):
     def validate_date(cls, value):
         if value is not None and (not isinstance(value, Date) or value < Date.today()):
             raise ValueError('date must be a valid date and cannot be in the past if provided')
+        return value
+    
+    @field_validator('producers')
+    @classmethod
+    def validate_producers(cls, value):
+        if value is not None and not isinstance(value, list):
+            raise ValueError('producers must be a list of UUIDs if provided')
+        return value
+    
+    @field_validator('typeEvent')
+    @classmethod
+    def validate_type_event(cls, value):
+        if value is not None and not isinstance(value, TypeEvent):
+            raise ValueError('typeEvent must be a valid TypeEvent enum if provided')
         return value
 
     def isEmpty(self) -> bool:

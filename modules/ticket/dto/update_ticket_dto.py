@@ -1,3 +1,4 @@
+from uuid import UUID
 from pydantic import BaseModel, field_validator
 from typing import Optional
 from models.models import Status
@@ -11,9 +12,9 @@ class UpdateTicketDTO(BaseModel):
         sellerId (Optional[str]): The ID of the seller who sold this ticket.
         status (Optional[Status]): The status of the ticket.
     """
-    ownerId: Optional[str] = None
-    tierId: Optional[str] = None
-    sellerId: Optional[str] = None
+    ownerId: Optional[UUID] = None
+    tierId: Optional[UUID] = None
+    sellerId: Optional[UUID] = None
     status: Optional[Status] = None
 
     @field_validator('ownerId')

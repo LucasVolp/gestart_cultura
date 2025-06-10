@@ -19,10 +19,11 @@ class UpdateUserRepository:
         """
         if user not in self.session:
             user = self.session.merge(user)
-        data = data.model_dump(exclude_unset=True)                
-        for key, value in data.items():
+        dataDict = data.model_dump(exclude_unset=True)                
+        for key, value in dataDict.items():
             if value is not None:
                 setattr(user, key, value)
+                
         self.session.commit()
         self.session.refresh(user)
         return user

@@ -82,3 +82,22 @@ def remove(id: str, service: PurchaseService = Depends(getPurchaseService)):
     """
     service.remove(id)
     return {"message": f"Purchase with ID {id} deleted successfully."}
+
+@router.post("/pay/{purchaseId}")
+def processPayment(
+    purchaseId: str,
+    service: PurchaseService = Depends(getPurchaseService)
+):
+    """
+    Processes payment for a pending purchase.
+    
+    Args:
+        purchaseId (str): The ID of the purchase to process payment for.
+    
+    Returns:
+        Result of the payment processing with tickets and receipt generated.
+    
+    Raises:
+        HTTPException: If the purchase is not found, already processed, insufficient balance, or other errors.
+    """
+    return service.processPayment(purchaseId)

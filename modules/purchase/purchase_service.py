@@ -4,6 +4,7 @@ from modules.purchase.use_case import (
     FindAllPurchasesUseCase,
     FindPurchaseByIdUseCase,
     UpdatePurchaseUseCase,
+    ProcessPaymentUseCase,
 )
 from modules.purchase.dto import CreatePurchaseDTO, UpdatePurchaseDTO
 
@@ -14,13 +15,15 @@ class PurchaseService:
         FindAllPurchasesUseCase=FindAllPurchasesUseCase, 
         FindPurchaseByIdUseCase=FindPurchaseByIdUseCase, 
         UpdatePurchaseUseCase=UpdatePurchaseUseCase, 
-        DeletePurchaseUseCase=DeletePurchaseUseCase
+        DeletePurchaseUseCase=DeletePurchaseUseCase,
+        ProcessPaymentUseCase=ProcessPaymentUseCase
     ):
         self.CreatePurchaseUseCase = CreatePurchaseUseCase()
         self.FindAllPurchasesUseCase = FindAllPurchasesUseCase()
         self.FindPurchaseByIdUseCase = FindPurchaseByIdUseCase()
         self.UpdatePurchaseUseCase = UpdatePurchaseUseCase()
         self.DeletePurchaseUseCase = DeletePurchaseUseCase()
+        self.ProcessPaymentUseCase = ProcessPaymentUseCase()
 
     def create(self, data: CreatePurchaseDTO):
         """
@@ -79,3 +82,15 @@ class PurchaseService:
             Result of the deletion operation.
         """
         return self.DeletePurchaseUseCase.execute(id)
+    
+    def processPayment(self, purchaseId: str):
+        """
+        Processes payment for a pending purchase using the ProcessPaymentUseCase.
+
+        Args:
+            purchaseId: ID of the purchase to process payment for.
+        
+        Returns:
+            Result of the payment processing with tickets and receipt.
+        """
+        return self.ProcessPaymentUseCase.execute(purchaseId)

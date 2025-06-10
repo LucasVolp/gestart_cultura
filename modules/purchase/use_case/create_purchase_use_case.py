@@ -1,17 +1,18 @@
+from models.models import Status
 from modules.purchase.repository import CreatePurchaseRepository
 from modules.purchase.dto import CreatePurchaseDTO
-from modules.tier.dto import UpdateTierDTO
 from modules.user.repository import FindUserByIdRepository
-from modules.tier.repository import FindTierByIdRepository, UpdateTierRepository
+from modules.tier.repository import FindTierByIdRepository
+from modules.event.repository import FindEventByTierRepository
 from fastapi import HTTPException
 
 
 class CreatePurchaseUseCase:
-    def __init__(self, repository=None, findUserByIdRepo=None, findTierByIdRepo=None, updateTierRepo=None):
+    def __init__(self, repository=None, findUserByIdRepo=None, findTierByIdRepo=None, findEventByTierRepo=None):
         self.repository = repository or CreatePurchaseRepository()
         self.findUserByIdRepo = findUserByIdRepo or FindUserByIdRepository()
         self.findTierByIdRepo = findTierByIdRepo or FindTierByIdRepository()
-        self.updateTierRepo = updateTierRepo or UpdateTierRepository()
+        self.findEventByTierRepo = findEventByTierRepo or FindEventByTierRepository()
 
     def execute(self, data: CreatePurchaseDTO):
         """Executa o caso de uso para criar uma nova compra com seus itens.
@@ -41,7 +42,12 @@ class CreatePurchaseUseCase:
                 tier = self.findTierByIdRepo.findById(itemData.tierId)
                 if not tier:
                     raise HTTPException(status_code=404, detail=f"Tier com ID {itemData.tierId} não encontrado.")
-
+                
+                event = self.findEventByTierRepo.findByTier(itemData.tierId)
+                
+                if event.status != Status.ACTIVE:
+                    raise HTTPException(status_code=400, detail=f"Evento associado ao tier '{tier.name}' não está ativo: {event.name}.")
+                
                 if tier.amount < itemData.quantity:
                     raise HTTPException(
                         status_code=400, 
@@ -78,13 +84,7 @@ class CreatePurchaseUseCase:
 
             createdPurchase = self.repository.createPurchaseWithItems(purchaseData, itemsData)
 
-            for item in processedItems:
-                tier = item['tier']
-    
-                updateData = UpdateTierDTO(amount=tier.amount - item['quantity'])
-                self.updateTierRepo.update(tier, updateData)
-
-            print(f"Compra '{createdPurchase.id}' realizada com sucesso entre {buyer.name} e {seller.name}.")
+            print(f"Compra '{createdPurchase.id}' criada com status PENDING. Aguardando pagamento entre {buyer.name} e {seller.name}.")
             return createdPurchase
             
         except HTTPException as e:
@@ -99,5 +99,3 @@ class CreatePurchaseUseCase:
                 self.findUserByIdRepo.session.close()
             if hasattr(self.findTierByIdRepo, 'session'):
                 self.findTierByIdRepo.session.close()
-            if hasattr(self.updateTierRepo, 'session'):
-                self.updateTierRepo.session.close()

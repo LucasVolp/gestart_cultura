@@ -26,6 +26,6 @@ class FindEventByIdUseCase:
             return event
         except Exception as e:
             print(f"Erro ao buscar evento: {e}")
-            raise HTTPException(status_code=500, detail=f"Erro ao buscar evento")
+            raise HTTPException(status_code=400, detail=f"Erro ao buscar evento")
         finally:
             self.repository.session.close()

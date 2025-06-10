@@ -31,14 +31,11 @@ class DeleteRatingUseCase:
             if not deleted:
                 raise HTTPException(status_code=400, detail="Erro ao deletar avaliação.")
             print(f"Avaliação com ID {id} deletada com sucesso.")
-            return True
+            raise HTTPException(status_code=200, detail="Avaliação deletada com sucesso.")
         except HTTPException:
             raise
         except Exception as e:
-            raise HTTPException(
-                status_code=400,
-                detail="Erro ao deletar avaliação: "
-            )
+            raise HTTPException(status_code=400,detail="Erro ao deletar avaliação: ")
         finally:
             if hasattr(self.repository, 'session') and self.repository.session:
                 self.repository.session.close()

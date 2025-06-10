@@ -21,6 +21,6 @@ class FindAllUsersUseCase:
             return users
         except Exception as e:
             print(f"Erro ao buscar usuários: {e}")
-            raise HTTPException(status_code=500, detail="Erro ao buscar usuários.")
+            raise HTTPException(status_code=400, detail="Erro ao buscar usuários.")
         finally:
             self.userRepository.session.close()

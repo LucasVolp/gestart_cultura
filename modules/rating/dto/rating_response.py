@@ -1,6 +1,7 @@
+from datetime import datetime
 from uuid import UUID
 from pydantic import BaseModel
-
+from typing import Optional
 
 class RatingResponse(BaseModel):
     """Data Transfer Object for rating response.
@@ -13,10 +14,12 @@ class RatingResponse(BaseModel):
         comment (str): The comment provided by the user.
     """
     id: UUID
-    userId: str
-    eventId: str
+    userId: UUID
+    eventId: UUID
     rate: int
-    comment: str
+    comment: Optional[str] = None
+    createdAt: datetime
+    updatedAt: datetime
 
     class Config:
         from_attributes = True

@@ -1,7 +1,7 @@
 # __init__.py for purchase use_case module
-
 from .create_purchase_use_case import CreatePurchaseUseCase
 from .find_all_purchases_use_case import FindAllPurchasesUseCase
 from .find_purchase_by_id_use_case import FindPurchaseByIdUseCase
 from .update_purchase_use_case import UpdatePurchaseUseCase
 from .delete_purchase_use_case import DeletePurchaseUseCase
+from .process_payment_use_case import ProcessPaymentUseCase

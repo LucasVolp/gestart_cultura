@@ -1,0 +1,19 @@
+meta {
+  name: Create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/rating
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "userId": "71a97717-5f6d-491f-9a87-c7b4757d4d56",
+    "eventId": "c90022d0-ac2f-4001-ad6d-46ec88bdd7f6",
+    "rate": 5
+  }
+}

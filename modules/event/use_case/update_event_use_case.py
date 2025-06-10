@@ -29,12 +29,12 @@ class UpdateEventUseCase:
             
             event = self.repository.update(eventExists, data)
             return event
-        except HTTPException:
-            raise
-        except ValueError as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        except HTTPException as e:
+            print(f"Erro ao atualizar evento: {e.detail}")
+            raise e
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Internal server error while updating event: {str(e)}")
+            print(f"Erro ao atualizar evento: {e}")
+            raise HTTPException(status_code=400, detail="Erro ao atualizar evento")
         finally:
             self.repository.session.close()
             self.findEventById.session.close()

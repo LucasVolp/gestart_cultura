@@ -35,7 +35,7 @@ def findOne(id: str, service: EventService = Depends(getEventService)):
     """
     return service.findOne(id)
 
-@router.post("/")
+@router.post("/", response_model=EventResponse)
 def create(data: CreateEventDTO, service: EventService = Depends(getEventService)):
     """
     Creates a new event.
@@ -51,7 +51,7 @@ def create(data: CreateEventDTO, service: EventService = Depends(getEventService
     """
     return service.create(data)
     
-@router.patch("/{id}")
+@router.patch("/{id}", response_model=EventResponse)
 def update(id: str, data: UpdateEventDTO, service: EventService = Depends(getEventService)):
     """
     Updates an existing event.

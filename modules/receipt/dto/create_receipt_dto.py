@@ -1,3 +1,4 @@
+from uuid import UUID
 from pydantic import BaseModel, field_validator
 from typing import Optional
 
@@ -9,21 +10,25 @@ class CreateReceiptDTO(BaseModel):
         purchaseId (str): The ID of the purchase associated with the receipt.
         description (Optional[str]): Optional description of the receipt.
     """
-    userId: str
-    purchaseId: str
+    userId: UUID
+    purchaseId: UUID
     description: Optional[str] = None
 
     @field_validator('userId')
     def validate_user_id(cls, value):
-        if not value or not value.strip():
+        if not value:
             raise ValueError('userId cannot be empty')
-        return value.strip()
+        if not isinstance(value, UUID):
+            raise ValueError('userId must be a valid UUID')
+        return value
 
     @field_validator('purchaseId')
     def validate_purchase_id(cls, value):
-        if not value or not value.strip():
+        if not value:
             raise ValueError('purchaseId cannot be empty')
-        return value.strip()
+        if not isinstance(value, UUID):
+            raise ValueError('purchaseId must be a valid UUID')
+        return value
 
     @field_validator('description')
     def validate_description(cls, value):

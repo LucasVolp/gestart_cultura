@@ -37,6 +37,6 @@ class UpdateUserUseCase:
             raise e
         except Exception as e:
             print(f"Erro ao atualizar usuário: {e}")
-            raise HTTPException(status_code=500, detail="Erro ao atualizar usuário.")
+            raise HTTPException(status_code=400, detail="Erro ao atualizar usuário.")
         finally:
             self.userRepository.session.close()

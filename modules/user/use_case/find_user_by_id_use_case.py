@@ -29,6 +29,6 @@ class FindUserByIdUseCase:
             raise e
         except Exception as e:
             print(f"Erro ao buscar usuário: {e}")
-            raise HTTPException(status_code=500, detail="Erro ao buscar usuário.")
+            raise HTTPException(status_code=400, detail="Erro ao buscar usuário.")
         finally:
             self.userRepository.session.close()

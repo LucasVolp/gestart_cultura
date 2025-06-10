@@ -5,7 +5,8 @@ from .repository import (
     FindAllEventsRepository,
     FindEventByIdRepository,
     UpdateEventRepository,
-    DeleteEventRepository
+    DeleteEventRepository,
+    FindEventByTierRepository
 )
 from .use_case import (
     CreateEventUseCase,

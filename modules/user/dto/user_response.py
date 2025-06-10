@@ -3,8 +3,11 @@ from uuid import UUID
 from pydantic import BaseModel
 from datetime import datetime, date as Date
 from models.models import Role, Status, TypeEvent
-from modules.purchase.dto.purchase_response import PurchaseItemResponse, PurchaseResponse
+from modules.purchase.dto.purchase_response import PurchaseResponse
+from modules.receipt.dto.receipt_response import ReceiptResponse
+from modules.ticket.dto.ticket_response import TicketResponse
 from modules.tier.dto.tier_response import TierResponse
+from modules.rating.dto.rating_response import RatingResponse
 
 class EventOut(BaseModel):
     """Data Transfer Object for user response.
@@ -58,10 +61,10 @@ class UserResponse(BaseModel):
     updatedAt: datetime
     events: list[EventOut] = []
     sales: list[PurchaseResponse] = []
-    tickets: list[None] = []
-    ratings: list[None] = []
+    tickets: list[TicketResponse] = []
+    ratings: list[RatingResponse] = []
     purchases: list[PurchaseResponse] = []
-    receipts: list[None] = []
+    receipts: list[ReceiptResponse] = []
 
     class Config:
         from_attributes = True

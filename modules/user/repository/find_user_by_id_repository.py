@@ -1,4 +1,4 @@
-from models.models import Event, User
+from models.models import Event, Purchase, PurchaseItem, Ticket, User
 from db import SessionLocal
 from sqlalchemy.orm import joinedload
 
@@ -16,14 +16,26 @@ class FindUserByIdRepository:
             User | None: User model instance if found, None otherwise.
         """
         return self.session.query(User).filter(User.id == id).options(
-                joinedload(User.events).options(
-                    joinedload(Event.tiers),
-                    joinedload(Event.ratings),
-                    joinedload(Event.producers),
-                ),
-                joinedload(User.sales),
-                joinedload(User.tickets),
-                joinedload(User.ratings),
-                joinedload(User.purchases),
-                joinedload(User.receipts),
+            joinedload(User.events).options(
+                joinedload(Event.tiers),
+                joinedload(Event.ratings),
+                joinedload(Event.producers),
+            ),
+            joinedload(User.sales).options(
+                joinedload(Purchase.items).options(
+                    joinedload(PurchaseItem.tier)
+                )
+            ),
+            joinedload(User.purchases).options(
+                joinedload(Purchase.items).options(
+                    joinedload(PurchaseItem.tier)
+                )
+            ),
+            joinedload(User.tickets).options(
+                joinedload(Ticket.tier),
+                joinedload(Ticket.owner), 
+                joinedload(Ticket.seller)
+            ),
+            joinedload(User.ratings),
+            joinedload(User.receipts),
         ).first()

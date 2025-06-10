@@ -2,6 +2,7 @@ from db import SessionLocal
 from models.models import Event, User
 from modules.event import CreateEventDTO
 from dataclasses import asdict
+from sqlalchemy.orm import joinedload
 
 class CreateEventRepository:
     def __init__(self, session=None):
@@ -27,8 +28,15 @@ class CreateEventRepository:
             event.producers = producers if producerIds else []
             self.session.add(event)
             self.session.commit()
-            self.session.refresh(event)
+            event = self.session.query(Event).options(
+                joinedload(Event.producers),
+                joinedload(Event.tiers),
+                joinedload(Event.ratings)
+            ).filter(Event.id == event.id).first()
+            
             return event
         except Exception as e:
             self.session.rollback()
             raise e
+        finally:
+            pass

@@ -1,4 +1,5 @@
-from pydantic import BaseModel, validator
+from uuid import UUID
+from pydantic import BaseModel, field_validator
 from typing import Optional
 
 class UpdateReceiptDTO(BaseModel):
@@ -9,23 +10,23 @@ class UpdateReceiptDTO(BaseModel):
         purchaseId (Optional[str]): The ID of the purchase associated with the receipt.
         description (Optional[str]): Optional description of the receipt.
     """
-    userId: Optional[str] = None
-    purchaseId: Optional[str] = None
+    userId: Optional[UUID] = None
+    purchaseId: Optional[UUID] = None
     description: Optional[str] = None
 
-    @validator('userId')
+    @field_validator('userId')
     def validate_user_id(cls, value):
         if value is not None and (not value or not value.strip()):
             raise ValueError('userId cannot be empty if provided')
         return value.strip() if value else value
 
-    @validator('purchaseId')
+    @field_validator('purchaseId')
     def validate_purchase_id(cls, value):
         if value is not None and (not value or not value.strip()):
             raise ValueError('purchaseId cannot be empty if provided')
         return value.strip() if value else value
 
-    @validator('description')
+    @field_validator('description')
     def validate_description(cls, value):
         if value is not None and not value.strip():
             raise ValueError('description cannot be empty if provided')

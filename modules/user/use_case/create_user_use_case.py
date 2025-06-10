@@ -44,6 +44,6 @@ class CreateUserUseCase:
             raise e
         except Exception as e:
             print(f"Erro ao criar usuário: {e}")
-            raise HTTPException(status_code=500, detail="Erro ao criar usuário.")
+            raise HTTPException(status_code=400, detail="Erro ao criar usuário.")
         finally:
             self.repository.session.close()

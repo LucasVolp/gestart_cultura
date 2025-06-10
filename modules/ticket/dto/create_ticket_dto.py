@@ -1,3 +1,4 @@
+from uuid import UUID
 from pydantic import BaseModel, field_validator
 from typing import Optional
 from models.models import Status
@@ -10,29 +11,29 @@ class CreateTicketDTO(BaseModel):
         sellerId (str): The ID of the seller who sold this ticket.
         status (Optional[Status]): The status of the ticket, default is None.
     """
-    ownerId: str
-    tierId: str
-    sellerId: str
+    ownerId: UUID
+    tierId: UUID
+    sellerId: UUID
     status: Optional[Status] = None
 
     @field_validator('ownerId')
     @classmethod
     def validateOwnerId(cls, value):
-        if not value or not value.strip():
+        if not value:
             raise ValueError('ownerId cannot be empty')
-        return value.strip()
+        return value
 
     @field_validator('tierId')
     @classmethod
     def validateTierId(cls, value):
-        if not value or not value.strip():
+        if not value:
             raise ValueError('tierId cannot be empty')
-        return value.strip()
+        return value
 
     @field_validator('sellerId')
     @classmethod
     def validateSellerId(cls, value):
-        if not value or not value.strip():
+        if not value:
             raise ValueError('sellerId cannot be empty')
-        return value.strip()
+        return value
 

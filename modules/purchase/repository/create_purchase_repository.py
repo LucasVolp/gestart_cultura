@@ -22,7 +22,6 @@ class CreatePurchaseRepository:
             Exception: Se ocorrer erro durante a criação
         """
         try:
-            # 1. Criar Purchase com totalPrice inicial
             purchaseInstance = Purchase(**purchaseData, totalPrice=0.0)
             self.session.add(purchaseInstance)
             self.session.flush()

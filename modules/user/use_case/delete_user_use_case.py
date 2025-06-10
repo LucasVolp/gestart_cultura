@@ -47,7 +47,7 @@ class DeleteUserUseCase:
             raise e
         except Exception as e:
             print(f"Erro ao deletar usuário: {e}")
-            raise HTTPException(status_code=500, detail="Erro ao deletar usuário.")
+            raise HTTPException(status_code=400, detail="Erro ao deletar usuário.")
         finally:
             if hasattr(self.userRepository, 'session'):
                 self.userRepository.session.close()
